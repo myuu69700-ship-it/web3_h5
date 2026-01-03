@@ -1,0 +1,104 @@
+<template>
+  <van-tabbar v-model="active" fixed placeholder @change="onChange">
+    <van-tabbar-item name="home" icon="home-o">
+      Home
+    </van-tabbar-item>
+    <van-tabbar-item name="market" icon="chart-trending-o">
+      market
+    </van-tabbar-item>
+    <van-tabbar-item name="trade" :icon="tradeIcon">
+      Trade
+    </van-tabbar-item>
+    <van-tabbar-item name="explore" icon="location-o">
+      Explore
+    </van-tabbar-item>
+    <van-tabbar-item name="asset" icon="wallet-o">
+      Asset
+    </van-tabbar-item>
+  </van-tabbar>
+</template>
+
+<script setup>
+import { ref, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+
+const route = useRoute()
+const router = useRouter()
+
+// 路由名称到 tabbar 名称的映射
+const routeToTab = {
+  'Home': 'home',
+  'Market': 'market',
+  'Trade': 'trade',
+  'Explore': 'explore',
+  'Asset': 'asset'
+}
+
+// 根据当前路由设置激活的 tab
+const active = ref(routeToTab[route.name] || 'home')
+
+// 监听路由变化，更新激活的 tab
+watch(() => route.name, (newName) => {
+  if (routeToTab[newName]) {
+    active.value = routeToTab[newName]
+  }
+})
+
+// tabbar 切换事件
+const onChange = (name) => {
+  const tabToRoute = {
+    'home': '/',
+    'market': '/market',
+    'trade': '/trade',
+    'explore': '/explore',
+    'asset': '/asset'
+  }
+  
+  if (tabToRoute[name] && route.path !== tabToRoute[name]) {
+    router.push(tabToRoute[name])
+  }
+}
+
+// Trade 图标使用 exchange 或 swap-o
+const tradeIcon = 'swap-o'
+</script>
+
+<style lang="scss" scoped>
+:deep(.van-tabbar) {
+  background-color: #fff;
+  border-top: 1px solid #ebedf0;
+}
+
+:deep(.van-tabbar-item) {
+  color: #969799;
+}
+
+:deep(.van-tabbar-item--active) {
+  color: #323233;
+}
+
+// Trade 特殊样式 - 黑色圆形图标（始终显示）
+:deep(.van-tabbar-item[name="trade"]) {
+  .van-tabbar-item__icon {
+    background-color: #323233;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 4px;
+    padding: 0;
+    
+    .van-icon {
+      color: #fff;
+      font-size: 18px;
+    }
+  }
+}
+
+:deep(.van-tabbar-item[name="trade"].van-tabbar-item--active) {
+  color: #323233;
+}
+</style>
+
