@@ -1,19 +1,19 @@
 <template>
   <van-tabbar v-model="active" fixed placeholder @change="onChange">
     <van-tabbar-item name="home" icon="home-o">
-      Home
+      {{ t('home') }}
     </van-tabbar-item>
     <van-tabbar-item name="market" icon="chart-trending-o">
-      market
+      {{ t('market') }}
     </van-tabbar-item>
     <van-tabbar-item name="trade" :icon="tradeIcon">
-      Trade
+      {{ t('trade') }}
     </van-tabbar-item>
     <van-tabbar-item name="explore" icon="location-o">
-      Explore
+      {{ t('explore') }}
     </van-tabbar-item>
     <van-tabbar-item name="asset" icon="wallet-o">
-      Asset
+      {{ t('assets') }}
     </van-tabbar-item>
   </van-tabbar>
 </template>
@@ -21,9 +21,11 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useI18n } from '@/i18n'
 
 const route = useRoute()
 const router = useRouter()
+const { t } = useI18n()
 
 // 路由名称到 tabbar 名称的映射
 const routeToTab = {

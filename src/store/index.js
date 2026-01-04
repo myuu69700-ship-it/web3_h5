@@ -53,3 +53,25 @@ export const useAppStore = defineStore('app', {
   }
 })
 
+// 语言 store
+export const useLanguageStore = defineStore('language', {
+  state: () => {
+    // 从 localStorage 读取，如果没有则使用默认值
+    const savedLang = localStorage.getItem('language')
+    return {
+      currentLang: savedLang || 'zh-TW' // 默认繁体中文
+    }
+  },
+  
+  getters: {
+    getCurrentLang: (state) => state.currentLang
+  },
+  
+  actions: {
+    setLanguage(lang) {
+      this.currentLang = lang
+      localStorage.setItem('language', lang)
+    }
+  }
+})
+

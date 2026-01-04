@@ -48,6 +48,14 @@ const routes = [
     meta: {
       title: '关于'
     }
+  },
+  {
+    path: '/language-select',
+    name: 'LanguageSelect',
+    component: () => import('@/views/LanguageSelect.vue'),
+    meta: {
+      title: '语言选择'
+    }
   }
 ]
 
