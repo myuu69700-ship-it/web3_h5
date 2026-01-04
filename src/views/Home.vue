@@ -95,9 +95,9 @@
     <!-- 语言选择对话框 -->
     <van-popup
       v-model:show="showLanguageDialog"
-      position="bottom"
-      :style="{ height: '70%' }"
-      round
+      position="right"
+      :style="{ width: '100%', height: '100%', overflow: 'visible' }"
+      class="language-popup"
     >
       <div class="language-dialog">
         <div class="dialog-header">
@@ -474,11 +474,37 @@ const goToAbout = () => {
 }
 
 // 语言选择对话框
+.language-popup {
+  overflow: visible !important;
+  
+  :deep(.van-popup) {
+    overflow: visible !important;
+  }
+  
+  :deep(.van-popup__content) {
+    overflow: visible !important;
+    animation: slideInFromRight 0.3s ease-out;
+    will-change: transform;
+  }
+}
+
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
 .language-dialog {
   height: 100%;
+  min-height: 100%;
   display: flex;
   flex-direction: column;
   background-color: #f7f8fa;
+  position: relative;
+  overflow: visible;
 
   .dialog-header {
     display: flex;
@@ -487,6 +513,9 @@ const goToAbout = () => {
     padding: 16px;
     background-color: #fff;
     border-bottom: 1px solid #ebedf0;
+    position: relative;
+    z-index: 1;
+    flex-shrink: 0;
 
     .dialog-title {
       font-size: 18px;
@@ -505,6 +534,8 @@ const goToAbout = () => {
     flex: 1;
     overflow-y: auto;
     padding: 16px 0;
+    position: relative;
+    z-index: 1;
 
     .flag-icon {
       font-size: 24px;
