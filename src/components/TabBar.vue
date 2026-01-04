@@ -9,10 +9,10 @@
     <van-tabbar-item name="trade" :icon="tradeIcon">
       {{ t('trade') }}
     </van-tabbar-item>
-    <van-tabbar-item name="explore" icon="location-o">
+    <van-tabbar-item name="explore" icon="browsing-history-o">
       {{ t('explore') }}
     </van-tabbar-item>
-    <van-tabbar-item name="asset" icon="wallet-o">
+    <van-tabbar-item name="asset" icon="balance-list-o">
       {{ t('assets') }}
     </van-tabbar-item>
   </van-tabbar>
@@ -62,7 +62,7 @@ const onChange = (name) => {
 }
 
 // Trade 图标使用 exchange 或 swap-o
-const tradeIcon = 'swap-o'
+const tradeIcon = 'exchange'
 </script>
 
 <style lang="scss" scoped>
