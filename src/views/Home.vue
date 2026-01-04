@@ -12,7 +12,21 @@
 
     <!-- 首页搜索区域 -->
     <div class="search-section">
-      <van-search class="search-input" v-model="searchValue" :placeholder="t('searchCoinPair')" />
+      <van-search
+        class="search-input"
+        v-model="searchValue"
+        :placeholder="t('searchCoinPair')"
+      />
+
+      <!--  banner -->
+      <div class="banner">
+        <div class="banner-text">
+          <p>{{ t("bannerTitle1") }}</p>
+          <p>{{ t("bannerTitle2") }}</p>
+        </div>
+        <div class="banner-text-2">{{ t("bannerSubtitle") }}</div>
+        <van-image :src="homeIcon" />
+      </div>
     </div>
 
     <div class="content">
@@ -62,7 +76,7 @@
 
       <!-- 推广横幅 -->
       <div class="promo-banner">
-        <div class="promo-text">一點不差</div>
+        <div class="promo-text">{{ t("promoText") }}</div>
         <div class="promo-nft">
           <div class="nft-box">
             <div class="nft-label">NFT</div>
@@ -83,11 +97,11 @@
       :style="{ width: '70%', height: '100%' }"
     >
       <div class="menu-content">
-        <div class="menu-header">菜单</div>
+        <div class="menu-header">{{ t("menu") }}</div>
         <van-cell-group>
-          <van-cell title="设置" is-link />
-          <van-cell title="帮助" is-link />
-          <van-cell title="关于" is-link @click="goToAbout" />
+          <van-cell :title="t('settings')" is-link />
+          <van-cell :title="t('help')" is-link />
+          <van-cell :title="t('about')" is-link @click="goToAbout" />
         </van-cell-group>
       </div>
     </van-popup>
@@ -138,6 +152,7 @@
 import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
 import { useI18n, languages } from "@/i18n";
+import homeIcon from "@/assets/images/homeIcon.gif";
 
 const router = useRouter();
 const { t, currentLang, setLanguage } = useI18n();
@@ -206,7 +221,7 @@ const notifications = ref([
 
 const currentLangName = computed(() => {
   const lang = languages.find((l) => l.code === currentLang.value);
-  return lang?.name || "繁體中文";
+  return lang?.name || languages.find((l) => l.code === 'zh-TW')?.name || '繁體中文';
 });
 
 const selectLanguage = (code) => {
@@ -267,6 +282,25 @@ const goToAbout = () => {
   .search-input {
     :deep(.van-search__content) {
       border-radius: 5.06667vw;
+    }
+  }
+
+  .banner {
+    .banner-text {
+      color: var(--primary-bg);
+      font-size: 9.06667vw;
+      line-height: 10.66667vw;
+      font-weight: 600;
+      text-align: center;
+      margin-top: 8vw;
+      font-weight: 700;
+    }
+    .banner-text-2 {
+      color: var(--primary-bg);
+      font-size: 3.2vw;
+      margin-top: 4.26667vw;
+      text-align: center;
+      margin: 16.64px 0;
     }
   }
 }
@@ -476,11 +510,11 @@ const goToAbout = () => {
 // 语言选择对话框
 .language-popup {
   overflow: visible !important;
-  
+
   :deep(.van-popup) {
     overflow: visible !important;
   }
-  
+
   :deep(.van-popup__content) {
     overflow: visible !important;
     animation: slideInFromRight 0.3s ease-out;
