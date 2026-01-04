@@ -1,5 +1,6 @@
 import { computed } from 'vue'
 import { useLanguageStore } from '@/store'
+import { termsOfServiceMessages } from './termsOfService'
 
 // 语言包
 const messages = {
@@ -854,6 +855,16 @@ const messages = {
     selectCountry: '国を選択'
   }
 }
+
+// 合并服务条款多语言内容到 messages 中
+Object.keys(messages).forEach(lang => {
+  if (termsOfServiceMessages[lang]) {
+    Object.assign(messages[lang], termsOfServiceMessages[lang])
+  } else if (termsOfServiceMessages['en']) {
+    // 如果该语言没有服务条款翻译，使用英文版本
+    Object.assign(messages[lang], termsOfServiceMessages['en'])
+  }
+})
 
 // 导入国旗图片
 import usFlag from '@/assets/images/us.svg'

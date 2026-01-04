@@ -374,8 +374,7 @@ const goToRegister = () => {
 };
 
 const openTerms = () => {
-  // TODO: 打开服务条款
-  console.log("服务条款");
+  router.push('/terms-of-service');
 };
 
 const openPrivacy = () => {

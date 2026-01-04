@@ -64,6 +64,14 @@ const routes = [
     meta: {
       title: '登录'
     }
+  },
+  {
+    path: '/terms-of-service',
+    name: 'TermsOfService',
+    component: () => import('@/views/TermsOfService/index.vue'),
+    meta: {
+      title: '服务条款'
+    }
   }
 ]
 
