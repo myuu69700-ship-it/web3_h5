@@ -515,25 +515,44 @@ const messages = {
   }
 }
 
+// 导入国旗图片
+import usFlag from '@/assets/images/us.svg'
+import koreaFlag from '@/assets/images/Korea.svg'
+import germanyFlag from '@/assets/images/Germany.svg'
+import russiaFlag from '@/assets/images/Russia.svg'
+import arabFlag from '@/assets/images/Arab.svg'
+import portugalFlag from '@/assets/images/Portugal (1).svg'
+import frenchFlag from '@/assets/images/French.svg'
+import spainFlag from '@/assets/images/Spain.svg'
+import trFlag from '@/assets/images/tr.svg'
+import indiaFlag from '@/assets/images/India.svg'
+import italyFlag from '@/assets/images/Italy.svg'
+import vietnamFlag from '@/assets/images/Vietnam.svg'
+import indonesiaFlag from '@/assets/images/Indonesia.svg'
+import hongkongFlag from '@/assets/images/HongKong.svg'
+import japanFlag from '@/assets/images/Japan.svg'
+import iranFlag from '@/assets/images/Iran.svg'
+import chinaFlag from '@/assets/images/China.webp'
+
 // 语言列表配置
 export const languages = [
-  { code: 'en', name: 'English', flag: '🇺🇸' },
-  { code: 'ko', name: '한국인', flag: '🇰🇷' },
-  { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
-  { code: 'ru', name: 'Русский', flag: '🇷🇺' },
-  { code: 'ar', name: 'عربي', flag: '🇦🇪' },
-  { code: 'pt', name: 'Português', flag: '🇵🇹' },
-  { code: 'fr', name: 'Français', flag: '🇫🇷' },
-  { code: 'es', name: 'español', flag: '🇪🇸' },
-  { code: 'tr', name: 'türkiye', flag: '🇹🇷' },
-  { code: 'hi', name: 'हिंदी', flag: '🇮🇳' },
-  { code: 'it', name: 'italiano', flag: '🇮🇹' },
-  { code: 'vi', name: 'Tiếng Việt', flag: '🇻🇳' },
-  { code: 'id', name: 'Indonesia', flag: '🇮🇩' },
-  { code: 'fa', name: 'فارسی', flag: '🇮🇷' },
-  { code: 'zh-TW', name: '繁體中文', flag: '🇭🇰' },
-  { code: 'ja', name: '日本語', flag: '🇯🇵' },
-  { code: 'zh-CN', name: '简体中文', flag: '🇨🇳' }
+  { code: 'en', name: 'English', flag: usFlag },
+  { code: 'ko', name: '한국인', flag: koreaFlag },
+  { code: 'de', name: 'Deutsch', flag: germanyFlag },
+  { code: 'ru', name: 'Русский', flag: russiaFlag },
+  { code: 'ar', name: 'عربي', flag: arabFlag },
+  { code: 'pt', name: 'Português', flag: portugalFlag },
+  { code: 'fr', name: 'Français', flag: frenchFlag },
+  { code: 'es', name: 'español', flag: spainFlag },
+  { code: 'tr', name: 'türkiye', flag: trFlag },
+  { code: 'hi', name: 'हिंदी', flag: indiaFlag },
+  { code: 'it', name: 'italiano', flag: italyFlag },
+  { code: 'vi', name: 'Tiếng Việt', flag: vietnamFlag },
+  { code: 'id', name: 'Indonesia', flag: indonesiaFlag },
+  { code: 'fa', name: 'فارسی', flag: iranFlag },
+  { code: 'zh-TW', name: '繁體中文', flag: hongkongFlag },
+  { code: 'ja', name: '日本語', flag: japanFlag },
+  { code: 'zh-CN', name: '简体中文', flag: chinaFlag }
 ]
 
 // 组合式函数

@@ -115,12 +115,12 @@
     >
       <div class="language-dialog">
         <div class="dialog-header">
-          <div class="dialog-title">{{ currentLangName }}</div>
           <van-icon
-            name="cross"
-            class="close-icon"
+            name="arrow-left"
+            class="back-icon"
             @click="showLanguageDialog = false"
           />
+          <div class="dialog-title">{{ currentLangName }}</div>
         </div>
         <div class="dialog-content">
           <van-cell-group inset>
@@ -131,7 +131,7 @@
               @click="selectLanguage(lang.code)"
             >
               <template #icon>
-                <span class="flag-icon">{{ lang.flag }}</span>
+                <img :src="lang.flag" class="flag-icon" alt="" />
               </template>
               <template #right-icon>
                 <van-icon
@@ -542,7 +542,6 @@ const goToAbout = () => {
 
   .dialog-header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
     padding: 16px;
     background-color: #fff;
@@ -551,30 +550,52 @@ const goToAbout = () => {
     z-index: 1;
     flex-shrink: 0;
 
+    .back-icon {
+      font-size: 20px;
+      color: #323233;
+      cursor: pointer;
+      margin-right: 12px;
+    }
+
     .dialog-title {
       font-size: 18px;
       font-weight: bold;
       color: #323233;
-    }
-
-    .close-icon {
-      font-size: 20px;
-      color: #969799;
-      cursor: pointer;
+      display: inline-block;
+      width: 100%;
+      text-align: center;
     }
   }
 
   .dialog-content {
     flex: 1;
     overflow-y: auto;
-    padding: 16px 0;
+    padding: 0;
     position: relative;
     z-index: 1;
+    background-color: #fff;
+
+    :deep(.van-cell-group) {
+      margin: 0;
+    }
+
+    :deep(.van-cell) {
+      padding: 12px 16px;
+      border-bottom: 1px solid #ebedf0;
+    }
+
+    :deep(.van-cell:last-child) {
+      border-bottom: none;
+    }
 
     .flag-icon {
-      font-size: 24px;
+      width: 24px;
+      height: 18px;
       margin-right: 12px;
       display: inline-block;
+      object-fit: cover;
+      border-radius: 2px;
+      flex-shrink: 0;
     }
   }
 }
