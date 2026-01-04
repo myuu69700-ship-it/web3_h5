@@ -31,7 +31,11 @@ const messages = {
     usdt: 'USDT',
     doge: 'DOGE',
     fil: 'FIL',
-    dai: 'DAI'
+    dai: 'DAI',
+    login: 'Login',
+    register: 'Register',
+    deposit: 'On-chain Deposit',
+    quickBuy: 'Quick Buy'
   },
   'zh-TW': {
     home: '首頁',
@@ -61,7 +65,11 @@ const messages = {
     usdt: 'USDT',
     doge: 'DOGE',
     fil: 'FIL',
-    dai: 'DAI'
+    dai: 'DAI',
+    login: '登錄',
+    register: '註冊',
+    deposit: '鏈上充幣',
+    quickBuy: '快捷買幣'
   },
   'zh-CN': {
     home: '首页',
@@ -91,7 +99,11 @@ const messages = {
     usdt: 'USDT',
     doge: 'DOGE',
     fil: 'FIL',
-    dai: 'DAI'
+    dai: 'DAI',
+    login: '登录',
+    register: '注册',
+    deposit: '链上充币',
+    quickBuy: '快捷买币'
   },
   'ko': {
     home: '홈',
@@ -121,7 +133,11 @@ const messages = {
     usdt: 'USDT',
     doge: 'DOGE',
     fil: 'FIL',
-    dai: 'DAI'
+    dai: 'DAI',
+    login: '로그인',
+    register: '회원가입',
+    deposit: '체인 입금',
+    quickBuy: '빠른 구매'
   },
   'de': {
     home: 'Startseite',
@@ -151,7 +167,11 @@ const messages = {
     usdt: 'USDT',
     doge: 'DOGE',
     fil: 'FIL',
-    dai: 'DAI'
+    dai: 'DAI',
+    login: 'Anmelden',
+    register: 'Registrieren',
+    deposit: 'On-Chain-Einzahlung',
+    quickBuy: 'Schnellkauf'
   },
   'ru': {
     home: 'Главная',
@@ -181,7 +201,11 @@ const messages = {
     usdt: 'USDT',
     doge: 'DOGE',
     fil: 'FIL',
-    dai: 'DAI'
+    dai: 'DAI',
+    login: 'Войти',
+    register: 'Регистрация',
+    deposit: 'Пополнение по сети',
+    quickBuy: 'Быстрая покупка'
   },
   'ar': {
     home: 'الرئيسية',
@@ -211,7 +235,11 @@ const messages = {
     usdt: 'USDT',
     doge: 'DOGE',
     fil: 'FIL',
-    dai: 'DAI'
+    dai: 'DAI',
+    login: 'تسجيل الدخول',
+    register: 'التسجيل',
+    deposit: 'إيداع على السلسلة',
+    quickBuy: 'شراء سريع'
   },
   'pt': {
     home: 'Início',
@@ -241,7 +269,11 @@ const messages = {
     usdt: 'USDT',
     doge: 'DOGE',
     fil: 'FIL',
-    dai: 'DAI'
+    dai: 'DAI',
+    login: 'Entrar',
+    register: 'Registrar',
+    deposit: 'Depósito na Cadeia',
+    quickBuy: 'Compra Rápida'
   },
   'fr': {
     home: 'Accueil',
@@ -271,7 +303,11 @@ const messages = {
     usdt: 'USDT',
     doge: 'DOGE',
     fil: 'FIL',
-    dai: 'DAI'
+    dai: 'DAI',
+    login: 'Connexion',
+    register: 'S\'inscrire',
+    deposit: 'Dépôt sur chaîne',
+    quickBuy: 'Achat rapide'
   },
   'es': {
     home: 'Inicio',
@@ -301,7 +337,11 @@ const messages = {
     usdt: 'USDT',
     doge: 'DOGE',
     fil: 'FIL',
-    dai: 'DAI'
+    dai: 'DAI',
+    login: 'Iniciar sesión',
+    register: 'Registrarse',
+    deposit: 'Depósito en cadena',
+    quickBuy: 'Compra rápida'
   },
   'tr': {
     home: 'Ana Sayfa',
@@ -331,7 +371,11 @@ const messages = {
     usdt: 'USDT',
     doge: 'DOGE',
     fil: 'FIL',
-    dai: 'DAI'
+    dai: 'DAI',
+    login: 'Giriş yap',
+    register: 'Kayıt ol',
+    deposit: 'Zincir üzeri yatırma',
+    quickBuy: 'Hızlı satın alma'
   },
   'hi': {
     home: 'होम',
@@ -361,7 +405,11 @@ const messages = {
     usdt: 'USDT',
     doge: 'DOGE',
     fil: 'FIL',
-    dai: 'DAI'
+    dai: 'DAI',
+    login: 'लॉगिन',
+    register: 'पंजीकरण',
+    deposit: 'चेन जमा',
+    quickBuy: 'त्वरित खरीद'
   },
   'it': {
     home: 'Home',
@@ -391,7 +439,11 @@ const messages = {
     usdt: 'USDT',
     doge: 'DOGE',
     fil: 'FIL',
-    dai: 'DAI'
+    dai: 'DAI',
+    login: 'Accedi',
+    register: 'Registrati',
+    deposit: 'Deposito su catena',
+    quickBuy: 'Acquisto rapido'
   },
   'vi': {
     home: 'Trang chủ',
@@ -421,7 +473,11 @@ const messages = {
     usdt: 'USDT',
     doge: 'DOGE',
     fil: 'FIL',
-    dai: 'DAI'
+    dai: 'DAI',
+    login: 'Đăng nhập',
+    register: 'Đăng ký',
+    deposit: 'Nạp tiền trên chuỗi',
+    quickBuy: 'Mua nhanh'
   },
   'id': {
     home: 'Beranda',
@@ -451,7 +507,11 @@ const messages = {
     usdt: 'USDT',
     doge: 'DOGE',
     fil: 'FIL',
-    dai: 'DAI'
+    dai: 'DAI',
+    login: 'Masuk',
+    register: 'Daftar',
+    deposit: 'Deposit On-chain',
+    quickBuy: 'Beli Cepat'
   },
   'fa': {
     home: 'خانه',
@@ -481,7 +541,11 @@ const messages = {
     usdt: 'USDT',
     doge: 'DOGE',
     fil: 'FIL',
-    dai: 'DAI'
+    dai: 'DAI',
+    login: 'ورود',
+    register: 'ثبت نام',
+    deposit: 'واریز زنجیره‌ای',
+    quickBuy: 'خرید سریع'
   },
   'ja': {
     home: 'ホーム',
@@ -511,7 +575,11 @@ const messages = {
     usdt: 'USDT',
     doge: 'DOGE',
     fil: 'FIL',
-    dai: 'DAI'
+    dai: 'DAI',
+    login: 'ログイン',
+    register: '登録',
+    deposit: 'チェーン入金',
+    quickBuy: 'クイック購入'
   }
 }
 

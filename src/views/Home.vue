@@ -18,7 +18,7 @@
         :placeholder="t('searchCoinPair')"
       />
 
-      <!--  banner -->
+      <!--  banner 区域 -->
       <div class="banner">
         <div class="banner-text">
           <p>{{ t("bannerTitle1") }}</p>
@@ -27,8 +27,27 @@
         <div class="banner-text-2">{{ t("bannerSubtitle") }}</div>
         <van-image :src="homeIcon" />
       </div>
-    </div>
 
+      <!-- 登录 注册  鏈上充幣  快捷買幣-->
+      <div class="action-buttons">
+        <div class="button-row">
+          <button class="action-btn login-btn" @click="handleLogin">
+            {{ t("login") }}
+          </button>
+          <button class="action-btn register-btn" @click="handleRegister">
+            {{ t("register") }}
+          </button>
+        </div>
+        <div class="button-row margin-top-32">
+          <button class="action-btn deposit-btn" @click="handleDeposit">
+            {{ t("deposit") }}
+          </button>
+          <button class="action-btn buy-btn" @click="handleQuickBuy">
+            {{ t("quickBuy") }}
+          </button>
+        </div>
+      </div>
+    </div>
     <div class="content">
       <!-- 加密货币市场数据 -->
       <div class="market-section">
@@ -221,7 +240,9 @@ const notifications = ref([
 
 const currentLangName = computed(() => {
   const lang = languages.find((l) => l.code === currentLang.value);
-  return lang?.name || languages.find((l) => l.code === 'zh-TW')?.name || '繁體中文';
+  return (
+    lang?.name || languages.find((l) => l.code === "zh-TW")?.name || "繁體中文"
+  );
 });
 
 const selectLanguage = (code) => {
@@ -246,6 +267,26 @@ const openChat = () => {
 const goToAbout = () => {
   showMenu.value = false;
   router.push("/about");
+};
+
+const handleLogin = () => {
+  // 处理登录逻辑
+  console.log("登录");
+};
+
+const handleRegister = () => {
+  // 处理注册逻辑
+  console.log("注册");
+};
+
+const handleDeposit = () => {
+  // 处理鏈上充幣逻辑
+  console.log("鏈上充幣");
+};
+
+const handleQuickBuy = () => {
+  // 处理快捷買幣逻辑
+  console.log("快捷買幣");
 };
 </script>
 
@@ -301,6 +342,83 @@ const goToAbout = () => {
       margin-top: 4.26667vw;
       text-align: center;
       margin: 16.64px 0;
+    }
+  }
+
+  .action-buttons {
+    margin-top: 16px;
+
+    .button-row {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      // margin-bottom: 12px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      &.margin-top-16 {
+        margin-top: 16px;
+      }
+    }
+
+    .action-btn {
+      height: 48px;
+      border-radius: 12px;
+      border: none;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: opacity 0.2s;
+
+      &:active {
+        opacity: 0.8;
+      }
+
+      &.login-btn {
+        background-color: #e7ffb1;
+        color: #2b6d16;
+        width: 169px;
+        height: 10.13333vw;
+        border-radius: 5.06667vw;
+        font-size: 3.2vw;
+        cursor: pointer;
+        border: none;
+      }
+
+      &.register-btn {
+        background-color: #2b6d16;
+        color: #fff;
+        width: 169px;
+        height: 10.13333vw;
+        border-radius: 5.06667vw;
+        font-size: 3.2vw;
+        cursor: pointer;
+        border: none;
+      }
+
+      &.deposit-btn {
+        background-color: #2b6d16;
+        color: #fff;
+        width: 169px;
+        height: 10.13333vw;
+        border-radius: 5.06667vw;
+        font-size: 3.2vw;
+        cursor: pointer;
+        border: none;
+      }
+
+      &.buy-btn {
+        background-color: #2b6d16;
+        color: #fff;
+        width: 169px;
+        height: 10.13333vw;
+        border-radius: 5.06667vw;
+        font-size: 3.2vw;
+        cursor: pointer;
+        border: none;
+      }
     }
   }
 }
