@@ -270,8 +270,7 @@ const goToAbout = () => {
 };
 
 const handleLogin = () => {
-  // 处理登录逻辑
-  console.log("登录");
+  router.push("/login");
 };
 
 const handleRegister = () => {
