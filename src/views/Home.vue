@@ -3,7 +3,7 @@
     <!-- 顶部导航栏 -->
     <div class="top-bar">
       <van-icon name="apps-o" class="menu-icon" @click="showMenu = true" />
-      <van-icon name="globe-o" class="globe-icon" @click="goToLanguageSelect" />
+      <van-icon name="setting-o" class="setting-icon" @click="showLanguageDialog = true" />
     </div>
     
     <div class="content">
@@ -82,17 +82,54 @@
         </van-cell-group>
       </div>
     </van-popup>
+    
+    <!-- 语言选择对话框 -->
+    <van-popup 
+      v-model:show="showLanguageDialog" 
+      position="bottom" 
+      :style="{ height: '70%' }"
+      round
+    >
+      <div class="language-dialog">
+        <div class="dialog-header">
+          <div class="dialog-title">{{ currentLangName }}</div>
+          <van-icon name="cross" class="close-icon" @click="showLanguageDialog = false" />
+        </div>
+        <div class="dialog-content">
+          <van-cell-group inset>
+            <van-cell
+              v-for="lang in languages"
+              :key="lang.code"
+              :title="lang.name"
+              @click="selectLanguage(lang.code)"
+            >
+              <template #icon>
+                <span class="flag-icon">{{ lang.flag }}</span>
+              </template>
+              <template #right-icon>
+                <van-icon 
+                  v-if="currentLang === lang.code" 
+                  name="success" 
+                  color="#1989fa" 
+                />
+              </template>
+            </van-cell>
+          </van-cell-group>
+        </div>
+      </div>
+    </van-popup>
   </div>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { useI18n } from '@/i18n'
+import { useI18n, languages } from '@/i18n'
 
 const router = useRouter()
-const { t } = useI18n()
+const { t, currentLang, setLanguage } = useI18n()
 const showMenu = ref(false)
+const showLanguageDialog = ref(false)
 
 // 加密货币数据
 const coins = ref([
@@ -153,8 +190,14 @@ const notifications = ref([
   }
 ])
 
-const goToLanguageSelect = () => {
-  router.push('/language-select')
+const currentLangName = computed(() => {
+  const lang = languages.find(l => l.code === currentLang.value)
+  return lang?.name || '繁體中文'
+})
+
+const selectLanguage = (code) => {
+  setLanguage(code)
+  showLanguageDialog.value = false
 }
 
 const goToMarket = () => {
@@ -195,7 +238,7 @@ const goToAbout = () => {
   z-index: 100;
   
   .menu-icon,
-  .globe-icon {
+  .setting-icon {
     font-size: 24px;
     color: #323233;
     cursor: pointer;
@@ -405,6 +448,47 @@ const goToAbout = () => {
     font-size: 20px;
     font-weight: bold;
     margin-bottom: 20px;
+  }
+}
+
+// 语言选择对话框
+.language-dialog {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: #f7f8fa;
+  
+  .dialog-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    background-color: #fff;
+    border-bottom: 1px solid #ebedf0;
+    
+    .dialog-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: #323233;
+    }
+    
+    .close-icon {
+      font-size: 20px;
+      color: #969799;
+      cursor: pointer;
+    }
+  }
+  
+  .dialog-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px 0;
+    
+    .flag-icon {
+      font-size: 24px;
+      margin-right: 12px;
+      display: inline-block;
+    }
   }
 }
 </style>
