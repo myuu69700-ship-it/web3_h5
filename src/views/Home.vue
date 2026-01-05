@@ -74,31 +74,34 @@
             <div class="promo-title">{{ t("promoText") }}</div>
             <div class="promo-description">{{ t("promoDescription") }}</div>
             <div class="promo-cta">{{ t("promoCta") }}</div>
-            <div class="promo-copyright">{{ t("copyright") }}</div>
+            <!-- <div class="promo-copyright">{{ t("copyright") }}</div> -->
           </div>
           <div class="promo-right">
             <img :src="nftIcon" alt="NFT" class="nft-image" />
           </div>
         </div>
       </div>
-
+      <!-- 您加密貨幣之旅的得力助手 -->
+      <div class="s1">
+        <p>{{ t("cryptoJourneyAssistant") }}</p>
+      </div>
       <!-- 新增内容区域 -->
       <div class="new-content-section">
         <!-- 描述文本 -->
         <div class="description-text">
           {{ t("cryptoJourneyDescription") }}
         </div>
-        
+
         <!-- 图片 -->
         <div class="zhus-image-wrapper">
           <img :src="zhusImage" alt="zhus" class="zhus-image" />
         </div>
-        
+
         <!-- 版权信息 -->
         <div class="copyright-text">
           {{ t("copyright") }}
         </div>
-        
+
         <!-- 菜单折叠面板 -->
         <MenuSection />
       </div>
@@ -451,9 +454,26 @@ const handleQuickBuy = () => {
 }
 
 // 推广横幅
+.s1 {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  font-size: 9.06667vw;
+  font-weight: 800;
+  line-height: 1.3;
+  padding: 10px;
+  color: #040303;
+  text-align: center;
+
+  p {
+    text-align: center;
+    width: 100%;
+    margin: 0;
+  }
+}
 .promo-banner {
   margin-top: 24px;
-  padding: 20px;
   background-color: #fff;
   border-radius: 12px;
   position: relative;
@@ -475,9 +495,9 @@ const handleQuickBuy = () => {
   }
 
   .promo-title {
-    font-size: 32px;
-    font-weight: bold;
-    color: #4caf50;
+    font-size: 9.06667vw;
+    font-weight: 700;
+    color: #a0de1f;
     line-height: 1.2;
   }
 
@@ -507,11 +527,12 @@ const handleQuickBuy = () => {
     display: flex;
     align-items: center;
     justify-content: center;
+   
   }
 
   .nft-image {
-    width: 120px;
-    height: 120px;
+    width: 50.13333vw;
+    height: auto;
     object-fit: contain;
   }
 }
