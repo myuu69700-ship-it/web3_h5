@@ -702,24 +702,30 @@ const handleQuickBuy = () => {
   .tabs-header {
     display: flex;
     background-color: #fff;
-    border-radius: 8px;
-    padding: 4px;
     margin-bottom: 16px;
+    gap: 0;
 
     .tab-item {
-      flex: 1;
+      // flex: 1;
       text-align: center;
-      padding: 8px 16px;
+      padding: 1.06667vw 2.13333vw;
+      margin:0 4px;
       font-size: 14px;
-      color: #969799;
+      color: #5b616e;
       cursor: pointer;
-      border-radius: 6px;
       transition: all 0.3s;
+      position: relative;
+      
 
       &.active {
-        background-color: #f7f8fa;
-        color: #323233;
+        background-color: #f3f3f3;
+        color: #040303;
         font-weight: 500;
+        border-radius: 26.4vw;
+      }
+
+      &:not(.active) {
+        color: #5b616e;
       }
     }
   }
