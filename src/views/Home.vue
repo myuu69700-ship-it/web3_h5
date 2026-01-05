@@ -186,10 +186,100 @@
 
       <!-- 推广横幅 -->
       <div class="promo-banner">
-        <div class="promo-text">{{ t("promoText") }}</div>
-        <div class="promo-nft">
-          <div class="nft-box">
-            <div class="nft-label">NFT</div>
+        <div class="promo-content">
+          <div class="promo-left">
+            <div class="promo-title">{{ t("promoText") }}</div>
+            <div class="promo-description">{{ t("promoDescription") }}</div>
+            <div class="promo-cta">{{ t("promoCta") }}</div>
+            <div class="promo-copyright">{{ t("copyright") }}</div>
+          </div>
+          <div class="promo-right">
+            <img :src="nftIcon" alt="NFT" class="nft-image" />
+          </div>
+        </div>
+      </div>
+
+      <!-- 新增内容区域 -->
+      <div class="new-content-section">
+        <!-- 描述文本 -->
+        <div class="description-text">
+          {{ t("cryptoJourneyDescription") }}
+        </div>
+        
+        <!-- 图片 -->
+        <div class="zhus-image-wrapper">
+          <img :src="zhusImage" alt="zhus" class="zhus-image" />
+        </div>
+        
+        <!-- 版权信息 -->
+        <div class="copyright-text">
+          {{ t("copyright") }}
+        </div>
+        
+        <!-- 菜单折叠面板 -->
+        <div class="menu-section">
+          <!-- 交易市場 -->
+          <div class="menu-item">
+            <div class="menu-header" @click="toggleMenu('tradingMarket')">
+              <span class="menu-title">{{ t("tradingMarket") }}</span>
+              <span class="menu-toggle">{{ expandedMenus.tradingMarket ? '−' : '+' }}</span>
+            </div>
+            <div v-if="expandedMenus.tradingMarket" class="menu-content">
+              <div class="menu-sub-item">{{ t("spot") }}</div>
+              <div class="menu-sub-item">{{ t("perpetual") }}</div>
+              <div class="menu-sub-item">{{ t("options") }}</div>
+            </div>
+          </div>
+          
+          <!-- 資產管理 -->
+          <div class="menu-item">
+            <div class="menu-header" @click="toggleMenu('assetManagement')">
+              <span class="menu-title">{{ t("assetManagement") }}</span>
+              <span class="menu-toggle">{{ expandedMenus.assetManagement ? '−' : '+' }}</span>
+            </div>
+            <div v-if="expandedMenus.assetManagement" class="menu-content">
+              <div class="menu-sub-item">{{ t("myAssets") }}</div>
+              <div class="menu-sub-item">{{ t("deposit") }}</div>
+              <div class="menu-sub-item">{{ t("withdraw") }}</div>
+              <div class="menu-sub-item">{{ t("transfer") }}</div>
+              <div class="menu-sub-item">{{ t("orderCenter") }}</div>
+            </div>
+          </div>
+          
+          <!-- 金融理財 -->
+          <div class="menu-item">
+            <div class="menu-header" @click="toggleMenu('financialManagement')">
+              <span class="menu-title">{{ t("financialManagement") }}</span>
+              <span class="menu-toggle">{{ expandedMenus.financialManagement ? '−' : '+' }}</span>
+            </div>
+            <div v-if="expandedMenus.financialManagement" class="menu-content">
+              <div class="menu-sub-item">{{ t("products") }}</div>
+            </div>
+          </div>
+          
+          <!-- 支持 -->
+          <div class="menu-item">
+            <div class="menu-header" @click="toggleMenu('support')">
+              <span class="menu-title">{{ t("support") }}</span>
+              <span class="menu-toggle">{{ expandedMenus.support ? '−' : '+' }}</span>
+            </div>
+            <div v-if="expandedMenus.support" class="menu-content">
+              <div class="menu-sub-item">{{ t("newbieTutorial") }}</div>
+              <div class="menu-sub-item">{{ t("consultationService") }}: 0</div>
+            </div>
+          </div>
+          
+          <!-- 政策 -->
+          <div class="menu-item">
+            <div class="menu-header" @click="toggleMenu('policies')">
+              <span class="menu-title">{{ t("policies") }}</span>
+              <span class="menu-toggle">{{ expandedMenus.policies ? '−' : '+' }}</span>
+            </div>
+            <div v-if="expandedMenus.policies" class="menu-content">
+              <div class="menu-sub-item">{{ t("termsOfService") }}</div>
+              <div class="menu-sub-item">{{ t("privacyPolicy") }}</div>
+              <div class="menu-sub-item">{{ t("antiMoneyLaundering") }}</div>
+            </div>
           </div>
         </div>
       </div>
@@ -265,6 +355,8 @@ import { useI18n, languages } from "@/i18n";
 import homeIcon from "@/assets/images/homeIcon.gif";
 import chartIcon from "@/assets/images/chart.png";
 import nomoreIcon from "@/assets/images/nomore.png";
+import nftIcon from "@/assets/images/nft.png";
+import zhusImage from "@/assets/images/zhus.png";
 
 const router = useRouter();
 const { t, currentLang, setLanguage } = useI18n();
@@ -272,6 +364,20 @@ const showMenu = ref(false);
 const showLanguageDialog = ref(false);
 const searchValue = ref("");
 const activeTab = ref("favorites"); // 默认显示自選
+
+// 菜单展开状态
+const expandedMenus = ref({
+  tradingMarket: false,
+  assetManagement: false,
+  financialManagement: false,
+  support: false,
+  policies: false
+});
+
+// 切换菜单展开/折叠
+const toggleMenu = (menuName) => {
+  expandedMenus.value[menuName] = !expandedMenus.value[menuName];
+};
 
 // 自選数据（空数组，显示暂无数据）
 const favoriteCoins = ref([]);
@@ -883,36 +989,150 @@ const handleQuickBuy = () => {
 // 推广横幅
 .promo-banner {
   margin-top: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   padding: 20px;
-  background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+  background-color: #fff;
   border-radius: 12px;
+  position: relative;
+  overflow: hidden;
 
-  .promo-text {
+  .promo-content {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    position: relative;
+  }
+
+  .promo-left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .promo-title {
     font-size: 32px;
     font-weight: bold;
     color: #4caf50;
+    line-height: 1.2;
   }
 
-  .promo-nft {
-    .nft-box {
-      width: 80px;
-      height: 80px;
-      background-color: #fff;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      transform: perspective(200px) rotateX(15deg) rotateY(-15deg);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  .promo-description {
+    font-size: 14px;
+    color: #323233;
+    line-height: 1.5;
+    margin-top: 8px;
+  }
 
-      .nft-label {
-        font-size: 18px;
-        font-weight: bold;
-        color: #4caf50;
+  .promo-cta {
+    font-size: 14px;
+    color: #4caf50;
+    font-weight: 500;
+    margin-top: 8px;
+    cursor: pointer;
+  }
+
+  .promo-copyright {
+    font-size: 12px;
+    color: #969799;
+    margin-top: 8px;
+  }
+
+  .promo-right {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .nft-image {
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+  }
+}
+
+// 新增内容区域
+.new-content-section {
+  margin-top: 24px;
+  background-color: #fff;
+
+  .description-text {
+    font-size: 14px;
+    color: #323233;
+    line-height: 1.6;
+    text-align: center;
+    margin-bottom: 24px;
+    padding: 0 16px;
+  }
+
+  .zhus-image-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 24px;
+    width: 100%;
+
+    .zhus-image {
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      object-fit: contain;
+    }
+  }
+
+  .copyright-text {
+    font-size: 12px;
+    color: #969799;
+    text-align: center;
+    margin-bottom: 24px;
+  }
+
+  .menu-section {
+    margin-top: 16px;
+
+    .menu-item {
+      border-bottom: 1px solid #ebedf0;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      .menu-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px;
+        cursor: pointer;
+        user-select: none;
+
+        .menu-title {
+          font-size: 16px;
+          font-weight: 500;
+          color: #323233;
+        }
+
+        .menu-toggle {
+          font-size: 20px;
+          color: #323233;
+          font-weight: 300;
+          line-height: 1;
+        }
+      }
+
+      .menu-content {
+        padding: 0 16px 16px 16px;
+
+        .menu-sub-item {
+          padding: 12px 0;
+          font-size: 14px;
+          color: #323233;
+          border-bottom: 1px solid #ebedf0;
+
+          &:last-child {
+            border-bottom: none;
+          }
+        }
       }
     }
   }
