@@ -419,37 +419,47 @@ const handleQuickBuy = () => {
   margin-top: 24px;
 
   .section-title {
-    font-size: 18px;
-    font-weight: bold;
-    color: #323233;
+    font-size: 5vw;
+    color: #040303;
+    font-weight: 900;
     margin-bottom: 16px;
   }
 
   .notification-item {
     padding: 12px 0;
-    border-bottom: 1px solid #ebedf0;
-
+    // border-bottom: 1px solid #ebedf0;
     .notification-text {
-      font-size: 14px;
-      color: #323233;
-      margin-bottom: 4px;
+      width: 100%;
+      font-size: 4vw;
+      color: #040303;
+      font-weight: 500;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      margin-bottom: 1vw;
     }
 
     .notification-time {
-      font-size: 12px;
-      color: #969799;
+      font-size: 3.2vw;
+      color: #9a9a9a;
+      margin-top: 0.53333vw;
     }
   }
 
   .view-more-btn {
-    text-align: center;
-    padding: 12px;
-    margin-top: 8px;
-    background-color: #f7f8fa;
-    border-radius: 8px;
-    color: #969799;
-    font-size: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.53333vw;
+    background-color: #f3f3f3;
+    width: 100%;
+    height: 9.6vw;
+    margin: 4vw auto;
+    border-radius: 6.4vw;
+    color: #040303;
+    font-size: 3.46667vw;
     cursor: pointer;
+    margin-top: 6vw;
   }
 }
 
@@ -483,12 +493,15 @@ const handleQuickBuy = () => {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
+    align-items: center;
     gap: 16px;
     position: relative;
   }
 
   .promo-left {
-    flex: 1;
+    // flex: 1;
+    width: 142.5px;
+    height: 149px;
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -502,18 +515,18 @@ const handleQuickBuy = () => {
   }
 
   .promo-description {
-    font-size: 14px;
-    color: #323233;
-    line-height: 1.5;
-    margin-top: 8px;
+    color: #040303;
+    font-size: 3.73333vw;
+    line-height: 1.6;
   }
 
   .promo-cta {
-    font-size: 14px;
-    color: #4caf50;
-    font-weight: 500;
-    margin-top: 8px;
-    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 4.26667vw;
+    color: #a0de1f;
+    text-align: left;
   }
 
   .promo-copyright {
@@ -527,7 +540,6 @@ const handleQuickBuy = () => {
     display: flex;
     align-items: center;
     justify-content: center;
-   
   }
 
   .nft-image {
@@ -543,11 +555,10 @@ const handleQuickBuy = () => {
   background-color: #fff;
 
   .description-text {
-    font-size: 14px;
-    color: #323233;
-    line-height: 1.6;
+    margin-top: 3.73333vw;
     text-align: center;
-    margin-bottom: 24px;
+    color: #acacac;
+    font-size: 3.73333vw;
     padding: 0 16px;
   }
 
@@ -563,14 +574,15 @@ const handleQuickBuy = () => {
       max-width: 100%;
       height: auto;
       object-fit: contain;
+      display: block;
+      margin-top: 5.33333vw;
+      margin-bottom: 10vw;
     }
   }
 
   .copyright-text {
-    font-size: 12px;
-    color: #969799;
-    text-align: center;
-    margin-bottom: 24px;
+    color: #0a0b0d;
+    font-size: 3.2vw;
   }
 }
 

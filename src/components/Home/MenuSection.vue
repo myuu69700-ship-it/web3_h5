@@ -4,7 +4,11 @@
     <div class="menu-item">
       <div class="menu-header" @click="toggleMenu('tradingMarket')">
         <span class="menu-title">{{ t("tradingMarket") }}</span>
-        <span class="menu-toggle">{{ expandedMenus.tradingMarket ? '−' : '+' }}</span>
+        <img
+          :src="expandedMenus.tradingMarket ? jianIcon : jiaIcon"
+          class="menu-toggle-icon"
+          alt=""
+        />
       </div>
       <div v-if="expandedMenus.tradingMarket" class="menu-content">
         <div class="menu-sub-item">{{ t("spot") }}</div>
@@ -12,12 +16,16 @@
         <div class="menu-sub-item">{{ t("options") }}</div>
       </div>
     </div>
-    
+
     <!-- 資產管理 -->
     <div class="menu-item">
       <div class="menu-header" @click="toggleMenu('assetManagement')">
         <span class="menu-title">{{ t("assetManagement") }}</span>
-        <span class="menu-toggle">{{ expandedMenus.assetManagement ? '−' : '+' }}</span>
+        <img
+          :src="expandedMenus.assetManagement ? jianIcon : jiaIcon"
+          class="menu-toggle-icon"
+          alt=""
+        />
       </div>
       <div v-if="expandedMenus.assetManagement" class="menu-content">
         <div class="menu-sub-item">{{ t("myAssets") }}</div>
@@ -27,35 +35,47 @@
         <div class="menu-sub-item">{{ t("orderCenter") }}</div>
       </div>
     </div>
-    
+
     <!-- 金融理財 -->
     <div class="menu-item">
       <div class="menu-header" @click="toggleMenu('financialManagement')">
         <span class="menu-title">{{ t("financialManagement") }}</span>
-        <span class="menu-toggle">{{ expandedMenus.financialManagement ? '−' : '+' }}</span>
+        <img
+          :src="expandedMenus.financialManagement ? jianIcon : jiaIcon"
+          class="menu-toggle-icon"
+          alt=""
+        />
       </div>
       <div v-if="expandedMenus.financialManagement" class="menu-content">
         <div class="menu-sub-item">{{ t("products") }}</div>
       </div>
     </div>
-    
+
     <!-- 支持 -->
     <div class="menu-item">
       <div class="menu-header" @click="toggleMenu('support')">
         <span class="menu-title">{{ t("support") }}</span>
-        <span class="menu-toggle">{{ expandedMenus.support ? '−' : '+' }}</span>
+        <img
+          :src="expandedMenus.support ? jianIcon : jiaIcon"
+          class="menu-toggle-icon"
+          alt=""
+        />
       </div>
       <div v-if="expandedMenus.support" class="menu-content">
         <div class="menu-sub-item">{{ t("newbieTutorial") }}</div>
         <div class="menu-sub-item">{{ t("consultationService") }}: 0</div>
       </div>
     </div>
-    
+
     <!-- 政策 -->
     <div class="menu-item">
       <div class="menu-header" @click="toggleMenu('policies')">
         <span class="menu-title">{{ t("policies") }}</span>
-        <span class="menu-toggle">{{ expandedMenus.policies ? '−' : '+' }}</span>
+        <img
+          :src="expandedMenus.policies ? jianIcon : jiaIcon"
+          class="menu-toggle-icon"
+          alt=""
+        />
       </div>
       <div v-if="expandedMenus.policies" class="menu-content">
         <div class="menu-sub-item">{{ t("termsOfService") }}</div>
@@ -69,6 +89,8 @@
 <script setup>
 import { ref } from "vue";
 import { useI18n } from "@/i18n";
+import jiaIcon from "@/assets/images/jia.svg";
+import jianIcon from "@/assets/images/jian.svg";
 
 const { t } = useI18n();
 
@@ -78,7 +100,7 @@ const expandedMenus = ref({
   assetManagement: false,
   financialManagement: false,
   support: false,
-  policies: false
+  policies: false,
 });
 
 // 切换菜单展开/折叠
@@ -107,16 +129,19 @@ const toggleMenu = (menuName) => {
       user-select: none;
 
       .menu-title {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 4.26667vw;
         font-size: 16px;
         font-weight: 500;
-        color: #323233;
+        color: #040303;
       }
 
-      .menu-toggle {
-        font-size: 20px;
-        color: #323233;
-        font-weight: 300;
-        line-height: 1;
+      .menu-toggle-icon {
+        width: 3.2vw;
+        height: 3.2vw;
+        object-fit: contain;
       }
     }
 

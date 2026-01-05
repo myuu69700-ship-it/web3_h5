@@ -48,10 +48,7 @@
             <div class="price-value">{{ coin.price }}</div>
             <div class="price-usd">${{ coin.price }}</div>
           </div>
-          <div
-            class="coin-change"
-            :class="coin.change >= 0 ? 'up' : 'down'"
-          >
+          <div class="coin-change" :class="coin.change >= 0 ? 'up' : 'down'">
             {{ coin.change >= 0 ? "+" : "" }}{{ coin.change }}%
           </div>
         </div>
@@ -366,19 +363,23 @@ const goToMarket = () => {
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 60px 20px;
+      padding: 20px;
       text-align: center;
 
       .no-data-icon {
-        width: 120px;
-        height: 120px;
-        margin-bottom: 16px;
-        opacity: 0.6;
+        width: 24.26667vw;
+        height: 24.26667vw;
+        // margin-bottom: 16px;
       }
 
       .no-data-text {
-        font-size: 14px;
-        color: #969799;
+        font-weight: 700;
+        color: #040303;
+        font-size: 3.73333vw;
+        height: 8vw;
+        line-height: 8vw;
+        text-align: center;
+        width: 53.33333vw;
       }
     }
   }
@@ -460,15 +461,18 @@ const goToMarket = () => {
   }
 
   .view-more-btn {
-    text-align: center;
-    padding: 12px;
-    margin-top: 8px;
-    background-color: #f7f8fa;
-    border-radius: 8px;
-    color: #969799;
-    font-size: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.53333vw;
+    background-color: #f3f3f3;
+    width: 100%;
+    height: 9.6vw;
+    margin: 4vw auto;
+    border-radius: 6.4vw;
+    color: #040303;
+    font-size: 3.46667vw;
     cursor: pointer;
   }
 }
 </style>
-
