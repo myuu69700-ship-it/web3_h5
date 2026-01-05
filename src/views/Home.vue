@@ -2,11 +2,12 @@
   <div class="home">
     <!-- 顶部导航栏 -->
     <div class="top-bar">
-      <van-icon name="apps-o" class="menu-icon" @click="showMenu = true" />
-      <van-icon
-        name="setting-o"
+      <img :src="galleryViewIcon" class="menu-icon" @click="showMenu = true" alt="" />
+      <img
+        :src="diqiuIcon"
         class="setting-icon"
         @click="showLanguageDialog = true"
+        alt=""
       />
     </div>
 
@@ -178,6 +179,8 @@ import homeIcon from "@/assets/images/homeIcon.gif";
 import chartIcon from "@/assets/images/chart.png";
 import nftIcon from "@/assets/images/nft.png";
 import zhusImage from "@/assets/images/zhus.png";
+import galleryViewIcon from "@/assets/images/gallery-view.svg";
+import diqiuIcon from "@/assets/images/diqiu.svg";
 import MenuSection from "@/components/Home/MenuSection.vue";
 import TabSection from "@/components/Home/TabSection.vue";
 
@@ -272,9 +275,10 @@ const handleQuickBuy = () => {
 
   .menu-icon,
   .setting-icon {
-    font-size: 24px;
-    color: #323233;
+    width: 24px;
+    height: 24px;
     cursor: pointer;
+    object-fit: contain;
   }
 }
 
