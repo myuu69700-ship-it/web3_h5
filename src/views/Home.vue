@@ -326,6 +326,11 @@ const handleQuickBuy = () => {
   }
 
   .banner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+
     .banner-text {
       color: var(--primary-bg);
       font-size: 9.06667vw;
@@ -342,15 +347,38 @@ const handleQuickBuy = () => {
       text-align: center;
       margin: 16.64px 0;
     }
+
+    :deep(.van-image) {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      max-width: 100%;
+      margin-top: 16px;
+
+      img {
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+        object-fit: contain;
+      }
+    }
   }
 
   .action-buttons {
     margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
 
     .button-row {
       display: flex;
       gap: 12px;
       justify-content: center;
+      align-items: center;
+      width: 100%;
+      max-width: 100%;
       // margin-bottom: 12px;
 
       &:last-child {
