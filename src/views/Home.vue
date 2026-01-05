@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home" :class="{ 'page-loaded': pageLoaded }">
     <!-- 顶部导航栏 -->
     <div class="top-bar">
       <img :src="galleryViewIcon" class="menu-icon" @click="showMenu = true" alt="" />
@@ -12,7 +12,7 @@
     </div>
 
     <!-- 首页搜索区域 -->
-    <div class="search-section">
+    <div class="search-section scroll-animate">
       <van-search
         class="search-input"
         v-model="searchValue"
@@ -53,7 +53,7 @@
       <!-- 标签栏 -->
       <TabSection />
       <!-- 平台通知 -->
-      <div class="notifications-section">
+      <div class="notifications-section scroll-animate">
         <div class="section-title">{{ t("platformNotifications") }}</div>
         <div
           v-for="notification in notifications"
@@ -69,7 +69,7 @@
       </div>
 
       <!-- 推广横幅 -->
-      <div class="promo-banner">
+      <div class="promo-banner scroll-animate">
         <div class="promo-content">
           <div class="promo-left">
             <div class="promo-title">{{ t("promoText") }}</div>
@@ -83,11 +83,11 @@
         </div>
       </div>
       <!-- 您加密貨幣之旅的得力助手 -->
-      <div class="s1">
+      <div class="s1 scroll-animate">
         <p>{{ t("cryptoJourneyAssistant") }}</p>
       </div>
       <!-- 新增内容区域 -->
-      <div class="new-content-section">
+      <div class="new-content-section scroll-animate">
         <!-- 描述文本 -->
         <div class="description-text">
           {{ t("cryptoJourneyDescription") }}
@@ -172,7 +172,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted, nextTick } from "vue";
 import { useRouter } from "vue-router";
 import { useI18n, languages } from "@/i18n";
 import homeIcon from "@/assets/images/homeIcon.gif";
@@ -254,6 +254,56 @@ const handleQuickBuy = () => {
   // 处理快捷買幣逻辑
   console.log("快捷買幣");
 };
+
+// 页面初始化动画和滚动动画
+const pageLoaded = ref(false);
+
+onMounted(() => {
+  // 页面初始化动画
+  nextTick(() => {
+    pageLoaded.value = true;
+    
+    // 延迟设置滚动动画观察器，确保DOM完全渲染
+    setTimeout(() => {
+      setupScrollAnimations();
+    }, 100);
+  });
+});
+
+// 设置滚动动画
+const setupScrollAnimations = () => {
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('animate-in');
+        // 动画完成后可以取消观察以提升性能
+        observer.unobserve(entry.target);
+      }
+    });
+  }, observerOptions);
+
+  // 观察所有需要动画的元素
+  const animatedElements = document.querySelectorAll('.scroll-animate');
+  animatedElements.forEach((el) => {
+    // 检查元素是否在视口中，如果在则立即添加动画类
+    const rect = el.getBoundingClientRect();
+    const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+    if (isVisible) {
+      // 在视口中，延迟一点添加动画类以触发过渡效果
+      setTimeout(() => {
+        el.classList.add('animate-in');
+      }, 50);
+    } else {
+      // 不在视口中，使用观察器
+      observer.observe(el);
+    }
+  });
+};
 </script>
 
 <style lang="scss" scoped>
@@ -261,6 +311,14 @@ const handleQuickBuy = () => {
   min-height: 100vh;
   background-color: #fff;
   padding-bottom: 80px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+
+  &.page-loaded {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .top-bar {
@@ -716,5 +774,22 @@ const handleQuickBuy = () => {
       flex-shrink: 0;
     }
   }
+}
+
+// 滚动动画样式
+.scroll-animate {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+
+  &.animate-in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// 确保搜索区域在页面加载时就有动画
+.search-section {
+  transition: opacity 0.6s ease, transform 0.6s ease;
 }
 </style>
