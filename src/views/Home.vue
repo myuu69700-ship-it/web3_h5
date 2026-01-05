@@ -314,8 +314,8 @@ const setupScrollAnimations = () => {
   background-color: #fff;
   padding-bottom: 80px;
   opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  transform: translateY(1200px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
 
   &.page-loaded {
     opacity: 1;
@@ -362,7 +362,7 @@ const setupScrollAnimations = () => {
     .banner-text {
       color: var(--primary-bg);
       font-size: 9.06667vw;
-      line-height: 10.66667vw;
+      line-height: 10.46667vw;
       font-weight: 600;
       text-align: center;
       margin-top: 8vw;
@@ -425,7 +425,7 @@ const setupScrollAnimations = () => {
       font-size: 16px;
       font-weight: 500;
       cursor: pointer;
-      transition: opacity 0.2s;
+      transition: opacity 0.4s;
 
       &:active {
         opacity: 0.8;
@@ -665,7 +665,7 @@ const setupScrollAnimations = () => {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   cursor: pointer;
   z-index: 9999;
-  transition: transform 0.2s ease, opacity 0.2s ease;
+  transition: transform 0.4s ease, opacity 0.4s ease;
 
   &:active {
     transform: scale(0.95);
@@ -786,8 +786,8 @@ const setupScrollAnimations = () => {
 // 滚动动画样式
 .scroll-animate {
   opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  transform: translateY(80px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
 
   &.animate-in {
     opacity: 1;
@@ -797,6 +797,6 @@ const setupScrollAnimations = () => {
 
 // 确保搜索区域在页面加载时就有动画
 .search-section {
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  transition: opacity 0.4s ease, transform 0.4s ease;
 }
 </style>
