@@ -108,11 +108,6 @@
       </div>
     </div>
 
-    <!-- 浮动聊天按钮 -->
-    <div class="chat-fab" @click="openChat">
-      <img :src="chartIcon" alt="chart" />
-    </div>
-
     <!-- 菜单抽屉 -->
     <van-popup
       v-model:show="showMenu"
@@ -168,6 +163,13 @@
         </div>
       </div>
     </van-popup>
+
+    <!-- 浮动聊天按钮 - 使用 Teleport 传送到 body，确保 fixed 定位生效 -->
+    <Teleport to="body">
+      <div class="chat-fab" @click="openChat">
+        <img :src="chartIcon" alt="chart" />
+      </div>
+    </Teleport>
   </div>
 </template>
 
@@ -650,7 +652,7 @@ const setupScrollAnimations = () => {
 
 // 浮动聊天按钮
 .chat-fab {
-  position: fixed;
+  position: fixed !important;
   right: 16px;
   bottom: 90px;
   width: 48.67px;
@@ -662,7 +664,12 @@ const setupScrollAnimations = () => {
   justify-content: center;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   cursor: pointer;
-  z-index: 99;
+  z-index: 9999;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+
+  &:active {
+    transform: scale(0.95);
+  }
 
   img {
     width: 48.67px;
