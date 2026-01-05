@@ -52,7 +52,11 @@ const messages = {
     walletLogin: 'Wallet Login',
     noAccount: "Don't have an account?",
     registerNow: 'Register now',
-    selectCountry: 'Select Country'
+    selectCountry: 'Select Country',
+    favorites: 'Favorites',
+    cryptocurrency: 'Cryptocurrency',
+    forex: 'Forex',
+    noData: 'No Data'
   },
   'zh-TW': {
     home: '首頁',
@@ -102,7 +106,11 @@ const messages = {
     walletLogin: '錢包登錄',
     noAccount: '還沒有帳戶?',
     registerNow: '立即註冊',
-    selectCountry: '選擇國家'
+    selectCountry: '選擇國家',
+    favorites: '自選',
+    cryptocurrency: '加密貨幣',
+    forex: '外匯',
+    noData: '暫無數據'
   },
   'zh-CN': {
     home: '首页',
@@ -152,7 +160,11 @@ const messages = {
     walletLogin: '钱包登录',
     noAccount: '还没有账户?',
     registerNow: '立即注册',
-    selectCountry: '选择国家'
+    selectCountry: '选择国家',
+    favorites: '自选',
+    cryptocurrency: '加密货币',
+    forex: '外汇',
+    noData: '暂无数据'
   },
   'ko': {
     home: '홈',
