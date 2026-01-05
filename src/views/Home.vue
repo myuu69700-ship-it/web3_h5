@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <!-- 顶部导航栏 -->
-    <div class="top-bar">
+    <div class="top-bar" :class="{ 'animate-in': isInitialized }" ref="topBarRef">
       <img :src="galleryViewIcon" class="menu-icon" @click="showMenu = true" alt="" />
       <img
         :src="diqiuIcon"
@@ -12,7 +12,7 @@
     </div>
 
     <!-- 首页搜索区域 -->
-    <div class="search-section">
+    <div class="search-section" :class="{ 'animate-in': isInitialized }" ref="searchSectionRef">
       <van-search
         class="search-input"
         v-model="searchValue"
@@ -51,9 +51,11 @@
     </div>
     <div class="content">
       <!-- 标签栏 -->
-      <TabSection />
+      <div ref="tabSectionRef">
+        <TabSection />
+      </div>
       <!-- 平台通知 -->
-      <div class="notifications-section">
+      <div class="notifications-section" ref="notificationsRef">
         <div class="section-title">{{ t("platformNotifications") }}</div>
         <div
           v-for="notification in notifications"
@@ -69,7 +71,7 @@
       </div>
 
       <!-- 推广横幅 -->
-      <div class="promo-banner">
+      <div class="promo-banner" ref="promoBannerRef">
         <div class="promo-content">
           <div class="promo-left">
             <div class="promo-title">{{ t("promoText") }}</div>
@@ -83,11 +85,11 @@
         </div>
       </div>
       <!-- 您加密貨幣之旅的得力助手 -->
-      <div class="s1">
+      <div class="s1" ref="s1Ref">
         <p>{{ t("cryptoJourneyAssistant") }}</p>
       </div>
       <!-- 新增内容区域 -->
-      <div class="new-content-section">
+      <div class="new-content-section" ref="newContentRef">
         <!-- 描述文本 -->
         <div class="description-text">
           {{ t("cryptoJourneyDescription") }}
@@ -172,7 +174,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted, onUnmounted } from "vue";
 import { useRouter } from "vue-router";
 import { useI18n, languages } from "@/i18n";
 import homeIcon from "@/assets/images/homeIcon.gif";
@@ -189,6 +191,16 @@ const { t, currentLang, setLanguage } = useI18n();
 const showMenu = ref(false);
 const showLanguageDialog = ref(false);
 const searchValue = ref("");
+const isInitialized = ref(false);
+
+// 元素引用
+const topBarRef = ref(null);
+const searchSectionRef = ref(null);
+const tabSectionRef = ref(null);
+const notificationsRef = ref(null);
+const promoBannerRef = ref(null);
+const s1Ref = ref(null);
+const newContentRef = ref(null);
 
 // 通知数据
 const notifications = ref([
@@ -254,6 +266,54 @@ const handleQuickBuy = () => {
   // 处理快捷買幣逻辑
   console.log("快捷買幣");
 };
+
+// Intersection Observer 用于滚动动画
+let observer = null;
+
+onMounted(() => {
+  // 页面初始化动画
+  setTimeout(() => {
+    isInitialized.value = true;
+  }, 50);
+
+  // 设置滚动动画观察器
+  observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("animate-in");
+          // 动画完成后可以取消观察
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    {
+      threshold: 0.1, // 当元素10%可见时触发
+      rootMargin: "0px 0px -50px 0px", // 提前50px触发
+    }
+  );
+
+  // 观察需要动画的元素
+  const elementsToObserve = [
+    tabSectionRef.value,
+    notificationsRef.value,
+    promoBannerRef.value,
+    s1Ref.value,
+    newContentRef.value,
+  ];
+
+  elementsToObserve.forEach((el) => {
+    if (el) {
+      observer.observe(el);
+    }
+  });
+});
+
+onUnmounted(() => {
+  if (observer) {
+    observer.disconnect();
+  }
+});
 </script>
 
 <style lang="scss" scoped>
@@ -261,6 +321,38 @@ const handleQuickBuy = () => {
   min-height: 100vh;
   background-color: #fff;
   padding-bottom: 80px;
+}
+
+// 动画定义
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(180px);
+    // transform: translateX(-120px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    // transform: translateX(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+// 动画类
+.animate-in {
+  animation: fadeInUp 0.4s ease-out forwards;
+}
+
+.top-bar.animate-in {
+  animation: fadeIn 0.4s ease-out forwards;
 }
 
 .top-bar {
@@ -286,7 +378,28 @@ const handleQuickBuy = () => {
   padding: 0 16px;
 }
 
+// 滚动动画元素初始状态 - 为 TabSection 容器添加
+.content > div:first-child {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+
+  &.animate-in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .search-section {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+
+  &.animate-in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
   .search-input {
     :deep(.van-search__content) {
       border-radius: 5.06667vw;
@@ -421,6 +534,14 @@ const handleQuickBuy = () => {
 // 通知区域
 .notifications-section {
   margin-top: 24px;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+
+  &.animate-in {
+    opacity: 1;
+    transform: translateY(0);
+  }
 
   .section-title {
     font-size: 5vw;
@@ -479,6 +600,14 @@ const handleQuickBuy = () => {
   padding: 10px;
   color: #040303;
   text-align: center;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+
+  &.animate-in {
+    opacity: 1;
+    transform: translateY(0);
+  }
 
   p {
     text-align: center;
@@ -492,6 +621,14 @@ const handleQuickBuy = () => {
   border-radius: 12px;
   position: relative;
   overflow: hidden;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+
+  &.animate-in {
+    opacity: 1;
+    transform: translateY(0);
+  }
 
   .promo-content {
     display: flex;
@@ -557,6 +694,14 @@ const handleQuickBuy = () => {
 .new-content-section {
   margin-top: 24px;
   background-color: #fff;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+
+  &.animate-in {
+    opacity: 1;
+    transform: translateY(0);
+  }
 
   .description-text {
     margin-top: 3.73333vw;
