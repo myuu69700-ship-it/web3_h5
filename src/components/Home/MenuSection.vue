@@ -11,9 +11,9 @@
         />
       </div>
       <div v-if="expandedMenus.tradingMarket" class="menu-content">
-        <div class="menu-sub-item">{{ t("spot") }}</div>
-        <div class="menu-sub-item">{{ t("perpetual") }}</div>
-        <div class="menu-sub-item">{{ t("options") }}</div>
+        <div class="menu-sub-item" @click="handleMarketItemClick('spot')">{{ t("spot") }}</div>
+        <div class="menu-sub-item" @click="handleMarketItemClick('perpetual')">{{ t("perpetual") }}</div>
+        <div class="menu-sub-item" @click="handleMarketItemClick('options')">{{ t("options") }}</div>
       </div>
     </div>
 
@@ -88,10 +88,12 @@
 
 <script setup>
 import { ref } from "vue";
+import { useRouter } from "vue-router";
 import { useI18n } from "@/i18n";
 import jiaIcon from "@/assets/images/jia.svg";
 import jianIcon from "@/assets/images/jian.svg";
 
+const router = useRouter();
 const { t } = useI18n();
 
 // 菜单展开状态
@@ -106,6 +108,15 @@ const expandedMenus = ref({
 // 切换菜单展开/折叠
 const toggleMenu = (menuName) => {
   expandedMenus.value[menuName] = !expandedMenus.value[menuName];
+};
+
+// 处理交易市场子项点击
+const handleMarketItemClick = (type) => {
+  // 跳转到图表详情页，使用默认币对 BTC/USDT，并通过查询参数传递类型
+  router.push({
+    path: `/coin/${encodeURIComponent('BTC/USDT')}`,
+    query: { type }
+  });
 };
 </script>
 
@@ -153,6 +164,16 @@ const toggleMenu = (menuName) => {
         font-size: 14px;
         color: #323233;
         border-bottom: 1px solid #ebedf0;
+        cursor: pointer;
+        transition: background-color 0.2s;
+
+        &:hover {
+          background-color: #f7f8fa;
+        }
+
+        &:active {
+          background-color: #ebedf0;
+        }
 
         &:last-child {
           border-bottom: none;

@@ -107,7 +107,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from '@/i18n'
 import ChartComponent from '@/components/Home/ChartComponent.vue'
@@ -124,6 +124,15 @@ const coinPair = computed(() => {
   const pair = route.params.pair || 'FIL/USDT'
   return decodeURIComponent(pair)
 })
+
+// 从查询参数获取币对类型
+const getCoinTypeFromQuery = () => {
+  const type = route.query.type
+  if (type === 'spot' || type === 'perpetual' || type === 'options') {
+    return type
+  }
+  return 'options' // 默认类型
+}
 
 const tradeType = ref('instant') // 'instant' | 'timed'
 const direction = ref('up') // 'up' | 'down'
@@ -142,7 +151,7 @@ const isChartHidden = ref(false)
 const activeHistoryTab = ref('options')
 const orderList = ref([])
 // 当前币对类型：spot(现货)、contract(合约)、options(期权)
-const coinType = ref('options')
+const coinType = ref(getCoinTypeFromQuery())
 
 // 当前价格和涨跌幅 - 根据图片使用 FIL/USDT 的价格范围
 const currentPrice = ref(1.5885)
@@ -223,6 +232,13 @@ const handleCoinPairSelect = (coin) => {
 // 根据币对类型获取标签文案
 const typeLabel = computed(() => {
   return t(coinType.value) || t('options')
+})
+
+// 监听路由查询参数变化，更新币对类型
+watch(() => route.query.type, (newType) => {
+  if (newType === 'spot' || newType === 'perpetual' || newType === 'options') {
+    coinType.value = newType
+  }
 })
 
 // 模拟实时更新价格
