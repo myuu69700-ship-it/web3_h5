@@ -80,6 +80,14 @@ const routes = [
     meta: {
       title: '币种详情'
     }
+  },
+  {
+    path: '/my-assets',
+    name: 'MyAssets',
+    component: () => import('@/views/MyAssets.vue'),
+    meta: {
+      title: '我的资产'
+    }
   }
 ]
 

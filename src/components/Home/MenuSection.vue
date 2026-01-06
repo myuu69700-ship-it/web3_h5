@@ -28,7 +28,7 @@
         />
       </div>
       <div v-if="expandedMenus.assetManagement" class="menu-content">
-        <div class="menu-sub-item">{{ t("myAssets") }}</div>
+        <div class="menu-sub-item" @click="handleMyAssetsClick">{{ t("myAssets") }}</div>
         <div class="menu-sub-item">{{ t("deposit") }}</div>
         <div class="menu-sub-item">{{ t("withdraw") }}</div>
         <div class="menu-sub-item">{{ t("transfer") }}</div>
@@ -117,6 +117,11 @@ const handleMarketItemClick = (type) => {
     path: `/coin/${encodeURIComponent('BTC/USDT')}`,
     query: { type }
   });
+};
+
+// 处理我的资产点击
+const handleMyAssetsClick = () => {
+  router.push('/my-assets');
 };
 </script>
 
