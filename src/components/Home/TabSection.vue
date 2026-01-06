@@ -35,7 +35,7 @@
           v-for="coin in favoriteCoins"
           :key="coin.id"
           class="coin-item"
-          @click="goToMarket"
+          @click="goToDetail(coin)"
         >
           <div class="coin-icon" :style="{ backgroundColor: coin.color }">
             <span class="coin-symbol">{{ coin.symbol }}</span>
@@ -64,7 +64,7 @@
         v-for="coin in cryptocurrencyCoins"
         :key="coin.id"
         class="coin-item"
-        @click="goToMarket"
+        @click="goToDetail(coin)"
       >
         <div class="coin-icon" :style="{ backgroundColor: coin.color }">
           <span class="coin-symbol">{{ coin.symbol }}</span>
@@ -92,7 +92,7 @@
         v-for="pair in forexPairs"
         :key="pair.id"
         class="coin-item"
-        @click="goToMarket"
+        @click="goToDetail(pair)"
       >
         <div class="coin-icon" :style="{ backgroundColor: pair.color }">
           <span class="coin-symbol">{{ pair.symbol }}</span>
@@ -316,6 +316,12 @@ const forexPairs = ref([
     color: "#ED2939",
   },
 ]);
+
+const goToDetail = (coin) => {
+  // 使用 coin.pair 如果存在，否则构造 pair
+  const pair = coin.pair || `${coin.symbol}/USDT`
+  router.push(`/coin/${encodeURIComponent(pair)}`)
+}
 
 const goToMarket = () => {
   router.push("/market");

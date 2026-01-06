@@ -72,6 +72,14 @@ const routes = [
     meta: {
       title: '服务条款'
     }
+  },
+  {
+    path: '/coin/:pair',
+    name: 'CoinDetail',
+    component: () => import('@/views/CoinDetail.vue'),
+    meta: {
+      title: '币种详情'
+    }
   }
 ]
 

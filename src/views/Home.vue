@@ -288,8 +288,9 @@ const handleQuickBuy = () => {
 };
 
 const handleSelectCoinPair = (coin) => {
-  // 处理选择交易对
-  console.log("选择交易对:", coin);
+  // 处理选择交易对 - 跳转到详情页
+  const pair = coin.pair || `${coin.symbol}${coin.pair || '/USDT'}`;
+  router.push(`/coin/${encodeURIComponent(pair)}`);
 };
 
 // Intersection Observer 用于滚动动画

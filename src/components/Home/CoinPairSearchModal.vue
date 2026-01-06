@@ -102,6 +102,7 @@
 
 <script setup>
 import { ref, computed, watch } from "vue";
+import { useRouter } from "vue-router";
 import { useI18n } from "@/i18n";
 import nomoreImage from "@/assets/images/nomore.png";
 
@@ -115,6 +116,7 @@ const props = defineProps({
 const emit = defineEmits(["update:modelValue", "select"]);
 
 const { t } = useI18n();
+const router = useRouter();
 
 const show = computed({
   get: () => props.modelValue,
@@ -384,6 +386,13 @@ const toggleFavorite = (coin) => {
 const handleSelectCoin = (coin) => {
   emit("select", coin);
   show.value = false;
+  // 跳转到详情页
+  // coin.pair 格式可能是 "/USDT" 或 "BTC/USDT"，需要处理
+  let pair = coin.pair || '/USDT';
+  if (pair.startsWith('/')) {
+    pair = `${coin.symbol}${pair}`;
+  }
+  router.push(`/coin/${encodeURIComponent(pair)}`);
 };
 
 // 搜索
