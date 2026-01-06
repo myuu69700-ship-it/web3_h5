@@ -96,6 +96,14 @@ const routes = [
     meta: {
       title: '儲值'
     }
+  },
+  {
+    path: '/withdraw-detail',
+    name: 'WithdrawDetail',
+    component: () => import('@/views/WithdrawDetail.vue'),
+    meta: {
+      title: '提現'
+    }
   }
 ]
 

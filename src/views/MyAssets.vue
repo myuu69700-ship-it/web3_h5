@@ -227,7 +227,7 @@ const handleDeposit = () => {
 }
 
 const handleWithdraw = () => {
-  console.log('提現')
+  router.push('/withdraw-detail')
 }
 
 const handleTransfer = () => {
