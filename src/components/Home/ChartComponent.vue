@@ -120,7 +120,7 @@ const initChart = () => {
       },
     },
     width: chartContainer.value.clientWidth,
-    height: 300,
+    height: 214,
     timeScale: {
       timeVisible: true,
       secondsVisible: false,
@@ -134,6 +134,7 @@ const initChart = () => {
         bottom: 0.1,
       },
       entireTextOnly: false,
+      width: 60,
     },
     leftPriceScale: {
       visible: false,
@@ -349,7 +350,7 @@ onMounted(() => {
 
 .chart-wrapper {
   width: 100%;
-  height: 300px;
+  height: 214px;
   position: relative;
 }
 </style>
