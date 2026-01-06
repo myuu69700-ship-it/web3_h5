@@ -3,8 +3,8 @@
     <!-- 顶部导航栏 -->
     <div class="top-bar">
       <van-icon name="arrow-left" class="back-icon" @click="goBack" />
-      <div class="coin-pair-title">
-        <span>{{ coinPair }} 期權</span>
+      <div class="coin-pair-title" @click="showSearchModal = true">
+        <span>{{ coinPair }} {{ typeLabel }}</span>
         <van-icon name="arrow-down" class="dropdown-icon" />
       </div>
       <div class="top-actions">
@@ -97,18 +97,27 @@
         @cancel="showIntervalPicker = false"
       />
     </van-popup>
+
+    <!-- 搜索币对弹窗 -->
+    <CoinPairSearchModal
+      v-model="showSearchModal"
+      @select="handleCoinPairSelect"
+    />
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useI18n } from '@/i18n'
 import ChartComponent from '@/components/Home/ChartComponent.vue'
 import TradingPanel from '@/components/CoinDetail/TradingPanel.vue'
 import OrderBook from '@/components/CoinDetail/OrderBook.vue'
+import CoinPairSearchModal from '@/components/Home/CoinPairSearchModal.vue'
 
 const route = useRoute()
 const router = useRouter()
+const { t } = useI18n()
 
 // 从路由参数获取币种信息
 const coinPair = computed(() => {
@@ -127,10 +136,13 @@ const amount = ref('0')
 const sliderValue = ref(0)
 const showTimePicker = ref(false)
 const showIntervalPicker = ref(false)
+const showSearchModal = ref(false)
 const currentDate = ref(new Date())
 const isChartHidden = ref(false)
 const activeHistoryTab = ref('options')
 const orderList = ref([])
+// 当前币对类型：spot(现货)、contract(合约)、options(期权)
+const coinType = ref('options')
 
 // 当前价格和涨跌幅 - 根据图片使用 FIL/USDT 的价格范围
 const currentPrice = ref(1.5885)
@@ -190,6 +202,28 @@ const confirmInterval = ({ selectedValues }) => {
   tradingInterval.value = selectedValues[0].text
   showIntervalPicker.value = false
 }
+
+// 处理币对选择
+const handleCoinPairSelect = (coin) => {
+  // 保存币对类型
+  if (coin.type) {
+    coinType.value = coin.type
+  }
+  // 构建币对字符串
+  let pair = coin.pair || '/USDT'
+  if (pair.startsWith('/')) {
+    pair = `${coin.symbol}${pair}`
+  }
+  // 如果选择的币对与当前不同，则跳转
+  if (pair !== coinPair.value) {
+    router.push(`/coin/${encodeURIComponent(pair)}`)
+  }
+}
+
+// 根据币对类型获取标签文案
+const typeLabel = computed(() => {
+  return t(coinType.value) || t('options')
+})
 
 // 模拟实时更新价格
 onMounted(() => {
@@ -255,6 +289,12 @@ onUnmounted(() => {
     align-items: center;
     justify-content: center;
     gap: 4px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+
+    &:active {
+      opacity: 0.7;
+    }
 
     .dropdown-icon {
       font-size: 14px;

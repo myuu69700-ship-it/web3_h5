@@ -124,8 +124,20 @@ const show = computed({
 });
 
 const searchKeyword = ref("");
-const activeMainTab = ref("favorites");
-const activeSubTab = ref("cryptocurrency");
+
+// 从 localStorage 读取保存的 tab 状态，如果没有则使用默认值
+const getSavedMainTab = () => {
+  const saved = localStorage.getItem("coinPairSearchMainTab");
+  return saved || "favorites";
+};
+
+const getSavedSubTab = () => {
+  const saved = localStorage.getItem("coinPairSearchSubTab");
+  return saved || "cryptocurrency";
+};
+
+const activeMainTab = ref(getSavedMainTab());
+const activeSubTab = ref(getSavedSubTab());
 
 // 主标签配置
 const mainTabs = [
@@ -403,13 +415,39 @@ const handleSearch = (value) => {
 // 关闭弹窗
 const handleClose = () => {
   searchKeyword.value = "";
-  activeMainTab.value = "favorites";
-  activeSubTab.value = "cryptocurrency";
+  // 保存当前的 tab 状态到 localStorage（虽然 watch 已经保存了，但这里再保存一次确保数据不丢失）
+  saveTabState();
 };
 
-// 监听主标签切换，重置子标签
-watch(activeMainTab, () => {
-  activeSubTab.value = "cryptocurrency";
+// 保存 tab 状态的函数
+const saveTabState = () => {
+  localStorage.setItem("coinPairSearchMainTab", activeMainTab.value);
+  localStorage.setItem("coinPairSearchSubTab", activeSubTab.value);
+};
+
+// 监听主标签切换，保存状态
+watch(activeMainTab, (newTab) => {
+  // 保存主标签状态
+  saveTabState();
+  // 如果切换到合约或期权，恢复之前保存的子标签状态
+  if (newTab === "contract" || newTab === "options") {
+    // 恢复保存的子标签状态
+    activeSubTab.value = getSavedSubTab();
+  }
+});
+
+// 监听子标签切换，保存状态
+watch(activeSubTab, () => {
+  saveTabState();
+});
+
+// 监听弹窗打开，恢复保存的 tab 状态
+watch(show, (isOpen) => {
+  if (isOpen) {
+    // 弹窗打开时，恢复保存的 tab 状态
+    activeMainTab.value = getSavedMainTab();
+    activeSubTab.value = getSavedSubTab();
+  }
 });
 </script>
 

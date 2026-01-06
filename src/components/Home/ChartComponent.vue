@@ -53,11 +53,6 @@ const timeframes = [
 
 const toggleExpand = () => {
   isExpanded.value = !isExpanded.value
-  if (isExpanded.value && chartContainer.value) {
-    nextTick(() => {
-      chart?.timeScale().fitContent()
-    })
-  }
 }
 
 // 根据币种对获取基础价格
@@ -207,6 +202,36 @@ onUnmounted(() => {
   }
 })
 
+// 监听展开/收起状态变化
+watch(isExpanded, (newVal) => {
+  if (newVal) {
+    // 展开时，确保图表已初始化
+    nextTick(() => {
+      if (!chart && chartContainer.value) {
+        initChart()
+      } else if (chart) {
+        // 如果图表已存在，调整尺寸并适应内容
+        chart.applyOptions({
+          width: chartContainer.value.clientWidth,
+        })
+        chart.timeScale().fitContent()
+      }
+    })
+  } else {
+    // 收起时，清理图表资源
+    if (chart) {
+      chart.remove()
+      chart = null
+      candlestickSeries = null
+      currentPriceLine = null
+    }
+    if (resizeHandler) {
+      window.removeEventListener('resize', resizeHandler)
+      resizeHandler = null
+    }
+  }
+})
+
 // 监听时间周期变化
 watch(activeTimeframe, () => {
   // 这里可以重新加载对应周期的数据
@@ -244,9 +269,12 @@ watch(activeTimeframe, () => {
 })
 
 onMounted(() => {
-  nextTick(() => {
-    initChart()
-  })
+  // 如果初始状态是展开的，初始化图表
+  if (isExpanded.value) {
+    nextTick(() => {
+      initChart()
+    })
+  }
 })
 </script>
 
