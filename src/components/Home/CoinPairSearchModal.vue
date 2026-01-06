@@ -49,7 +49,7 @@
         <!-- 自選标签显示空状态 -->
         <div v-if="activeMainTab === 'favorites'" class="empty-state">
           <img :src="nomoreImage" alt="no data" class="empty-icon" />
-          <div class="empty-text">{{ t('noData') }}</div>
+          <div class="empty-text">{{ t("noData") }}</div>
         </div>
 
         <!-- 其他标签显示交易对列表 -->
@@ -68,14 +68,18 @@
                 @click.stop="toggleFavorite(coin)"
               />
               <div class="coin-logo">
-                <div class="logo-placeholder">{{ coin.symbol.substring(0, 1) }}</div>
+                <div class="logo-placeholder">
+                  {{ coin.symbol.substring(0, 1) }}
+                </div>
               </div>
               <div class="coin-info">
                 <div class="coin-symbol">{{ coin.symbol }}</div>
                 <div class="coin-pair">{{ coin.pair }}</div>
               </div>
               <div class="coin-tags">
-                <span class="tag" :class="getTagClass(coin.type)">{{ t(coin.typeLabel) }}</span>
+                <span class="tag" :class="getTagClass(coin.type)">{{
+                  t(coin.typeLabel)
+                }}</span>
                 <van-icon
                   v-if="coin.isHot"
                   name="fire-o"
@@ -88,7 +92,7 @@
           <!-- 无数据时显示空状态 -->
           <div v-else class="empty-state">
             <img :src="nomoreImage" alt="no data" class="empty-icon" />
-            <div class="empty-text">{{ t('noData') }}</div>
+            <div class="empty-text">{{ t("noData") }}</div>
           </div>
         </div>
       </div>
@@ -97,136 +101,307 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue'
-import { useI18n } from '@/i18n'
-import nomoreImage from '@/assets/images/nomore.png'
+import { ref, computed, watch } from "vue";
+import { useI18n } from "@/i18n";
+import nomoreImage from "@/assets/images/nomore.png";
 
 const props = defineProps({
   modelValue: {
     type: Boolean,
-    default: false
-  }
-})
+    default: false,
+  },
+});
 
-const emit = defineEmits(['update:modelValue', 'select'])
+const emit = defineEmits(["update:modelValue", "select"]);
 
-const { t } = useI18n()
+const { t } = useI18n();
 
 const show = computed({
   get: () => props.modelValue,
-  set: (val) => emit('update:modelValue', val)
-})
+  set: (val) => emit("update:modelValue", val),
+});
 
-const searchKeyword = ref('')
-const activeMainTab = ref('favorites')
-const activeSubTab = ref('cryptocurrency')
+const searchKeyword = ref("");
+const activeMainTab = ref("favorites");
+const activeSubTab = ref("cryptocurrency");
 
 // 主标签配置
 const mainTabs = [
-  { key: 'favorites', label: 'favorites' },
-  { key: 'spot', label: 'spot' },
-  { key: 'contract', label: 'contract' },
-  { key: 'options', label: 'options' }
-]
+  { key: "favorites", label: "favorites" },
+  { key: "spot", label: "spot" },
+  { key: "contract", label: "contract" },
+  { key: "options", label: "options" },
+];
 
 // 子标签配置
 const subTabs = [
-  { key: 'cryptocurrency', label: 'cryptocurrency' },
-  { key: 'forex', label: 'forex' }
-]
+  { key: "cryptocurrency", label: "cryptocurrency" },
+  { key: "forex", label: "forex" },
+];
 
 // 是否显示子标签
 const showSubTabs = computed(() => {
-  return activeMainTab.value === 'contract' || activeMainTab.value === 'options'
-})
+  return (
+    activeMainTab.value === "contract" || activeMainTab.value === "options"
+  );
+});
 
 // 模拟交易对数据
 const coinList = ref([
-  { symbol: 'BTC', pair: '/USDT', type: 'spot', typeLabel: 'spot', isHot: true },
-  { symbol: 'ETH', pair: '/USDT', type: 'spot', typeLabel: 'spot', isHot: true },
-  { symbol: 'ATOM', pair: '/USDT', type: 'spot', typeLabel: 'spot', isHot: false },
-  { symbol: 'BCH', pair: '/USDT', type: 'spot', typeLabel: 'spot', isHot: true },
-  { symbol: 'XRP', pair: '/USDT', type: 'spot', typeLabel: 'spot', isHot: true },
-  { symbol: 'LTC', pair: '/USDT', type: 'spot', typeLabel: 'spot', isHot: true },
-  { symbol: 'USDC', pair: '/USDT', type: 'spot', typeLabel: 'spot', isHot: false },
-  { symbol: 'DOGE', pair: '/USDT', type: 'spot', typeLabel: 'spot', isHot: false },
-  { symbol: 'FIL', pair: '/USDT', type: 'spot', typeLabel: 'spot', isHot: false },
-  { symbol: 'DAI', pair: '/USDT', type: 'spot', typeLabel: 'spot', isHot: false },
+  {
+    symbol: "BTC",
+    pair: "/USDT",
+    type: "spot",
+    typeLabel: "spot",
+    isHot: true,
+  },
+  {
+    symbol: "ETH",
+    pair: "/USDT",
+    type: "spot",
+    typeLabel: "spot",
+    isHot: true,
+  },
+  {
+    symbol: "ATOM",
+    pair: "/USDT",
+    type: "spot",
+    typeLabel: "spot",
+    isHot: false,
+  },
+  {
+    symbol: "BCH",
+    pair: "/USDT",
+    type: "spot",
+    typeLabel: "spot",
+    isHot: true,
+  },
+  {
+    symbol: "XRP",
+    pair: "/USDT",
+    type: "spot",
+    typeLabel: "spot",
+    isHot: true,
+  },
+  {
+    symbol: "LTC",
+    pair: "/USDT",
+    type: "spot",
+    typeLabel: "spot",
+    isHot: true,
+  },
+  {
+    symbol: "USDC",
+    pair: "/USDT",
+    type: "spot",
+    typeLabel: "spot",
+    isHot: false,
+  },
+  {
+    symbol: "DOGE",
+    pair: "/USDT",
+    type: "spot",
+    typeLabel: "spot",
+    isHot: false,
+  },
+  {
+    symbol: "FIL",
+    pair: "/USDT",
+    type: "spot",
+    typeLabel: "spot",
+    isHot: false,
+  },
+  {
+    symbol: "DAI",
+    pair: "/USDT",
+    type: "spot",
+    typeLabel: "spot",
+    isHot: false,
+  },
   // 合約数据
-  { symbol: 'BTC', pair: '/USDT', type: 'contract', typeLabel: 'perpetual', isHot: true },
-  { symbol: 'ETH', pair: '/USDT', type: 'contract', typeLabel: 'perpetual', isHot: true },
-  { symbol: 'ATOM', pair: '/USDT', type: 'contract', typeLabel: 'perpetual', isHot: false },
-  { symbol: 'BCH', pair: '/USDT', type: 'contract', typeLabel: 'perpetual', isHot: true },
-  { symbol: 'XRP', pair: '/USDT', type: 'contract', typeLabel: 'perpetual', isHot: true },
-  { symbol: 'LTC', pair: '/USDT', type: 'contract', typeLabel: 'perpetual', isHot: true },
-  { symbol: 'DOGE', pair: '/USDT', type: 'contract', typeLabel: 'perpetual', isHot: false },
-  { symbol: 'FIL', pair: '/USDT', type: 'contract', typeLabel: 'perpetual', isHot: false },
-  { symbol: 'DAI', pair: '/USDT', type: 'contract', typeLabel: 'perpetual', isHot: false },
+  {
+    symbol: "BTC",
+    pair: "/USDT",
+    type: "contract",
+    typeLabel: "perpetual",
+    isHot: true,
+  },
+  {
+    symbol: "ETH",
+    pair: "/USDT",
+    type: "contract",
+    typeLabel: "perpetual",
+    isHot: true,
+  },
+  {
+    symbol: "ATOM",
+    pair: "/USDT",
+    type: "contract",
+    typeLabel: "perpetual",
+    isHot: false,
+  },
+  {
+    symbol: "BCH",
+    pair: "/USDT",
+    type: "contract",
+    typeLabel: "perpetual",
+    isHot: true,
+  },
+  {
+    symbol: "XRP",
+    pair: "/USDT",
+    type: "contract",
+    typeLabel: "perpetual",
+    isHot: true,
+  },
+  {
+    symbol: "LTC",
+    pair: "/USDT",
+    type: "contract",
+    typeLabel: "perpetual",
+    isHot: true,
+  },
+  {
+    symbol: "DOGE",
+    pair: "/USDT",
+    type: "contract",
+    typeLabel: "perpetual",
+    isHot: false,
+  },
+  {
+    symbol: "FIL",
+    pair: "/USDT",
+    type: "contract",
+    typeLabel: "perpetual",
+    isHot: false,
+  },
+  {
+    symbol: "DAI",
+    pair: "/USDT",
+    type: "contract",
+    typeLabel: "perpetual",
+    isHot: false,
+  },
   // 期權数据
-  { symbol: 'BTC', pair: '/USDT', type: 'options', typeLabel: 'options', isHot: true },
-  { symbol: 'ETH', pair: '/USDT', type: 'options', typeLabel: 'options', isHot: true },
-  { symbol: 'ATOM', pair: '/USDT', type: 'options', typeLabel: 'options', isHot: false },
-  { symbol: 'BCH', pair: '/USDT', type: 'options', typeLabel: 'options', isHot: true },
-  { symbol: 'XRP', pair: '/USDT', type: 'options', typeLabel: 'options', isHot: true },
-  { symbol: 'LTC', pair: '/USDT', type: 'options', typeLabel: 'options', isHot: true },
-  { symbol: 'DOGE', pair: '/USDT', type: 'options', typeLabel: 'options', isHot: false },
-  { symbol: 'FIL', pair: '/USDT', type: 'options', typeLabel: 'options', isHot: false },
-  { symbol: 'DAI', pair: '/USDT', type: 'options', typeLabel: 'options', isHot: false }
-])
+  {
+    symbol: "BTC",
+    pair: "/USDT",
+    type: "options",
+    typeLabel: "options",
+    isHot: true,
+  },
+  {
+    symbol: "ETH",
+    pair: "/USDT",
+    type: "options",
+    typeLabel: "options",
+    isHot: true,
+  },
+  {
+    symbol: "ATOM",
+    pair: "/USDT",
+    type: "options",
+    typeLabel: "options",
+    isHot: false,
+  },
+  {
+    symbol: "BCH",
+    pair: "/USDT",
+    type: "options",
+    typeLabel: "options",
+    isHot: true,
+  },
+  {
+    symbol: "XRP",
+    pair: "/USDT",
+    type: "options",
+    typeLabel: "options",
+    isHot: true,
+  },
+  {
+    symbol: "LTC",
+    pair: "/USDT",
+    type: "options",
+    typeLabel: "options",
+    isHot: true,
+  },
+  {
+    symbol: "DOGE",
+    pair: "/USDT",
+    type: "options",
+    typeLabel: "options",
+    isHot: false,
+  },
+  {
+    symbol: "FIL",
+    pair: "/USDT",
+    type: "options",
+    typeLabel: "options",
+    isHot: false,
+  },
+  {
+    symbol: "DAI",
+    pair: "/USDT",
+    type: "options",
+    typeLabel: "options",
+    isHot: false,
+  },
+]);
 
 // 过滤后的交易对列表
 const filteredCoinList = computed(() => {
-  let list = coinList.value.filter(coin => coin.type === activeMainTab.value)
+  let list = coinList.value.filter((coin) => coin.type === activeMainTab.value);
 
   // 如果有搜索关键词，进行过滤
   if (searchKeyword.value) {
-    const keyword = searchKeyword.value.toUpperCase()
-    list = list.filter(coin => 
-      coin.symbol.toUpperCase().includes(keyword) || 
-      coin.pair.toUpperCase().includes(keyword)
-    )
+    const keyword = searchKeyword.value.toUpperCase();
+    list = list.filter(
+      (coin) =>
+        coin.symbol.toUpperCase().includes(keyword) ||
+        coin.pair.toUpperCase().includes(keyword)
+    );
   }
 
-  return list
-})
+  return list;
+});
 
 // 获取标签样式类
 const getTagClass = (type) => {
   return {
-    'tag-spot': type === 'spot',
-    'tag-contract': type === 'contract',
-    'tag-options': type === 'options'
-  }
-}
+    "tag-spot": type === "spot",
+    "tag-contract": type === "contract",
+    "tag-options": type === "options",
+  };
+};
 
 // 切换收藏
 const toggleFavorite = (coin) => {
-  console.log('Toggle favorite:', coin)
+  console.log("Toggle favorite:", coin);
   // 这里可以添加收藏逻辑
-}
+};
 
 // 选择交易对
 const handleSelectCoin = (coin) => {
-  emit('select', coin)
-  show.value = false
-}
+  emit("select", coin);
+  show.value = false;
+};
 
 // 搜索
 const handleSearch = (value) => {
-  console.log('Search:', value)
-}
+  console.log("Search:", value);
+};
 
 // 关闭弹窗
 const handleClose = () => {
-  searchKeyword.value = ''
-  activeMainTab.value = 'favorites'
-  activeSubTab.value = 'cryptocurrency'
-}
+  searchKeyword.value = "";
+  activeMainTab.value = "favorites";
+  activeSubTab.value = "cryptocurrency";
+};
 
 // 监听主标签切换，重置子标签
 watch(activeMainTab, () => {
-  activeSubTab.value = 'cryptocurrency'
-})
+  activeSubTab.value = "cryptocurrency";
+});
 </script>
 
 <style lang="scss" scoped>
@@ -250,25 +425,30 @@ watch(activeMainTab, () => {
 
 .search-bar {
   padding: 8px 16px 12px;
-  
+
   :deep(.van-search) {
     padding: 0;
-    background-color: transparent;
   }
-  
+
   :deep(.van-search__content) {
+    display: flex;
+    align-items: center;
+    gap: 2.13333vw;
+    width: 100%;
+    height: 10.13333vw;
+    padding: 0 4vw;
+    border-radius: 5.06667vw;
     background-color: #f3f3f3;
-    border-radius: 8px;
-    padding: 8px 12px;
   }
-  
+
   :deep(.van-field__left-icon) {
     margin-right: 8px;
+    color: #040303;
   }
-  
+
   :deep(.van-field__control) {
     font-size: 14px;
-    color: #969799;
+    color: #000;
   }
 }
 
@@ -276,23 +456,25 @@ watch(activeMainTab, () => {
   display: flex;
   padding: 0 16px;
   border-bottom: 1px solid #ebedf0;
-  
+
   .tab-item {
-    flex: 1;
+    // flex: 1;
+    width: 42.7px;
     text-align: center;
     padding: 14px 0;
-    font-size: 14px;
-    color: #969799;
+    font-size: 4vw;
+    font-weight: 600;
+    color: #7e7e7e;
     cursor: pointer;
     position: relative;
     transition: color 0.3s;
-    
+
     &.active {
       color: #040303;
       font-weight: 600;
-      
+
       &::after {
-        content: '';
+        content: "";
         position: absolute;
         bottom: 0;
         left: 0;
@@ -308,7 +490,7 @@ watch(activeMainTab, () => {
   display: flex;
   padding: 12px 16px 8px;
   gap: 20px;
-  
+
   .sub-tab-item {
     font-size: 13px;
     color: #969799;
@@ -316,13 +498,13 @@ watch(activeMainTab, () => {
     padding: 6px 0;
     position: relative;
     transition: color 0.3s;
-    
+
     &.active {
       color: #040303;
       font-weight: 600;
-      
+
       &::after {
-        content: '';
+        content: "";
         position: absolute;
         bottom: 0;
         left: 0;
@@ -344,20 +526,26 @@ watch(activeMainTab, () => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  // justify-content: center;
+  margin-top: 70px;
   height: 100%;
   min-height: 400px;
-  
+
   .empty-icon {
-    width: 120px;
-    height: 120px;
+    width: 24.26667vw;
+    height: 24.26667vw;
     object-fit: contain;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
   }
-  
+
   .empty-text {
-    font-size: 14px;
-    color: #969799;
+    font-weight: 700;
+    color: #040303;
+    font-size: 3.73333vw;
+    height: 8vw;
+    line-height: 8vw;
+    text-align: center;
+    width: 53.33333vw;
   }
 }
 
@@ -368,38 +556,43 @@ watch(activeMainTab, () => {
 .coin-item {
   display: flex;
   align-items: center;
-  padding: 14px 0;
-  border-bottom: 1px solid #f5f5f5;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  
+  // padding-left: 4.8vw;
+  padding-right: 5.33333vw;
+  width: 100%;
+  height: 14.9333vw;
+  font-size: 3.73333vw;
+
   &:active {
     background-color: #f5f5f5;
   }
-  
+
   &:last-child {
     border-bottom: none;
   }
 }
 
 .star-icon {
-  font-size: 18px;
-  color: #969799;
-  margin-right: 12px;
-  flex-shrink: 0;
+  width: 3.73333vw;
+  height: 3.73333vw;
+  display: flex;
+  align-items: center;
+  gap: 1.06667vw;
+  margin-right: 4px;
+  color: rgb(142, 142, 142);
 }
 
 .coin-logo {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background-color: #f3f3f3;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-right: 12px;
   flex-shrink: 0;
-  
+  width: 6.66667vw;
+  height: 6.66667vw;
+  margin-right: 2.5vw;
+  border-radius: 50%;
+  background-color: #f3f3f3;
+
   .logo-placeholder {
     font-size: 16px;
     font-weight: 600;
@@ -408,21 +601,24 @@ watch(activeMainTab, () => {
 }
 
 .coin-info {
-  flex: 1;
-  min-width: 0;
-  
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
   .coin-symbol {
     font-size: 15px;
-    font-weight: 600;
-    color: #040303;
-    margin-bottom: 4px;
-    line-height: 1.2;
+    font-size: 3.73333vw;
+    color: rgb(4, 3, 3);
+    font-weight: bolder;
+    margin-right: 2px
   }
-  
+
   .coin-pair {
-    font-size: 12px;
     color: #969799;
     line-height: 1.2;
+    font-size: 3.2vw;
+    color: rgb(126, 126, 126);
+    font-weight: bolder;
   }
 }
 
@@ -431,34 +627,41 @@ watch(activeMainTab, () => {
   align-items: center;
   gap: 6px;
   flex-shrink: 0;
-  
+
   .tag {
     padding: 3px 8px;
     border-radius: 4px;
     font-size: 11px;
     font-weight: 500;
     white-space: nowrap;
-    
+
     &.tag-spot {
       background-color: #fff3cd;
       color: #856404;
     }
-    
+
     &.tag-contract {
-      background-color: #fff3cd;
-      color: #856404;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.53333vw 1.06667vw;
+      background-color: rgb(245, 229, 195);
+      border-radius: 0.8vw;
+      color: rgb(254, 173, 21);
+      font-size: 2.66667vw;
+      margin-left: 2px;
+      height: 14.65px
     }
-    
+
     &.tag-options {
       background-color: #fff3cd;
       color: #856404;
     }
   }
-  
+
   .fire-icon {
     font-size: 16px;
     margin-left: 2px;
   }
 }
 </style>
-
