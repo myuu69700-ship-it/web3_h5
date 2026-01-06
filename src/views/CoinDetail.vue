@@ -25,148 +25,28 @@
     <!-- 主要内容区域：交易控制和订单簿 -->
     <div class="main-content">
       <!-- 左侧：交易控制区域 -->
-      <div class="trading-section">
-        <!-- 交易类型标签 -->
-        <div class="trade-tabs">
-          <div
-            class="tab-item"
-            :class="{ active: tradeType === 'instant' }"
-            @click="tradeType = 'instant'"
-          >
-            立即交易
-          </div>
-          <div
-            class="tab-item"
-            :class="{ active: tradeType === 'timed' }"
-            @click="tradeType = 'timed'"
-          >
-            定時交易
-          </div>
-        </div>
-
-        <!-- 方向选择 -->
-        <div class="direction-buttons">
-          <button
-            class="direction-btn buy-up"
-            :class="{ active: direction === 'up' }"
-            @click="direction = 'up'"
-          >
-            買漲
-          </button>
-          <button
-            class="direction-btn buy-down"
-            :class="{ active: direction === 'down' }"
-            @click="direction = 'down'"
-          >
-            買跌
-          </button>
-        </div>
-
-        <!-- 账户信息 -->
-        <div class="account-info">
-          <div class="info-item">
-            <span class="label">當前餘額</span>
-            <span class="value">${{ currentBalance }}</span>
-          </div>
-          <div class="info-item">
-            <span class="label">最低買入</span>
-            <span class="value">{{ minBuy }}</span>
-          </div>
-          <div class="info-item">
-            <span class="label">最高買入</span>
-            <span class="value">{{ maxBuy.toLocaleString() }}</span>
-          </div>
-        </div>
-
-        <!-- 交易参数 -->
-        <div class="trading-params">
-          <van-field
-            v-model="tradingInterval"
-            label="交易區間"
-            placeholder="30s-15%"
-            readonly
-            is-link
-            @click="showIntervalPicker = true"
-          />
-          <van-field
-            v-if="tradeType === 'timed'"
-            v-model="selectedTime"
-            label="選擇時間"
-            placeholder="請選擇時間"
-            readonly
-            is-link
-            @click="showTimePicker = true"
-          />
-          <van-field
-            v-model="amount"
-            label="投入金額"
-            type="number"
-            placeholder="0"
-          />
-          <div class="slider-container">
-            <van-slider v-model="sliderValue" :min="0" :max="100" />
-            <div class="slider-marks">
-              <span>0%</span>
-              <span>25%</span>
-              <span>50%</span>
-              <span>75%</span>
-              <span>100%</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- 交易按钮 -->
-        <button
-          class="trade-button"
-          :class="direction === 'up' ? 'buy-up-btn' : 'buy-down-btn'"
-          @click="handleTrade"
-        >
-          {{ direction === 'up' ? '買漲' : '買跌' }}
-        </button>
-      </div>
+      <TradingPanel
+        v-model:trade-type="tradeType"
+        v-model:direction="direction"
+        v-model:amount="amount"
+        v-model:slider-value="sliderValue"
+        :current-balance="currentBalance"
+        :min-buy="minBuy"
+        :max-buy="maxBuy"
+        :trading-interval="tradingInterval"
+        :selected-time="selectedTime"
+        @show-interval-picker="showIntervalPicker = true"
+        @show-time-picker="showTimePicker = true"
+        @trade="handleTrade"
+      />
 
       <!-- 右侧：订单簿区域 -->
-      <div class="order-book">
-        <div class="order-book-content">
-          <div class="order-section buy-section">
-            <div class="order-header">買盤</div>
-            <div class="order-list">
-              <div
-                v-for="(order, index) in buyOrders"
-                :key="index"
-                class="order-item buy-order"
-              >
-                <span class="order-price">{{ order.price.toFixed(4) }}</span>
-                <span class="order-amount">{{ order.amount }}</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="current-price">
-            <div class="price-value">{{ currentPrice.toFixed(4) }}</div>
-            <div class="price-info">
-              ≈ ${{ currentPrice.toFixed(4) }}
-              <span class="price-change" :class="priceChange >= 0 ? 'positive' : 'negative'">
-                {{ priceChange >= 0 ? '+' : '' }}{{ priceChange }}%
-              </span>
-            </div>
-          </div>
-
-          <div class="order-section sell-section">
-            <div class="order-header">賣盤</div>
-            <div class="order-list">
-              <div
-                v-for="(order, index) in sellOrders"
-                :key="index"
-                class="order-item sell-order"
-              >
-                <span class="order-price">{{ order.price.toFixed(4) }}</span>
-                <span class="order-amount">{{ order.amount }}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <OrderBook
+        :buy-orders="buyOrders"
+        :sell-orders="sellOrders"
+        :current-price="currentPrice"
+        :price-change="priceChange"
+      />
     </div>
 
     <!-- 订单历史标签 -->
@@ -224,6 +104,8 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import ChartComponent from '@/components/Home/ChartComponent.vue'
+import TradingPanel from '@/components/CoinDetail/TradingPanel.vue'
+import OrderBook from '@/components/CoinDetail/OrderBook.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -256,21 +138,21 @@ const priceChange = ref(5.94)
 
 // 订单簿数据 - 根据图片调整价格范围
 const buyOrders = ref([
-  { price: 1.5911, amount: 148.6 },
-  { price: 1.5893, amount: 318.7359 },
-  { price: 1.5899, amount: 750.99 },
-  { price: 1.5924, amount: 148.8 },
-  { price: 1.5889, amount: 318.7354 },
-  { price: 1.5897, amount: 247.9009 },
+  { price: 1.5911, amount: 148.6, highlight: false },
+  { price: 1.5893, amount: 318.7359, highlight: true },
+  { price: 1.5899, amount: 750.99, highlight: false },
+  { price: 1.5924, amount: 148.8, highlight: false },
+  { price: 1.5889, amount: 318.7354, highlight: true },
+  { price: 1.5897, amount: 247.9009, highlight: false },
 ])
 
 const sellOrders = ref([
-  { price: 1.5847, amount: 148.8 },
-  { price: 1.5874, amount: 467.2352 },
-  { price: 1.5879, amount: 31.8739 },
-  { price: 1.5864, amount: 1742.1762 },
-  { price: 1.5844, amount: 148.3 },
-  { price: 1.5856, amount: 630.1997 },
+  { price: 1.5847, amount: 148.8, highlight: false },
+  { price: 1.5874, amount: 467.2352, highlight: true },
+  { price: 1.5879, amount: 31.8739, highlight: false },
+  { price: 1.5864, amount: 1742.1762, highlight: true },
+  { price: 1.5844, amount: 148.3, highlight: false },
+  { price: 1.5856, amount: 630.1997, highlight: false },
 ])
 
 const intervalColumns = [
@@ -290,14 +172,10 @@ const goBack = () => {
 //   isChartHidden.value = !isChartHidden.value
 // }
 
-const handleTrade = () => {
+const handleTrade = (tradeData) => {
   console.log('交易:', {
     coinPair: coinPair.value,
-    tradeType: tradeType.value,
-    direction: direction.value,
-    amount: amount.value,
-    tradingInterval: tradingInterval.value,
-    sliderValue: sliderValue.value,
+    ...tradeData
   })
   // 这里可以添加交易逻辑
 }
@@ -321,15 +199,17 @@ onMounted(() => {
     currentPrice.value = Math.max(1.58, Math.min(1.60, currentPrice.value + change))
     priceChange.value = Number((Math.random() * 6).toFixed(2))
     
-    // 更新订单簿价格
-    buyOrders.value = buyOrders.value.map(order => ({
+    // 更新订单簿价格 - 随机高亮某些订单
+    buyOrders.value = buyOrders.value.map((order, index) => ({
       price: order.price + (Math.random() - 0.5) * 0.001,
-      amount: order.amount
+      amount: order.amount,
+      highlight: Math.random() > 0.7 // 随机高亮
     }))
     
-    sellOrders.value = sellOrders.value.map(order => ({
+    sellOrders.value = sellOrders.value.map((order, index) => ({
       price: order.price + (Math.random() - 0.5) * 0.001,
-      amount: order.amount
+      amount: order.amount,
+      highlight: Math.random() > 0.7 // 随机高亮
     }))
   }, 3000)
 })
@@ -423,235 +303,6 @@ onUnmounted(() => {
 
   @media (max-width: 768px) {
     flex-direction: column;
-  }
-}
-
-.trading-section {
-  background-color: #fff;
-  padding: 16px;
-  border-radius: 8px;
-  flex: 1;
-  min-width: 0;
-}
-
-.trade-tabs {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 16px;
-
-  .tab-item {
-    flex: 1;
-    padding: 8px 16px;
-    text-align: center;
-    border-radius: 4px;
-    font-size: 14px;
-    color: #7e7e7e;
-    background-color: #f3f3f3;
-    cursor: pointer;
-    transition: all 0.3s;
-
-    &.active {
-      background-color: #040303;
-      color: #fff;
-    }
-  }
-}
-
-.direction-buttons {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 16px;
-
-  .direction-btn {
-    flex: 1;
-    padding: 12px;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 500;
-    border: none;
-    cursor: pointer;
-    transition: all 0.3s;
-
-    &.buy-up {
-      background-color: #f3f3f3;
-      color: #7e7e7e;
-
-      &.active {
-        background-color: #26a69a;
-        color: #fff;
-      }
-    }
-
-    &.buy-down {
-      background-color: #f3f3f3;
-      color: #7e7e7e;
-
-      &.active {
-        background-color: #ef5350;
-        color: #fff;
-      }
-    }
-  }
-}
-
-.account-info {
-  display: flex;
-  justify-content: space-between;
-  padding: 12px 0;
-  border-top: 1px solid #ebedf0;
-  border-bottom: 1px solid #ebedf0;
-  margin-bottom: 16px;
-
-  .info-item {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-
-    .label {
-      font-size: 12px;
-      color: #969799;
-    }
-
-    .value {
-      font-size: 14px;
-      font-weight: 500;
-      color: #040303;
-    }
-  }
-}
-
-.trading-params {
-  margin-bottom: 16px;
-
-  :deep(.van-field) {
-    padding: 12px 0;
-  }
-
-  .slider-container {
-    margin-top: 16px;
-
-    .slider-marks {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 8px;
-      font-size: 12px;
-      color: #969799;
-    }
-  }
-}
-
-.trade-button {
-  width: 100%;
-  padding: 16px;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 600;
-  border: none;
-  cursor: pointer;
-  transition: opacity 0.3s;
-
-  &:active {
-    opacity: 0.8;
-  }
-
-  &.buy-up-btn {
-    background-color: #26a69a;
-    color: #fff;
-  }
-
-  &.buy-down-btn {
-    background-color: #ef5350;
-    color: #fff;
-  }
-}
-
-.order-book {
-  background-color: #fff;
-  padding: 16px;
-  border-radius: 8px;
-  flex: 1;
-  min-width: 0;
-  max-width: 300px;
-
-  @media (max-width: 768px) {
-    max-width: 100%;
-  }
-}
-
-.order-book-content {
-  display: flex;
-  flex-direction: column;
-}
-
-.order-section {
-  flex: 1;
-
-  .order-header {
-    font-size: 14px;
-    font-weight: 500;
-    color: #040303;
-    margin-bottom: 8px;
-  }
-
-  .order-list {
-    .order-item {
-      display: flex;
-      justify-content: space-between;
-      padding: 6px 0;
-      font-size: 13px;
-
-      &.buy-order {
-        .order-price {
-          color: #26a69a;
-        }
-      }
-
-      &.sell-order {
-        .order-price {
-          color: #ef5350;
-        }
-      }
-
-      .order-price {
-        font-weight: 500;
-      }
-
-      .order-amount {
-        color: #969799;
-      }
-    }
-  }
-}
-
-.current-price {
-  text-align: center;
-  padding: 16px 0;
-  border-top: 1px solid #ebedf0;
-  border-bottom: 1px solid #ebedf0;
-  margin: 12px 0;
-
-  .price-value {
-    font-size: 24px;
-    font-weight: 600;
-    color: #26a69a;
-    margin-bottom: 4px;
-  }
-
-  .price-info {
-    font-size: 12px;
-    color: #969799;
-
-    .price-change {
-      margin-left: 8px;
-
-      &.positive {
-        color: #26a69a;
-      }
-
-      &.negative {
-        color: #ef5350;
-      }
-    }
   }
 }
 
