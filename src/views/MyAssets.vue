@@ -223,7 +223,7 @@ const goBack = () => {
 
 // 操作按钮事件
 const handleDeposit = () => {
-  console.log('儲值')
+  router.push('/deposit-detail')
 }
 
 const handleWithdraw = () => {

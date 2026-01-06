@@ -88,6 +88,14 @@ const routes = [
     meta: {
       title: '我的资产'
     }
+  },
+  {
+    path: '/deposit-detail',
+    name: 'DepositDetail',
+    component: () => import('@/views/DepositDetail.vue'),
+    meta: {
+      title: '儲值'
+    }
   }
 ]
 
