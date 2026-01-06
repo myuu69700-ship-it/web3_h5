@@ -1,8 +1,17 @@
 <template>
   <div class="home">
     <!-- 顶部导航栏 -->
-    <div class="top-bar" :class="{ 'animate-in': isInitialized }" ref="topBarRef">
-      <img :src="galleryViewIcon" class="menu-icon" @click="showMenu = true" alt="" />
+    <div
+      class="top-bar"
+      :class="{ 'animate-in': isInitialized }"
+      ref="topBarRef"
+    >
+      <img
+        :src="galleryViewIcon"
+        class="menu-icon"
+        @click="showMenu = true"
+        alt=""
+      />
       <img
         :src="diqiuIcon"
         class="setting-icon"
@@ -12,11 +21,15 @@
     </div>
 
     <!-- 首页搜索区域 -->
-    <div class="search-section" :class="{ 'animate-in': isInitialized }" ref="searchSectionRef">
+    <div
+      class="search-section"
+      :class="{ 'animate-in': isInitialized }"
+      ref="searchSectionRef"
+    >
       <van-search
         class="search-input"
-        v-model="searchValue"
         :placeholder="t('searchCoinPair')"
+        @click="showSearchModal = true"
       />
 
       <!--  banner 区域 -->
@@ -131,6 +144,12 @@
       </div>
     </van-popup>
 
+    <!-- 币对搜索弹窗 -->
+    <CoinPairSearchModal
+      v-model="showSearchModal"
+      @select="handleSelectCoinPair"
+    />
+
     <!-- 语言选择对话框 -->
     <van-popup
       v-model:show="showLanguageDialog"
@@ -185,12 +204,13 @@ import galleryViewIcon from "@/assets/images/gallery-view.svg";
 import diqiuIcon from "@/assets/images/diqiu.svg";
 import MenuSection from "@/components/Home/MenuSection.vue";
 import TabSection from "@/components/Home/TabSection.vue";
+import CoinPairSearchModal from "@/components/Home/CoinPairSearchModal.vue";
 
 const router = useRouter();
 const { t, currentLang, setLanguage } = useI18n();
 const showMenu = ref(false);
 const showLanguageDialog = ref(false);
-const searchValue = ref("");
+const showSearchModal = ref(false);
 const isInitialized = ref(false);
 
 // 元素引用
@@ -265,6 +285,11 @@ const handleDeposit = () => {
 const handleQuickBuy = () => {
   // 处理快捷買幣逻辑
   console.log("快捷買幣");
+};
+
+const handleSelectCoinPair = (coin) => {
+  // 处理选择交易对
+  console.log("选择交易对:", coin);
 };
 
 // Intersection Observer 用于滚动动画
@@ -403,7 +428,15 @@ onUnmounted(() => {
   .search-input {
     :deep(.van-search__content) {
       border-radius: 5.06667vw;
+      background: #f3f3f3;
     }
+
+    :deep(.van-field__left-icon .van-icon, .van-field__right-icon .van-icon) {
+      color: #040303;
+    }
+    // :deep(.van-field__control::placeholder) {
+    //   color: #040303 !important;
+    // }
   }
 
   .banner {
@@ -863,4 +896,3 @@ onUnmounted(() => {
   }
 }
 </style>
-

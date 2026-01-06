@@ -1,0 +1,464 @@
+<template>
+  <van-popup
+    v-model:show="show"
+    position="bottom"
+    :style="{ height: '85%', borderRadius: '16px 16px 0 0' }"
+    @close="handleClose"
+  >
+    <div class="coin-pair-modal">
+      <!-- 顶部拖拽条 -->
+      <div class="drag-handle"></div>
+
+      <!-- 搜索框 -->
+      <div class="search-bar">
+        <van-search
+          v-model="searchKeyword"
+          :placeholder="t('searchCoinPair')"
+          @search="handleSearch"
+        />
+      </div>
+
+      <!-- 主标签页 -->
+      <div class="main-tabs">
+        <div
+          v-for="tab in mainTabs"
+          :key="tab.key"
+          class="tab-item"
+          :class="{ active: activeMainTab === tab.key }"
+          @click="activeMainTab = tab.key"
+        >
+          {{ t(tab.label) }}
+        </div>
+      </div>
+
+      <!-- 子标签页（仅在合約和期權时显示） -->
+      <div v-if="showSubTabs" class="sub-tabs">
+        <div
+          v-for="subTab in subTabs"
+          :key="subTab.key"
+          class="sub-tab-item"
+          :class="{ active: activeSubTab === subTab.key }"
+          @click="activeSubTab = subTab.key"
+        >
+          {{ t(subTab.label) }}
+        </div>
+      </div>
+
+      <!-- 内容区域 -->
+      <div class="content-area">
+        <!-- 自選标签显示空状态 -->
+        <div v-if="activeMainTab === 'favorites'" class="empty-state">
+          <img :src="nomoreImage" alt="no data" class="empty-icon" />
+          <div class="empty-text">{{ t('noData') }}</div>
+        </div>
+
+        <!-- 其他标签显示交易对列表 -->
+        <div v-else>
+          <!-- 有数据时显示列表 -->
+          <div v-if="filteredCoinList.length > 0" class="coin-list">
+            <div
+              v-for="coin in filteredCoinList"
+              :key="coin.symbol"
+              class="coin-item"
+              @click="handleSelectCoin(coin)"
+            >
+              <van-icon
+                name="star-o"
+                class="star-icon"
+                @click.stop="toggleFavorite(coin)"
+              />
+              <div class="coin-logo">
+                <div class="logo-placeholder">{{ coin.symbol.substring(0, 1) }}</div>
+              </div>
+              <div class="coin-info">
+                <div class="coin-symbol">{{ coin.symbol }}</div>
+                <div class="coin-pair">{{ coin.pair }}</div>
+              </div>
+              <div class="coin-tags">
+                <span class="tag" :class="getTagClass(coin.type)">{{ t(coin.typeLabel) }}</span>
+                <van-icon
+                  v-if="coin.isHot"
+                  name="fire-o"
+                  class="fire-icon"
+                  color="#ff4444"
+                />
+              </div>
+            </div>
+          </div>
+          <!-- 无数据时显示空状态 -->
+          <div v-else class="empty-state">
+            <img :src="nomoreImage" alt="no data" class="empty-icon" />
+            <div class="empty-text">{{ t('noData') }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </van-popup>
+</template>
+
+<script setup>
+import { ref, computed, watch } from 'vue'
+import { useI18n } from '@/i18n'
+import nomoreImage from '@/assets/images/nomore.png'
+
+const props = defineProps({
+  modelValue: {
+    type: Boolean,
+    default: false
+  }
+})
+
+const emit = defineEmits(['update:modelValue', 'select'])
+
+const { t } = useI18n()
+
+const show = computed({
+  get: () => props.modelValue,
+  set: (val) => emit('update:modelValue', val)
+})
+
+const searchKeyword = ref('')
+const activeMainTab = ref('favorites')
+const activeSubTab = ref('cryptocurrency')
+
+// 主标签配置
+const mainTabs = [
+  { key: 'favorites', label: 'favorites' },
+  { key: 'spot', label: 'spot' },
+  { key: 'contract', label: 'contract' },
+  { key: 'options', label: 'options' }
+]
+
+// 子标签配置
+const subTabs = [
+  { key: 'cryptocurrency', label: 'cryptocurrency' },
+  { key: 'forex', label: 'forex' }
+]
+
+// 是否显示子标签
+const showSubTabs = computed(() => {
+  return activeMainTab.value === 'contract' || activeMainTab.value === 'options'
+})
+
+// 模拟交易对数据
+const coinList = ref([
+  { symbol: 'BTC', pair: '/USDT', type: 'spot', typeLabel: 'spot', isHot: true },
+  { symbol: 'ETH', pair: '/USDT', type: 'spot', typeLabel: 'spot', isHot: true },
+  { symbol: 'ATOM', pair: '/USDT', type: 'spot', typeLabel: 'spot', isHot: false },
+  { symbol: 'BCH', pair: '/USDT', type: 'spot', typeLabel: 'spot', isHot: true },
+  { symbol: 'XRP', pair: '/USDT', type: 'spot', typeLabel: 'spot', isHot: true },
+  { symbol: 'LTC', pair: '/USDT', type: 'spot', typeLabel: 'spot', isHot: true },
+  { symbol: 'USDC', pair: '/USDT', type: 'spot', typeLabel: 'spot', isHot: false },
+  { symbol: 'DOGE', pair: '/USDT', type: 'spot', typeLabel: 'spot', isHot: false },
+  { symbol: 'FIL', pair: '/USDT', type: 'spot', typeLabel: 'spot', isHot: false },
+  { symbol: 'DAI', pair: '/USDT', type: 'spot', typeLabel: 'spot', isHot: false },
+  // 合約数据
+  { symbol: 'BTC', pair: '/USDT', type: 'contract', typeLabel: 'perpetual', isHot: true },
+  { symbol: 'ETH', pair: '/USDT', type: 'contract', typeLabel: 'perpetual', isHot: true },
+  { symbol: 'ATOM', pair: '/USDT', type: 'contract', typeLabel: 'perpetual', isHot: false },
+  { symbol: 'BCH', pair: '/USDT', type: 'contract', typeLabel: 'perpetual', isHot: true },
+  { symbol: 'XRP', pair: '/USDT', type: 'contract', typeLabel: 'perpetual', isHot: true },
+  { symbol: 'LTC', pair: '/USDT', type: 'contract', typeLabel: 'perpetual', isHot: true },
+  { symbol: 'DOGE', pair: '/USDT', type: 'contract', typeLabel: 'perpetual', isHot: false },
+  { symbol: 'FIL', pair: '/USDT', type: 'contract', typeLabel: 'perpetual', isHot: false },
+  { symbol: 'DAI', pair: '/USDT', type: 'contract', typeLabel: 'perpetual', isHot: false },
+  // 期權数据
+  { symbol: 'BTC', pair: '/USDT', type: 'options', typeLabel: 'options', isHot: true },
+  { symbol: 'ETH', pair: '/USDT', type: 'options', typeLabel: 'options', isHot: true },
+  { symbol: 'ATOM', pair: '/USDT', type: 'options', typeLabel: 'options', isHot: false },
+  { symbol: 'BCH', pair: '/USDT', type: 'options', typeLabel: 'options', isHot: true },
+  { symbol: 'XRP', pair: '/USDT', type: 'options', typeLabel: 'options', isHot: true },
+  { symbol: 'LTC', pair: '/USDT', type: 'options', typeLabel: 'options', isHot: true },
+  { symbol: 'DOGE', pair: '/USDT', type: 'options', typeLabel: 'options', isHot: false },
+  { symbol: 'FIL', pair: '/USDT', type: 'options', typeLabel: 'options', isHot: false },
+  { symbol: 'DAI', pair: '/USDT', type: 'options', typeLabel: 'options', isHot: false }
+])
+
+// 过滤后的交易对列表
+const filteredCoinList = computed(() => {
+  let list = coinList.value.filter(coin => coin.type === activeMainTab.value)
+
+  // 如果有搜索关键词，进行过滤
+  if (searchKeyword.value) {
+    const keyword = searchKeyword.value.toUpperCase()
+    list = list.filter(coin => 
+      coin.symbol.toUpperCase().includes(keyword) || 
+      coin.pair.toUpperCase().includes(keyword)
+    )
+  }
+
+  return list
+})
+
+// 获取标签样式类
+const getTagClass = (type) => {
+  return {
+    'tag-spot': type === 'spot',
+    'tag-contract': type === 'contract',
+    'tag-options': type === 'options'
+  }
+}
+
+// 切换收藏
+const toggleFavorite = (coin) => {
+  console.log('Toggle favorite:', coin)
+  // 这里可以添加收藏逻辑
+}
+
+// 选择交易对
+const handleSelectCoin = (coin) => {
+  emit('select', coin)
+  show.value = false
+}
+
+// 搜索
+const handleSearch = (value) => {
+  console.log('Search:', value)
+}
+
+// 关闭弹窗
+const handleClose = () => {
+  searchKeyword.value = ''
+  activeMainTab.value = 'favorites'
+  activeSubTab.value = 'cryptocurrency'
+}
+
+// 监听主标签切换，重置子标签
+watch(activeMainTab, () => {
+  activeSubTab.value = 'cryptocurrency'
+})
+</script>
+
+<style lang="scss" scoped>
+.coin-pair-modal {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: #fff;
+  border-radius: 16px 16px 0 0;
+  overflow: hidden;
+}
+
+.drag-handle {
+  width: 40px;
+  height: 4px;
+  background-color: #d4d4d4;
+  border-radius: 2px;
+  margin: 8px auto 0;
+  cursor: pointer;
+}
+
+.search-bar {
+  padding: 8px 16px 12px;
+  
+  :deep(.van-search) {
+    padding: 0;
+    background-color: transparent;
+  }
+  
+  :deep(.van-search__content) {
+    background-color: #f3f3f3;
+    border-radius: 8px;
+    padding: 8px 12px;
+  }
+  
+  :deep(.van-field__left-icon) {
+    margin-right: 8px;
+  }
+  
+  :deep(.van-field__control) {
+    font-size: 14px;
+    color: #969799;
+  }
+}
+
+.main-tabs {
+  display: flex;
+  padding: 0 16px;
+  border-bottom: 1px solid #ebedf0;
+  
+  .tab-item {
+    flex: 1;
+    text-align: center;
+    padding: 14px 0;
+    font-size: 14px;
+    color: #969799;
+    cursor: pointer;
+    position: relative;
+    transition: color 0.3s;
+    
+    &.active {
+      color: #040303;
+      font-weight: 600;
+      
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background-color: #040303;
+      }
+    }
+  }
+}
+
+.sub-tabs {
+  display: flex;
+  padding: 12px 16px 8px;
+  gap: 20px;
+  
+  .sub-tab-item {
+    font-size: 13px;
+    color: #969799;
+    cursor: pointer;
+    padding: 6px 0;
+    position: relative;
+    transition: color 0.3s;
+    
+    &.active {
+      color: #040303;
+      font-weight: 600;
+      
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background-color: #040303;
+      }
+    }
+  }
+}
+
+.content-area {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 16px;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 400px;
+  
+  .empty-icon {
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+    margin-bottom: 20px;
+  }
+  
+  .empty-text {
+    font-size: 14px;
+    color: #969799;
+  }
+}
+
+.coin-list {
+  padding: 8px 0;
+}
+
+.coin-item {
+  display: flex;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid #f5f5f5;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  
+  &:active {
+    background-color: #f5f5f5;
+  }
+  
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.star-icon {
+  font-size: 18px;
+  color: #969799;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.coin-logo {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: #f3f3f3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+  flex-shrink: 0;
+  
+  .logo-placeholder {
+    font-size: 16px;
+    font-weight: 600;
+    color: #040303;
+  }
+}
+
+.coin-info {
+  flex: 1;
+  min-width: 0;
+  
+  .coin-symbol {
+    font-size: 15px;
+    font-weight: 600;
+    color: #040303;
+    margin-bottom: 4px;
+    line-height: 1.2;
+  }
+  
+  .coin-pair {
+    font-size: 12px;
+    color: #969799;
+    line-height: 1.2;
+  }
+}
+
+.coin-tags {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  
+  .tag {
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 500;
+    white-space: nowrap;
+    
+    &.tag-spot {
+      background-color: #fff3cd;
+      color: #856404;
+    }
+    
+    &.tag-contract {
+      background-color: #fff3cd;
+      color: #856404;
+    }
+    
+    &.tag-options {
+      background-color: #fff3cd;
+      color: #856404;
+    }
+  }
+  
+  .fire-icon {
+    font-size: 16px;
+    margin-left: 2px;
+  }
+}
+</style>
+
