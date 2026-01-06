@@ -31,7 +31,7 @@
         <div class="menu-sub-item" @click="handleMyAssetsClick">{{ t("myAssets") }}</div>
         <div class="menu-sub-item" @click="handleDepositClick">{{ t("deposit") }}</div>
         <div class="menu-sub-item" @click="handleWithdrawClick">{{ t("withdraw") }}</div>
-        <div class="menu-sub-item">{{ t("transfer") }}</div>
+        <div class="menu-sub-item" @click="handleTransferClick">{{ t("transfer") }}</div>
         <div class="menu-sub-item">{{ t("orderCenter") }}</div>
       </div>
     </div>
@@ -133,6 +133,10 @@ const handleDepositClick = () => {
 const handleWithdrawClick = () => {
   router.push('/withdraw-detail');
 };
+// 处理划转点击
+const handleTransferClick =() => {
+  router.push('/transfer-detail')
+}
 </script>
 
 <style lang="scss" scoped>

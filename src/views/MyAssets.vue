@@ -231,7 +231,7 @@ const handleWithdraw = () => {
 }
 
 const handleTransfer = () => {
-  console.log('劃轉')
+  router.push('/transfer-detail')
 }
 
 const handleBill = () => {

@@ -104,6 +104,14 @@ const routes = [
     meta: {
       title: '提現'
     }
+  },
+  {
+    path: '/transfer-detail',
+    name: 'TransferDetail',
+    component: () => import('@/views/TransferDetail.vue'),
+    meta: {
+      title: '劃轉'
+    }
   }
 ]
 
