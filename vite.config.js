@@ -31,6 +31,9 @@ export default defineConfig({
     minify: 'esbuild',
     // 如需使用 terser，请安装 @rollup/plugin-terser
     // 并配置: minify: 'terser'
+  },
+  define: {
+    'process.env': {}
   }
 })
 

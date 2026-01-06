@@ -8,7 +8,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "lightweight-charts": "^5.1.0",
+    "lightweight-charts": "^4.1.0",
     "pinia": "^2.1.7",
     "vant": "^4.8.0",
     "vue": "^3.4.0",
