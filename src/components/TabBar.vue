@@ -45,15 +45,19 @@ const routeToTab = {
 };
 
 // 根据当前路由设置激活的 tab
-const active = ref(routeToTab[route.name] || "home");
+const getActiveTab = (routeName) => {
+  return routeToTab[routeName] || "";
+};
+
+const active = ref(getActiveTab(route.name));
 
 // 监听路由变化，更新激活的 tab
 watch(
   () => route.name,
   (newName) => {
-    if (routeToTab[newName]) {
-      active.value = routeToTab[newName];
-    }
+    const newActive = getActiveTab(newName);
+    // 如果路由不在映射中（如详情页），设置为空字符串，取消所有选中状态
+    active.value = newActive;
   }
 );
 
@@ -67,8 +71,13 @@ const onChange = (name) => {
     asset: "/asset",
   };
 
-  if (tabToRoute[name] && route.path !== tabToRoute[name]) {
-    router.push(tabToRoute[name]);
+  if (tabToRoute[name]) {
+    // 如果当前路径与目标路径不同，则跳转
+    if (route.path !== tabToRoute[name]) {
+      router.push(tabToRoute[name]);
+    }
+    // 更新激活状态
+    active.value = name;
   }
 };
 </script>
