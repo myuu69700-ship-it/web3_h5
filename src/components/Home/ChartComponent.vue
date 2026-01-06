@@ -37,6 +37,7 @@ const isExpanded = ref(true)
 const activeTimeframe = ref('5m')
 let chart = null
 let candlestickSeries = null
+let currentPriceLine = null
 let resizeHandler = null
 
 const timeframes = [
@@ -109,19 +110,38 @@ const initChart = () => {
     layout: {
       background: { type: ColorType.Solid, color: '#FFFFFF' },
       textColor: '#333',
+      fontSize: 12,
     },
     grid: {
-      vertLines: { color: '#f0f0f0' },
-      horzLines: { color: '#f0f0f0' },
+      vertLines: { 
+        color: '#f0f0f0',
+        visible: true,
+        style: 0, // 实线
+      },
+      horzLines: { 
+        color: '#f0f0f0',
+        visible: true,
+        style: 0, // 实线
+      },
     },
     width: chartContainer.value.clientWidth,
     height: 300,
     timeScale: {
       timeVisible: true,
       secondsVisible: false,
+      borderColor: '#f0f0f0',
+      rightOffset: 0,
     },
     rightPriceScale: {
-      borderColor: '#d1d4dc',
+      borderColor: '#f0f0f0',
+      scaleMargins: {
+        top: 0.1,
+        bottom: 0.1,
+      },
+      entireTextOnly: false,
+    },
+    leftPriceScale: {
+      visible: false,
     },
   })
 
@@ -129,23 +149,39 @@ const initChart = () => {
   candlestickSeries = chart.addCandlestickSeries({
     upColor: '#26a69a',
     downColor: '#ef5350',
-    borderVisible: false,
+    borderUpColor: '#26a69a',
+    borderDownColor: '#ef5350',
     wickUpColor: '#26a69a',
     wickDownColor: '#ef5350',
+    priceFormat: {
+      type: 'price',
+      precision: 6,
+      minMove: 0.000001,
+    },
   })
 
   // 加载数据
   const data = generateMockData()
   candlestickSeries.setData(data)
 
-  // 添加当前价格线
-  const currentPrice = getBasePrice()
-  candlestickSeries.createPriceLine({
+  // 获取最新价格并判断涨跌
+  const latestData = data[data.length - 1]
+  const previousData = data[data.length - 2]
+  const currentPrice = latestData.close
+  const isUp = currentPrice >= (previousData?.close || currentPrice)
+  
+  // 添加当前价格线（根据涨跌显示不同颜色）
+  const basePrice = getBasePrice()
+  const priceLineColor = isUp ? '#26a69a' : '#ef5350'
+  const priceDecimals = basePrice < 100 ? 6 : 2
+  currentPriceLine = candlestickSeries.createPriceLine({
     price: currentPrice,
-    color: '#ef5350',
+    color: priceLineColor,
     lineWidth: 1,
     lineStyle: 2, // 虚线
     axisLabelVisible: true,
+    title: currentPrice.toFixed(priceDecimals),
+    priceLineVisible: true,
   })
 
   // 响应式调整
@@ -174,10 +210,36 @@ onUnmounted(() => {
 // 监听时间周期变化
 watch(activeTimeframe, () => {
   // 这里可以重新加载对应周期的数据
-  if (candlestickSeries) {
+  if (candlestickSeries && chart) {
+    // 清除旧的价格线
+    if (currentPriceLine) {
+      candlestickSeries.removePriceLine(currentPriceLine)
+      currentPriceLine = null
+    }
+    
     const data = generateMockData()
     candlestickSeries.setData(data)
-    chart?.timeScale().fitContent()
+    
+    // 重新添加当前价格线
+    const latestData = data[data.length - 1]
+    const previousData = data[data.length - 2]
+    const currentPrice = latestData.close
+    const isUp = currentPrice >= (previousData?.close || currentPrice)
+    const priceLineColor = isUp ? '#26a69a' : '#ef5350'
+    const basePrice = getBasePrice()
+    const priceDecimals = basePrice < 100 ? 6 : 2
+    
+    currentPriceLine = candlestickSeries.createPriceLine({
+      price: currentPrice,
+      color: priceLineColor,
+      lineWidth: 1,
+      lineStyle: 2,
+      axisLabelVisible: true,
+      title: currentPrice.toFixed(priceDecimals),
+      priceLineVisible: true,
+    })
+    
+    chart.timeScale().fitContent()
   }
 })
 
@@ -226,7 +288,13 @@ onMounted(() => {
   display: flex;
   gap: 8px;
   margin-bottom: 12px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
   .timeframe-item {
     padding: 4px 12px;
@@ -237,11 +305,16 @@ onMounted(() => {
     background-color: #f3f3f3;
     transition: all 0.3s;
     white-space: nowrap;
+    flex-shrink: 0;
 
     &.active {
       background-color: #e0e0e0;
       color: #040303;
       font-weight: 500;
+    }
+
+    &:hover {
+      background-color: #e8e8e8;
     }
   }
 }
