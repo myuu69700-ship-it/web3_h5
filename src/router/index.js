@@ -74,6 +74,14 @@ const routes = [
     }
   },
   {
+    path: '/privacy-policy',
+    name: 'PrivacyPolicy',
+    component: () => import('@/views/PrivacyPolicy.vue'),
+    meta: {
+      title: '隐私协议'
+    }
+  },
+  {
     path: '/coin/:pair',
     name: 'CoinDetail',
     component: () => import('@/views/CoinDetail.vue'),
