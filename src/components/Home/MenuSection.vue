@@ -80,7 +80,7 @@
       <div v-if="expandedMenus.policies" class="menu-content">
         <div class="menu-sub-item" @click="handleTermsOfServiceClick">{{ t("termsOfService") }}</div>
         <div class="menu-sub-item" @click="handlePrivacyPolicyClick">{{ t("privacyPolicy") }}</div>
-        <div class="menu-sub-item">{{ t("antiMoneyLaundering") }}</div>
+        <div class="menu-sub-item" @click="handleAntiMoneyLaunderingClick">{{ t("antiMoneyLaundering") }}</div>
       </div>
     </div>
   </div>
@@ -161,6 +161,11 @@ const handleTermsOfServiceClick = () => {
 // 处理隐私协议点击
 const handlePrivacyPolicyClick = () => {
   router.push('/privacy-policy')
+}
+
+// 处理反洗钱协议点击
+const handleAntiMoneyLaunderingClick = () => {
+  router.push('/anti-money-laundering')
 }
 </script>
 

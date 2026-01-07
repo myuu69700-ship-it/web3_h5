@@ -82,6 +82,14 @@ const routes = [
     }
   },
   {
+    path: '/anti-money-laundering',
+    name: 'AntiMoneyLaundering',
+    component: () => import('@/views/AntiMoneyLaundering.vue'),
+    meta: {
+      title: '反洗钱协议'
+    }
+  },
+  {
     path: '/coin/:pair',
     name: 'CoinDetail',
     component: () => import('@/views/CoinDetail.vue'),
