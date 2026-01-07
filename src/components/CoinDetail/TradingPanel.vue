@@ -62,14 +62,44 @@
 
         <!-- 百分比滑块 -->
         <div class="slider-wrapper">
-          <input
-            type="range"
-            class="slider"
-            min="0"
-            max="100"
-            step="25"
-            v-model="sliderPercent"
-          />
+          <div class="slider-container">
+            <van-slider
+              v-model="sliderPercent"
+              :min="0"
+              :max="100"
+              :step="1"
+              active-color="#040303"
+              inactive-color="#e5e5e5"
+              button-size="12px"
+              :show-tooltip="false"
+              @change="handleSliderMove"
+              @drag="handleSliderDrag"
+            />
+            <!-- 自定义工具提示 -->
+            <div 
+              class="custom-tooltip" 
+              :class="{ 'show': isSliderHovering }"
+              :style="{ left: sliderPercent + '%' }"
+            >
+              <div class="tooltip-content">
+                {{ Math.round(sliderPercent) }}%
+              </div>
+              <div class="tooltip-arrow"></div>
+            </div>
+            <!-- 节点标记 -->
+            <div class="slider-nodes">
+              <div 
+                v-for="(mark, index) in [0, 25, 50, 75, 100]"
+                :key="index"
+                class="slider-node"
+                :class="{ 
+                  'passed': sliderPercent >= mark,
+                  'covered': Math.abs(sliderPercent - mark) < 2
+                }"
+                :style="{ left: mark + '%' }"
+              ></div>
+            </div>
+          </div>
           <div class="slider-marks">
             <span :class="{ active: sliderPercent >= 0 }">0</span>
             <span :class="{ active: sliderPercent >= 25 }">25%</span>
@@ -262,6 +292,17 @@ const price = ref("3257.16");
 const priceChange = ref(1.44);
 const isSyncing = ref(false); // 防止循环更新的标志
 const stopLossProfitEnabled = ref(false);
+const isSliderHovering = ref(false); // 控制滑块工具提示显示
+
+// 处理滑块移动事件
+const handleSliderMove = () => {
+  // 滑块值变化时的处理逻辑
+};
+
+// 处理滑块拖拽事件（用于实时更新工具提示）
+const handleSliderDrag = () => {
+  // 工具提示会通过 sliderPercent 自动更新
+};
 
 // 格式化显示价格（带逗号）
 const displayPrice = computed(() => {
@@ -402,7 +443,7 @@ watch(
     const percent = (parseFloat(newValue) / props.currentBalance) * 100;
     const roundedPercent = Math.min(
       100,
-      Math.max(0, Math.round(percent / 25) * 25)
+      Math.max(0, Math.round(percent))
     );
     if (roundedPercent !== props.sliderValue) {
       isSyncing.value = true;
@@ -664,35 +705,118 @@ onUnmounted(() => {
   margin-bottom: 8px;
 }
 
-.slider {
+.slider-container {
+  position: relative;
+  width: 100%;
+  padding: 8px 0;
+  display: flex;
+  align-items: center;
+}
+
+/* Vant Slider 样式覆盖 */
+.slider-container :deep(.van-slider) {
   width: 100%;
   height: 4px;
+  position: relative;
+  z-index: 1;
+}
+
+.slider-container :deep(.van-slider__track) {
+  height: 4px;
+  background-color: #e5e5e5;
   border-radius: 2px;
-  background: #ebedf0;
-  outline: none;
-  -webkit-appearance: none;
-  appearance: none;
 }
 
-.slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: #1dbf73;
-  cursor: pointer;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+.slider-container :deep(.van-slider__bar) {
+  height: 4px;
+  background-color: #040303;
+  border-radius: 2px 0 0 2px;
 }
 
-.slider::-moz-range-thumb {
-  width: 14px;
-  height: 14px;
+.slider-container :deep(.van-slider__button) {
+  width: 12px;
+  height: 12px;
+  background: #fff;
+  border: 2px solid #040303;
+  box-shadow: 0 0 8px rgba(4, 3, 3, 0.15);
+}
+
+.slider-container :deep(.van-slider__button-wrapper) {
+  width: 12px;
+  height: 12px;
+  z-index: 4;
+}
+
+/* 节点标记 */
+.slider-nodes {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+  height: 4px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.slider-node {
+  position: absolute;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  background: #1dbf73;
-  cursor: pointer;
-  border: none;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  background: #fff;
+  border: 2px solid #e5e5e5;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  transition: all 0.2s ease;
+}
+
+.slider-node.passed {
+  border-color: #040303;
+}
+
+.slider-node.covered {
+  opacity: 0;
+  z-index: 1;
+}
+
+/* 自定义工具提示样式 */
+.custom-tooltip {
+  position: absolute;
+  top: -36px;
+  transform: translateX(-50%);
+  z-index: 10;
+  pointer-events: none;
+  transition: left 0.1s ease-out;
+}
+
+.tooltip-content {
+  background: #323233;
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  white-space: nowrap;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  text-align: center;
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+.tooltip-arrow {
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid #323233;
 }
 
 .slider-marks {
