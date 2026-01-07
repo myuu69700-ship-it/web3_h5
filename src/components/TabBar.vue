@@ -91,6 +91,11 @@ const onChange = (name) => {
   left: 0;
   bottom: 0;
   box-shadow: 0 -1px 1.06667vw #0000001a;
+  
+  // 确保交易图标可以盖过底部线条
+  .van-tabbar-item[name="trade"] {
+    overflow: visible;
+  }
 }
 
 :deep(.van-tabbar-item) {
@@ -104,6 +109,10 @@ const onChange = (name) => {
 
 // Trade 特殊样式 - 黑色圆形图标（始终显示）
 :deep(.van-tabbar-item[name="trade"]) {
+  position: relative;
+  z-index: 100;
+  overflow: visible;
+  
   .van-tabbar-item__icon {
     background-color: #323233;
     border-radius: 50%;
@@ -114,15 +123,26 @@ const onChange = (name) => {
     justify-content: center;
     margin-bottom: 4px;
     padding: 0;
+    position: relative;
+    z-index: 101;
+    transform: translateY(-8px);
+  }
+  
+  .van-badge__wrapper {
+    position: relative;
+    z-index: 102;
+    transform: translateY(-8px);
   }
 }
 
 .trade-icon {
   width: 10.66667vw;
   height: 10.66667vw;
-  margin-top: -6vw;
+  margin-top: -7vw;
   color: #040303;
-  object-fit: contain;
+  position: relative;
+  z-index: 103;
+  // object-fit: contain;
 }
 
 :deep(.van-tabbar-item[name="trade"].van-tabbar-item--active) {
