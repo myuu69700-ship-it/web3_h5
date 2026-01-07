@@ -17,36 +17,39 @@
       </div>
     </div>
 
-    <!-- 图表区域 -->
-    <div v-if="!isChartHidden" class="chart-section">
-      <ChartComponent :coin-pair="coinPair" />
-    </div>
+    <!-- 图表和交易内容容器 -->
+    <div class="content-wrapper">
+      <!-- 图表区域 -->
+      <div v-if="!isChartHidden" class="chart-section">
+        <ChartComponent :coin-pair="coinPair" />
+      </div>
 
-    <!-- 主要内容区域：交易控制和订单簿 -->
-    <div class="main-content">
-      <!-- 左侧：交易控制区域 -->
-      <TradingPanel
-        v-model:trade-type="tradeType"
-        v-model:direction="direction"
-        v-model:amount="amount"
-        v-model:slider-value="sliderValue"
-        :current-balance="currentBalance"
-        :min-buy="minBuy"
-        :max-buy="maxBuy"
-        :trading-interval="tradingInterval"
-        :selected-time="selectedTime"
-        @show-interval-picker="showIntervalPicker = true"
-        @show-time-picker="showTimePicker = true"
-        @trade="handleTrade"
-      />
+      <!-- 主要内容区域：交易控制和订单簿 -->
+      <div class="main-content">
+        <!-- 左侧：交易控制区域 -->
+        <TradingPanel
+          v-model:trade-type="tradeType"
+          v-model:direction="direction"
+          v-model:amount="amount"
+          v-model:slider-value="sliderValue"
+          :current-balance="currentBalance"
+          :min-buy="minBuy"
+          :max-buy="maxBuy"
+          :trading-interval="tradingInterval"
+          :selected-time="selectedTime"
+          @show-interval-picker="showIntervalPicker = true"
+          @show-time-picker="showTimePicker = true"
+          @trade="handleTrade"
+        />
 
-      <!-- 右侧：订单簿区域 -->
-      <OrderBook
-        :buy-orders="buyOrders"
-        :sell-orders="sellOrders"
-        :current-price="currentPrice"
-        :price-change="priceChange"
-      />
+        <!-- 右侧：订单簿区域 -->
+        <OrderBook
+          :buy-orders="buyOrders"
+          :sell-orders="sellOrders"
+          :current-price="currentPrice"
+          :price-change="priceChange"
+        />
+      </div>
     </div>
 
     <!-- 订单历史标签 -->
@@ -344,18 +347,21 @@ onUnmounted(() => {
   }
 }
 
-.chart-section {
+.content-wrapper {
   background-color: #fff;
-  margin: 12px;
+  // margin: 12px;
   border-radius: 8px;
+  overflow: hidden;
+}
+
+.chart-section {
   overflow: hidden;
 }
 
 .main-content {
   display: flex;
   gap: 12px;
-  padding: 0 12px;
-  margin-bottom: 12px;
+  padding: 12px;
 
   @media (max-width: 768px) {
     flex-direction: column;

@@ -3,7 +3,7 @@
     <div class="chart-header">
       <div class="chart-title">{{ coinPair }} 圖表</div>
       <div class="chart-expand" @click="toggleExpand">
-        {{ isExpanded ? '隱藏' : '展開' }}<span class="arrow">{{ isExpanded ? '↑' : '↓' }}</span>
+        {{ isExpanded ? '隱藏' : '展開' }}<van-icon :name="isExpanded ? 'arrow-up' : 'arrow-down'" class="arrow" />
       </div>
     </div>
     <div v-if="isExpanded" class="chart-timeframes">
@@ -283,19 +283,17 @@ onMounted(() => {
 .chart-container {
   background-color: #fff;
   border-radius: 8px;
-  padding: 12px;
-  margin-bottom: 12px;
+  padding: 10px;
 }
 
 .chart-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
+  // margin-bottom: 12px;
 
   .chart-title {
-    font-size: 14px;
-    font-weight: 500;
+    font-size: 3.2vw;
     color: #040303;
   }
 
@@ -320,7 +318,7 @@ onMounted(() => {
   flex-wrap: nowrap;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-
+  margin-top: 12px;
   &::-webkit-scrollbar {
     display: none;
   }
