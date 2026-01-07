@@ -33,7 +33,7 @@ const props = defineProps({
 })
 
 const chartContainer = ref(null)
-const isExpanded = ref(true)
+const isExpanded = ref(false)
 const activeTimeframe = ref('5m')
 let chart = null
 let candlestickSeries = null
