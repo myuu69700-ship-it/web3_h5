@@ -6,9 +6,10 @@
       <div class="title">{{ t("termsOfServiceTitle") }}</div>
     </div>
 
-    <!-- 内容区域 -->
-    <div class="content">
-      <h1 class="main-title">{{ t("termsTitle") }}</h1>
+    <!-- 内容区域 - 可滚动 -->
+    <div class="content-wrapper">
+      <div class="content">
+        <h1 class="main-title">{{ t("termsTitle") }}</h1>
 
       <!-- 1. 总则 -->
       <section class="section">
@@ -53,6 +54,7 @@
           <li>{{ t("section4Item5") }}</li>
         </ul>
       </section>
+      </div>
     </div>
   </div>
 </template>
@@ -73,20 +75,25 @@ const goBack = () => {
 .terms-of-service {
   min-height: 100vh;
   background-color: #fff;
+  display: flex;
+  flex-direction: column;
 }
 
 .header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 16px;
+  padding: 12px 16px;
   position: relative;
   border-bottom: 1px solid #ebedf0;
+  background-color: #fff;
+  flex-shrink: 0;
+  z-index: 10;
 
   .back-icon {
     font-size: 20px;
     color: #040303;
     cursor: pointer;
+    z-index: 2;
   }
 
   .title {
@@ -94,31 +101,43 @@ const goBack = () => {
     left: 50%;
     transform: translateX(-50%);
     font-size: 18px;
-    font-weight: 500;
+    font-weight: 600;
     color: #040303;
+    width: 100%;
+    text-align: center;
   }
 }
 
+.content-wrapper {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  background-color: #fff;
+}
+
 .content {
-  padding: 24px 16px;
-  line-height: 1.6;
+  padding: 20px 16px;
+  line-height: 1.8;
   color: #040303;
+  max-width: 100%;
 
   .main-title {
-    font-size: 20px;
-    font-weight: 600;
-    margin-bottom: 24px;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 20px;
     color: #040303;
+    line-height: 1.5;
   }
 
   .section {
-    margin-bottom: 32px;
+    margin-bottom: 28px;
 
     .section-title {
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 600;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
       color: #040303;
+      line-height: 1.5;
     }
 
     .paragraph {
@@ -126,19 +145,23 @@ const goBack = () => {
       line-height: 1.8;
       margin-bottom: 12px;
       color: #040303;
-      text-align: justify;
+      // text-align: justify;
+      word-break: break-word;
     }
 
     .list {
-      padding-left: 20px;
+      // padding-left: 20px;
       margin-top: 12px;
+      // list-style: disc;
 
       li {
         font-size: 14px;
         line-height: 1.8;
-        margin-bottom: 8px;
+        margin-bottom: 10px;
         color: #040303;
         text-align: justify;
+        word-break: break-word;
+        padding-left: 4px;
       }
     }
   }
