@@ -6,7 +6,7 @@
     <van-tabbar-item name="market" icon="chart-trending-o">
       {{ t("market") }}
     </van-tabbar-item>
-    <van-tabbar-item name="trade">
+    <van-tabbar-item name="trade"> 
       <template #icon="props">
         <img
           :src="refreshIcon"

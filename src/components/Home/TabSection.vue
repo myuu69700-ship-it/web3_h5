@@ -124,7 +124,7 @@ import nomoreIcon from "@/assets/images/nomore.png";
 
 const router = useRouter();
 const { t } = useI18n();
-const activeTab = ref("favorites"); // 默认显示自選
+const activeTab = ref("cryptocurrency"); // 默认显示自選
 
 // 自選数据（空数组，显示暂无数据）
 const favoriteCoins = ref([]);
