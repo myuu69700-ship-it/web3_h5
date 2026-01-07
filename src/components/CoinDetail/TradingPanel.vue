@@ -123,6 +123,28 @@
           <div>止盈止損</div>
         </div>
 
+        <!-- 止盈止损输入框 -->
+        <div v-if="stopLossProfitEnabled" class="stop-loss-profit-inputs">
+          <div class="profit-loss-input-wrapper">
+            <input
+              type="text"
+              class="profit-loss-input"
+              v-model="takeProfitPrice"
+              placeholder="0"
+            />
+            <span class="profit-loss-label">止盈價格</span>
+          </div>
+          <div class="profit-loss-input-wrapper">
+            <input
+              type="text"
+              class="profit-loss-input"
+              v-model="stopLossPrice"
+              placeholder="0"
+            />
+            <span class="profit-loss-label">止損價格</span>
+          </div>
+        </div>
+
         <!-- 买入按钮 -->
         <div class="trade-button buy-button" @click="handleBuy">
           <div class="button-text">買進(做多) 1x</div>
@@ -227,12 +249,43 @@
 
         <!-- 价格增量选择 -->
         <div class="price-increment">
-          <div class="select-btn increment-btn">
-            <span>0.000001</span>
-            <van-icon name="arrow-down" size="10" />
-            <van-icon name="apps-o" size="12" class="grid-icon" />
+          <div class="increment-selector" @click="showIncrementPicker = true">
+            <span class="increment-value">{{ selectedIncrement }}</span>
+            <van-icon name="arrow-down" size="12" class="increment-arrow" />
+            <van-icon name="bars" size="14" class="increment-icon" />
           </div>
         </div>
+
+        <!-- 价格增量选择器弹窗 -->
+        <van-popup
+          v-model:show="showIncrementPicker"
+          position="bottom"
+          :style="{ height: '40%' }"
+          round
+        >
+          <div class="increment-picker-content">
+            <div class="picker-header">
+              <div class="picker-drag-handle"></div>
+              <van-icon
+                name="cross"
+                size="16"
+                class="picker-close"
+                @click="showIncrementPicker = false"
+              />
+            </div>
+            <div class="picker-list">
+              <div
+                v-for="(option, index) in incrementOptions"
+                :key="index"
+                class="picker-item"
+                :class="{ active: selectedIncrement === option }"
+                @click="selectIncrement(option)"
+              >
+                {{ option }}
+              </div>
+            </div>
+          </div>
+        </van-popup>
       </div>
     </div>
   </div>
@@ -306,6 +359,27 @@ const priceChange = ref(1.44);
 const isSyncing = ref(false); // 防止循环更新的标志
 const stopLossProfitEnabled = ref(false);
 const isSliderDragging = ref(false); // 控制滑块工具提示显示（鼠标按下时显示）
+
+// 止盈止损价格
+const takeProfitPrice = ref("");
+const stopLossPrice = ref("");
+
+// 价格增量选择
+const selectedIncrement = ref("0.000001");
+const showIncrementPicker = ref(false);
+const incrementOptions = ref([
+  "0.1",
+  "0.01",
+  "0.001",
+  "0.0001",
+  "0.00001",
+  "0.000001",
+]);
+
+const selectIncrement = (value) => {
+  selectedIncrement.value = value;
+  showIncrementPicker.value = false;
+};
 
 // 处理滑块移动事件
 const handleSliderMove = () => {
@@ -685,7 +759,7 @@ onUnmounted(() => {
 
 .input-label {
   font-size: 11px;
-  color: #969799;
+  color: #040303;
   margin-bottom: 4px;
 }
 
@@ -728,7 +802,6 @@ onUnmounted(() => {
   color: #040303;
   cursor: pointer;
   flex-shrink: 0;
-  clear
   // padding-left: 8px;
 
   span {
@@ -879,7 +952,7 @@ onUnmounted(() => {
   justify-content: space-between;
   margin-top: 6px;
   font-size: 10px;
-  color: #969799;
+  color: #040303;
 }
 
 .slider-marks span {
@@ -896,7 +969,42 @@ onUnmounted(() => {
   font-size: 11px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 8px;
+}
+
+.stop-loss-profit-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.profit-loss-input-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.profit-loss-input {
+  background-color: #f3f3f3;
+  width: 100%;
+  height: 8.8vw;
+  border: 1px solid transparent;
+  border-radius: 2.13333vw;
+  padding: 0 2vw;
+  font-size: 4vw;
+  color: #040303;
+  outline: none;
+
+  &::placeholder {
+    color: #c8c9cc;
+  }
+}
+
+.profit-loss-label {
+  font-size: 3.2vw;
+  color: #040303;
+  padding-left: 2vw;
 }
 
 .trade-button {
@@ -952,16 +1060,17 @@ onUnmounted(() => {
 .buy-info,
 .sell-info {
   font-size: 10px;
-  color: #969799;
+  color: #040303;;
   margin-bottom: 8px;
 
   .info-item {
     display: flex;
     justify-content: space-between;
     margin-bottom: 4px;
+    font-size: 3.2vw;
 
     .info-label {
-      color: #969799;
+      color: #040303;
     }
 
     .info-value {
@@ -975,7 +1084,7 @@ onUnmounted(() => {
   display: flex;
   justify-content: space-between;
   font-size: 10px;
-  color: #969799;
+  color: #040303;
   margin-bottom: 8px;
   padding: 0 4px;
   font-weight: 400;
@@ -1150,17 +1259,93 @@ onUnmounted(() => {
 
 .price-increment {
   margin-top: 6px;
+  flex-shrink: 0;
 }
 
-.increment-btn {
-  font-size: 9px;
-  padding: 4px 6px;
+.increment-selector {
   display: flex;
   align-items: center;
   gap: 4px;
+  padding: 4px 6px;
+  cursor: pointer;
+  font-size: 3.2vw;
+  color: #040303;
+  position: relative;
+}
 
-  .grid-icon {
-    margin-left: auto;
+.increment-value {
+  flex: 1;
+  font-size: 3.2vw;
+}
+
+.increment-arrow {
+  color: #040303;
+  flex-shrink: 0;
+}
+
+.increment-icon {
+  color: #040303;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.increment-picker-content {
+  padding: 16px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.picker-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #ebedf0;
+  margin-bottom: 16px;
+}
+
+.picker-drag-handle {
+  width: 40px;
+  height: 4px;
+  background: #ebedf0;
+  border-radius: 2px;
+  margin: 0 auto;
+}
+
+.picker-close {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #323233;
+  cursor: pointer;
+  padding: 8px;
+}
+
+.picker-list {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.picker-item {
+  padding: 16px;
+  text-align: center;
+  font-size: 16px;
+  color: #323233;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  border-radius: 4px;
+
+  &:active {
+    background-color: #f7f8fa;
+  }
+
+  &.active {
+    background-color: #f7f8fa;
+    color: #040303;
+    font-weight: 500;
   }
 }
 </style>
