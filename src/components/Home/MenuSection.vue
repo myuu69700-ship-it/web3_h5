@@ -47,7 +47,7 @@
         />
       </div>
       <div v-if="expandedMenus.financialManagement" class="menu-content">
-        <div class="menu-sub-item">{{ t("products") }}</div>
+        <div class="menu-sub-item" @click="handleProductClick">{{ t("products") }}</div>
       </div>
     </div>
 
@@ -141,6 +141,11 @@ const handleTransferClick =() => {
 // 处理订单中心点击
 const handleOrderCenterClick = () => {
   router.push('/order-center')
+}
+
+// 处理产品点击
+const handleProductClick = () => {
+  router.push('/product-detail')
 }
 </script>
 

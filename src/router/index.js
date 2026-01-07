@@ -120,6 +120,14 @@ const routes = [
     meta: {
       title: '帳單'
     }
+  },
+  {
+    path: '/product-detail',
+    name: 'ProductDetail',
+    component: () => import('@/views/ProductDetail.vue'),
+    meta: {
+      title: 'DeFi 借幣'
+    }
   }
 ]
 
