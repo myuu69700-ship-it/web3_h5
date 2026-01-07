@@ -154,8 +154,8 @@
       <div class="bet-main-right">
         <!-- 订单簿标题 -->
         <div class="order-book-header">
-          <span>價格 (USDT)</span>
-          <span>數量 (ETH)</span>
+          <div>價格 (USDT)</div>
+          <div style="margin-left: 65px;">數量 (ETH)</div>
         </div>
 
         <!-- 卖盘（绿色，在上方） -->
@@ -573,14 +573,16 @@ onUnmounted(() => {
 }
 
 .bet-main-right {
-  width: 134px;
-  padding: 8px 4px;
+  width: 140px;
+  // padding: 0px 4px;
   background: #fff;
   display: flex;
   flex-direction: column;
   font-size: 10px;
+  font-size: 3.2vw;
   position: relative;
   flex-shrink: 0;
+  padding-left: 4px;
 }
 // 左侧面板样式
 .margin-leverage {
@@ -720,6 +722,7 @@ onUnmounted(() => {
   color: #040303;
   cursor: pointer;
   flex-shrink: 0;
+  clear
   // padding-left: 8px;
 
   span {
@@ -951,13 +954,24 @@ onUnmounted(() => {
   margin-bottom: 8px;
   padding: 0 4px;
   font-weight: 400;
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: initial;
+  align-items: initial;
+  justify-content: initial;
+  height: 4.8vw;
+  line-height: 4.8vw;
+  margin-bottom: 1px;
+  width: 100%;
+  font-size: 3.2vw;
+  margin-bottom: 5.5vw;
 }
 
 .order-list {
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
-  max-height: 220px;
+  max-height: 250px;
   min-height: 140px;
 
   &::-webkit-scrollbar {
@@ -977,7 +991,8 @@ onUnmounted(() => {
 .order-row {
   position: relative;
   padding: 3px 4px;
-  font-size: 10px;
+  // font-size: 10px;
+  font-size: 3.2vw;
   transition: background-color 0.2s;
   overflow: hidden;
   cursor: pointer;
@@ -1038,14 +1053,17 @@ onUnmounted(() => {
 }
 
 .sell-row {
+  
   .sell-price {
     color: #1dbf73;
+    font-size: 3.2vw;
   }
 }
 
 .buy-row {
   .buy-price {
     color: #e84545;
+    font-size: 3.2vw;
   }
 }
 
@@ -1062,13 +1080,14 @@ onUnmounted(() => {
   flex: 1;
   font-size: 10px;
   line-height: 1.2;
+  font-size: 3.2vw;
 }
 
 .current-price-section {
   text-align: center;
   padding: 10px 4px;
-  border-top: 1px solid #ebedf0;
-  border-bottom: 1px solid #ebedf0;
+  // border-top: 1px solid #ebedf0;
+  // border-bottom: 1px solid #ebedf0;
   margin: 8px 0;
   flex-shrink: 0;
   background: #fff;
@@ -1082,6 +1101,7 @@ onUnmounted(() => {
   color: #040303;
   margin-bottom: 3px;
   line-height: 1.2;
+  font-size: 3.2vw;
 }
 
 .current-price-info {
