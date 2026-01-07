@@ -73,12 +73,14 @@
               button-size="12px"
               :show-tooltip="false"
               @change="handleSliderMove"
+              @drag-start="handleSliderDragStart"
               @drag="handleSliderDrag"
+              @drag-end="handleSliderDragEnd"
             />
             <!-- 自定义工具提示 -->
             <div 
               class="custom-tooltip" 
-              :class="{ 'show': isSliderHovering }"
+              :class="{ 'show': isSliderDragging }"
               :style="{ left: sliderPercent + '%' }"
             >
               <div class="tooltip-content">
@@ -292,16 +294,26 @@ const price = ref("3257.16");
 const priceChange = ref(1.44);
 const isSyncing = ref(false); // 防止循环更新的标志
 const stopLossProfitEnabled = ref(false);
-const isSliderHovering = ref(false); // 控制滑块工具提示显示
+const isSliderDragging = ref(false); // 控制滑块工具提示显示（鼠标按下时显示）
 
 // 处理滑块移动事件
 const handleSliderMove = () => {
   // 滑块值变化时的处理逻辑
 };
 
+// 处理滑块开始拖拽事件（鼠标按下）
+const handleSliderDragStart = () => {
+  isSliderDragging.value = true;
+};
+
 // 处理滑块拖拽事件（用于实时更新工具提示）
 const handleSliderDrag = () => {
   // 工具提示会通过 sliderPercent 自动更新
+};
+
+// 处理滑块结束拖拽事件（鼠标松开）
+const handleSliderDragEnd = () => {
+  isSliderDragging.value = false;
 };
 
 // 格式化显示价格（带逗号）
@@ -788,6 +800,13 @@ onUnmounted(() => {
   z-index: 10;
   pointer-events: none;
   transition: left 0.1s ease-out;
+  opacity: 0;
+  visibility: hidden;
+  
+  &.show {
+    opacity: 1;
+    visibility: visible;
+  }
 }
 
 .tooltip-content {
