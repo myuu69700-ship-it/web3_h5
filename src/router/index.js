@@ -128,6 +128,22 @@ const routes = [
     meta: {
       title: 'DeFi 借幣'
     }
+  },
+  {
+    path: '/tutorial-list',
+    name: 'TutorialList',
+    component: () => import('@/views/TutorialList.vue'),
+    meta: {
+      title: '新手教程'
+    }
+  },
+  {
+    path: '/tutorial-detail/:id',
+    name: 'TutorialDetail',
+    component: () => import('@/views/TutorialDetail.vue'),
+    meta: {
+      title: '新手教程'
+    }
   }
 ]
 

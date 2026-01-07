@@ -62,7 +62,7 @@
         />
       </div>
       <div v-if="expandedMenus.support" class="menu-content">
-        <div class="menu-sub-item">{{ t("newbieTutorial") }}</div>
+        <div class="menu-sub-item" @click="handleTutorialClick">{{ t("newbieTutorial") }}</div>
         <div class="menu-sub-item">{{ t("consultationService") }}: 0</div>
       </div>
     </div>
@@ -146,6 +146,11 @@ const handleOrderCenterClick = () => {
 // 处理产品点击
 const handleProductClick = () => {
   router.push('/product-detail')
+}
+
+// 处理新手教程点击
+const handleTutorialClick = () => {
+  router.push('/tutorial-list')
 }
 </script>
 
