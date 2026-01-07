@@ -112,6 +112,14 @@ const routes = [
     meta: {
       title: '劃轉'
     }
+  },
+  {
+    path: '/order-center',
+    name: 'OrderCenter',
+    component: () => import('@/views/OrderCenter.vue'),
+    meta: {
+      title: '帳單'
+    }
   }
 ]
 
