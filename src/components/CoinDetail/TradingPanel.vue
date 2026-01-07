@@ -18,7 +18,7 @@
 
         <!-- 订单类型 -->
         <div class="order-type">
-          <div class="select-btn">
+          <div class="select-btn2">
             <span>市價</span>
             <van-icon name="arrow-down" size="12" />
           </div>
@@ -38,15 +38,14 @@
 
         <!-- 数量输入 -->
         <div class="quantity-input-wrapper">
-          <div class="input-label">數量</div>
-          <div class="quantity-input-group">
+          <div class="quantity-input-container">
             <input
               type="text"
               class="quantity-input"
               v-model="inputAmount"
               placeholder="0"
             />
-            <div class="select-btn unit-btn">
+            <div class="quantity-unit-selector">
               <span>張</span>
               <van-icon name="arrow-down" size="12" />
             </div>
@@ -56,8 +55,10 @@
         <!-- 可用余额 -->
         <div class="available-balance">
           <span class="balance-label">可用</span>
-          <span class="balance-value">{{ currentBalance }} USDT</span>
-          <van-icon name="exchange" size="14" class="exchange-icon" />
+          <div class="balance-value">
+            <span>{{ currentBalance }} USDT</span>
+            <van-icon name="exchange" size="14" class="exchange-icon" />
+          </div>
         </div>
 
         <!-- 百分比滑块 -->
@@ -78,9 +79,9 @@
               @drag-end="handleSliderDragEnd"
             />
             <!-- 自定义工具提示 -->
-            <div 
-              class="custom-tooltip" 
-              :class="{ 'show': isSliderDragging }"
+            <div
+              class="custom-tooltip"
+              :class="{ show: isSliderDragging }"
               :style="{ left: sliderPercent + '%' }"
             >
               <div class="tooltip-content">
@@ -90,13 +91,13 @@
             </div>
             <!-- 节点标记 -->
             <div class="slider-nodes">
-              <div 
+              <div
                 v-for="(mark, index) in [0, 25, 50, 75, 100]"
                 :key="index"
                 class="slider-node"
-                :class="{ 
-                  'passed': sliderPercent >= mark,
-                  'covered': Math.abs(sliderPercent - mark) < 2
+                :class="{
+                  passed: sliderPercent >= mark,
+                  covered: Math.abs(sliderPercent - mark) < 2,
                 }"
                 :style="{ left: mark + '%' }"
               ></div>
@@ -165,16 +166,18 @@
             class="order-row sell-row"
             @click="handlePriceClick(item.price, 'sell')"
           >
-            <div 
-              class="order-progress-bar sell-progress" 
-              :style="{ 
+            <div
+              class="order-progress-bar sell-progress"
+              :style="{
                 width: `${getSellProgress(item.amount)}%`,
                 right: 0,
-                left: 'auto'
+                left: 'auto',
               }"
             ></div>
             <div class="order-content">
-              <span class="order-price sell-price">{{ formatPrice(item.price) }}</span>
+              <span class="order-price sell-price">{{
+                formatPrice(item.price)
+              }}</span>
               <span class="order-amount">{{ formatAmount(item.amount) }}</span>
             </div>
           </div>
@@ -186,7 +189,7 @@
           <div class="current-price-info">
             ≈ $ {{ displayPrice }}
             <span class="price-change" :class="priceChangeClass">
-              {{ priceChange >= 0 ? '+' : '' }}{{ priceChange }}%
+              {{ priceChange >= 0 ? "+" : "" }}{{ priceChange }}%
             </span>
           </div>
         </div>
@@ -199,16 +202,18 @@
             class="order-row buy-row"
             @click="handlePriceClick(item.price, 'buy')"
           >
-            <div 
-              class="order-progress-bar buy-progress" 
-              :style="{ 
+            <div
+              class="order-progress-bar buy-progress"
+              :style="{
                 width: `${getBuyProgress(item.amount)}%`,
                 right: 0,
-                left: 'auto'
+                left: 'auto',
               }"
             ></div>
             <div class="order-content">
-              <span class="order-price buy-price">{{ formatPrice(item.price) }}</span>
+              <span class="order-price buy-price">{{
+                formatPrice(item.price)
+              }}</span>
               <span class="order-amount">{{ formatAmount(item.amount) }}</span>
             </div>
           </div>
@@ -321,7 +326,7 @@ const displayPrice = computed(() => {
   const numPrice = parseFloat(price.value) || 0;
   return numPrice.toLocaleString("en-US", {
     minimumFractionDigits: 2,
-    maximumFractionDigits: 2
+    maximumFractionDigits: 2,
   });
 });
 
@@ -357,7 +362,7 @@ const sellList = ref([
   { price: 3262.43, amount: 0.8297 },
   { price: 3258.25, amount: 2.8815 },
   { price: 3260.64, amount: 2.7389 },
-  { price: 3260.30, amount: 3.1998 },
+  { price: 3260.3, amount: 3.1998 },
   { price: 3259.94, amount: 3.1075 },
 ]);
 
@@ -415,12 +420,12 @@ const formatAmount = (amount) => {
 };
 
 const formatPrice = (price) => {
-  if (typeof price === 'string') {
+  if (typeof price === "string") {
     return price;
   }
-  return price.toLocaleString("en-US", { 
+  return price.toLocaleString("en-US", {
     minimumFractionDigits: 2,
-    maximumFractionDigits: 2 
+    maximumFractionDigits: 2,
   });
 };
 
@@ -436,8 +441,8 @@ const handleSell = () => {
 
 const handlePriceInput = (event) => {
   // 移除逗号，只保留数字和小数点
-  const value = event.target.value.replace(/,/g, '');
-  if (value === '' || /^\d*\.?\d*$/.test(value)) {
+  const value = event.target.value.replace(/,/g, "");
+  if (value === "" || /^\d*\.?\d*$/.test(value)) {
     price.value = value;
   }
 };
@@ -453,10 +458,7 @@ watch(
   (newValue) => {
     if (isSyncing.value || !props.currentBalance || !newValue) return;
     const percent = (parseFloat(newValue) / props.currentBalance) * 100;
-    const roundedPercent = Math.min(
-      100,
-      Math.max(0, Math.round(percent))
-    );
+    const roundedPercent = Math.min(100, Math.max(0, Math.round(percent)));
     if (roundedPercent !== props.sliderValue) {
       isSyncing.value = true;
       emit("update:sliderValue", roundedPercent);
@@ -557,14 +559,14 @@ onUnmounted(() => {
   max-width: 350px;
   background: #fff;
   border-radius: 8px;
-  overflow: hidden;
+  // overflow: hidden;
 }
 
 .bet-main-left {
   width: 216px;
-  padding: 12px;
+  // padding: 12px;
   background: #fff;
-  border-right: 1px solid #ebedf0;
+  // border-right: 1px solid #ebedf0;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -587,18 +589,37 @@ onUnmounted(() => {
   margin-bottom: 8px;
 }
 
-.select-btn {
+.select-btn2 {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 6px 8px;
-  background: #f7f8fa;
+  gap: 2.13333vw;
+  padding: 0 3vw;
+  background: #f3f3f3;
+  border: 0;
+  border-radius: 1.6vw;
+  width: 100%;
+  height: 8.53333vw;
+  line-height: 8.53333vw;
+  margin-bottom: 4vw;
+  line-height: 1;
+}
+
+.select-btn {
+  width: 50%;
+  height: 10.66667vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 22px;
+  background: #f3f3f3;
   border-radius: 4px;
-  font-size: 12px;
+  font-size: 16px;
   color: #040303;
   cursor: pointer;
   border: 1px solid #ebedf0;
   transition: all 0.2s;
+  font-weight: 500;
 
   &:active {
     opacity: 0.7;
@@ -617,26 +638,26 @@ onUnmounted(() => {
   flex: 1;
 }
 
-.order-type {
-  margin-bottom: 8px;
-}
-
 .price-input-wrapper {
+  background-color: #f3f3f3;
+  width: 100%;
+  height: 8.8vw;
+  border: 1px solid transparent;
+  border-radius: 2.13333vw;
+  // padding: 0 2.13333vw;
+  padding-left: 2vw;
+  margin-bottom: 2.93333vw;
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 8px;
-  padding: 8px;
-  background: #f7f8fa;
-  border-radius: 4px;
-  border: 1px solid #ebedf0;
+  // justify-content: space-between;
+  color: #040303;
 }
 
 .price-input {
   flex: 1;
   border: none;
   background: transparent;
-  font-size: 13px;
+  font-size: 4vw;
   color: #040303;
   outline: none;
 
@@ -646,8 +667,8 @@ onUnmounted(() => {
 }
 
 .input-unit {
-  font-size: 12px;
-  color: #969799;
+  font-size: 3.2vw;
+  color: #040303;
 }
 
 .quantity-input-wrapper {
@@ -660,22 +681,30 @@ onUnmounted(() => {
   margin-bottom: 4px;
 }
 
-.quantity-input-group {
+.quantity-input-container {
+  background-color: #f3f3f3;
+  width: 100%;
+  height: 8.8vw;
+  border: 1px solid transparent;
+  border-radius: 2.13333vw;
+  padding: 0 2vw;
   display: flex;
-  gap: 6px;
+  align-items: center;
+  justify-content: space-between;
+  color: #040303;
 }
 
 .quantity-input {
   flex: 1;
-  padding: 6px 8px;
-  border: 1px solid #ebedf0;
-  border-radius: 4px;
-  font-size: 12px;
-  background: #fff;
+  border: none;
+  background: transparent;
+  font-size: 4vw;
+  color: #040303;
   outline: none;
+  padding: 0;
 
   &:focus {
-    border-color: #1dbf73;
+    outline: none;
   }
 
   &::placeholder {
@@ -683,30 +712,28 @@ onUnmounted(() => {
   }
 }
 
-.unit-btn {
-  min-width: 40px;
-  padding: 6px 8px;
+.quantity-unit-selector {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 3.2vw;
+  color: #040303;
+  cursor: pointer;
+  flex-shrink: 0;
+  // padding-left: 8px;
+
+  span {
+    font-size: 3.2vw;
+  }
 }
 
 .available-balance {
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 11px;
-  color: #969799;
-  margin-bottom: 8px;
-
-  .balance-label {
-    color: #969799;
-  }
-
-  .balance-value {
-    color: #040303;
-    font-weight: 500;
-  }
+  justify-content: space-between;
 
   .exchange-icon {
-    color: #969799;
+    color: #040303;
     cursor: pointer;
   }
 }
@@ -802,7 +829,7 @@ onUnmounted(() => {
   transition: left 0.1s ease-out;
   opacity: 0;
   visibility: hidden;
-  
+
   &.show {
     opacity: 1;
     visibility: visible;
@@ -932,15 +959,15 @@ onUnmounted(() => {
   overflow-x: hidden;
   max-height: 220px;
   min-height: 140px;
-  
+
   &::-webkit-scrollbar {
     width: 2px;
   }
-  
+
   &::-webkit-scrollbar-track {
     background: transparent;
   }
-  
+
   &::-webkit-scrollbar-thumb {
     background: #ebedf0;
     border-radius: 1px;
@@ -959,11 +986,11 @@ onUnmounted(() => {
   align-items: center;
   border-radius: 0;
   margin: 2px 0;
-  
+
   &:hover {
     background-color: rgba(0, 0, 0, 0.02);
   }
-  
+
   &:active {
     background-color: rgba(0, 0, 0, 0.04);
   }
