@@ -155,7 +155,7 @@
         <!-- 订单簿标题 -->
         <div class="order-book-header">
           <div>價格 (USDT)</div>
-          <div style="margin-left: 65px;">數量 (ETH)</div>
+          <div style="margin-left: 65px">數量 (ETH)</div>
         </div>
 
         <!-- 卖盘（绿色，在上方） -->
@@ -891,37 +891,53 @@ onUnmounted(() => {
 }
 
 .trade-button {
-  padding: 10px;
-  border-radius: 6px;
+  width: 100%;
+  min-height: 13.33333vw;
+  line-height: 4vw;
   text-align: center;
-  cursor: pointer;
-  transition: opacity 0.2s;
-  margin-bottom: 6px;
+  border-radius: 26.66667vw;
+  font-size: 3.73333vw;
+  color: var(--font-btn);
+  display: flex;
+  flex-wrap: initial;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: column;
+  color: #ffffff;
 
   &:active {
     opacity: 0.8;
   }
 
   .button-text {
-    font-size: 13px;
+    // font-size: 13px;
+    font-size: 3.73333vw;
     font-weight: 600;
     margin-bottom: 2px;
+    color: #ffffff;
   }
 
   .button-desc {
-    font-size: 10px;
+    // font-size: 10px;
+    font-size: 3.73333vw;
     opacity: 0.8;
+    color: #ffffff;
   }
 }
 
 .buy-button {
   background: #1dbf73;
   color: #fff;
+  display: flex;
+  flex-direction: column;
 }
 
 .sell-button {
-  background: #e84545;
+  background: #ec4b6d;
   color: #fff;
+  display: flex;
+  flex-direction: column;
 }
 
 .buy-info,
@@ -1053,7 +1069,6 @@ onUnmounted(() => {
 }
 
 .sell-row {
-  
   .sell-price {
     color: #1dbf73;
     font-size: 3.2vw;
