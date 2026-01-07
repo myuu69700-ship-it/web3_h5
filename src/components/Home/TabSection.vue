@@ -319,9 +319,9 @@ const forexPairs = ref([
 
 const goToDetail = (coin) => {
   // 使用 coin.pair 如果存在，否则构造 pair
-  const pair = coin.pair || `${coin.symbol}/USDT`
-  router.push(`/coin/${encodeURIComponent(pair)}`)
-}
+  const pair = coin.pair || `${coin.symbol}/USDT`;
+  router.push(`/coin/${encodeURIComponent(pair)}`);
+};
 
 const goToMarket = () => {
   router.push("/market");
@@ -349,11 +349,13 @@ const goToMarket = () => {
       cursor: pointer;
       transition: all 0.3s;
       position: relative;
+      font-size: 3.2vw;
 
       &.active {
         background-color: #f3f3f3;
         color: #040303;
-        font-weight: 500;
+        font-size: 3.2vw;
+        // font-weight: 500;
         border-radius: 26.4vw;
       }
 
@@ -398,13 +400,14 @@ const goToMarket = () => {
     cursor: pointer;
 
     .coin-icon {
-      width: 40px;
-      height: 40px;
+      flex: none;
+      width: 6.66667vw;
+      height: 6.66667vw;
+      margin-right: 1.86667vw;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-right: 12px;
 
       .coin-symbol {
         color: #fff;
@@ -417,15 +420,15 @@ const goToMarket = () => {
       flex: 1;
 
       .coin-name {
-        font-size: 16px;
-        font-weight: 500;
-        color: #323233;
+        font-size: 3.73333vw;
+        font-weight: bolder;
+        color: #040303;
         margin-bottom: 4px;
       }
 
       .coin-pair {
-        font-size: 12px;
-        color: #969799;
+        font-size: 3.2vw;
+        color: #5b616e;
       }
     }
 
@@ -434,15 +437,16 @@ const goToMarket = () => {
       margin-right: 12px;
 
       .price-value {
-        font-size: 16px;
+        font-size: 3.73333vw;
         font-weight: 500;
-        color: #323233;
+        color: #040303;
         margin-bottom: 4px;
+        font-weight: bolder;
       }
 
       .price-usd {
-        font-size: 12px;
-        color: #969799;
+        font-size: 3.2vw;
+        color: #5b616e;
       }
     }
 
@@ -455,13 +459,29 @@ const goToMarket = () => {
       text-align: center;
 
       &.up {
-        background-color: #e8f5e9;
-        color: #07c160;
+        background-color: #ec4b6d;
+        font-size: 3.73333vw;
+        color: #fff;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1.06667vw;
+        border-radius: 1.06667vw;
+        width: 21.33333vw;
+        height: 8vw;
       }
 
       &.down {
-        background-color: #ffebee;
-        color: #ee0a24;
+        background-color: #07c160;
+        font-size: 3.73333vw;
+        color: #fff;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1.06667vw;
+        border-radius: 1.06667vw;
+        width: 21.33333vw;
+        height: 8vw;
       }
     }
   }
