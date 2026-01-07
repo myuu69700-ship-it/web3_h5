@@ -114,7 +114,13 @@
 
         <!-- 止盈止损 -->
         <div class="stop-loss-profit">
-          <van-checkbox v-model="stopLossProfitEnabled">止盈止損</van-checkbox>
+          <van-checkbox
+            v-model="stopLossProfitEnabled"
+            shape="square"
+            icon-size="13px"
+            checked-color="#040303"
+          ></van-checkbox>
+          <div>止盈止損</div>
         </div>
 
         <!-- 买入按钮 -->
@@ -888,6 +894,9 @@ onUnmounted(() => {
 .stop-loss-profit {
   margin-bottom: 8px;
   font-size: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .trade-button {
@@ -1099,8 +1108,8 @@ onUnmounted(() => {
 }
 
 .current-price-section {
-  text-align: center;
-  padding: 10px 4px;
+  // text-align: center;
+  padding: 5px 0px;
   // border-top: 1px solid #ebedf0;
   // border-bottom: 1px solid #ebedf0;
   margin: 8px 0;
@@ -1111,25 +1120,26 @@ onUnmounted(() => {
 }
 
 .current-price-value {
-  font-size: 14px;
+  font-size: 3.73333vw;
   font-weight: 600;
-  color: #040303;
+  color: #3abf74;
   margin-bottom: 3px;
   line-height: 1.2;
-  font-size: 3.2vw;
+  // font-size: 3.2vw;
 }
 
 .current-price-info {
-  font-size: 9px;
-  color: #969799;
+  font-size: 3.2vw;
+  color: #040303;
   line-height: 1.2;
+  font-weight: 700;
 
   .price-change {
     margin-left: 4px;
     font-weight: 500;
 
     &.up {
-      color: #1dbf73;
+      color: #ec4b6d;
     }
 
     &.down {
