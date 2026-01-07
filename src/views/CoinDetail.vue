@@ -43,43 +43,82 @@
         />
 
         <!-- 右侧：订单簿区域 -->
-        <OrderBook
+        <!-- <OrderBook
           :buy-orders="buyOrders"
           :sell-orders="sellOrders"
           :current-price="currentPrice"
           :price-change="priceChange"
-        />
+        /> -->
       </div>
     </div>
 
-    <!-- 订单历史标签 -->
-    <div class="order-history-tabs">
-      <div
-        class="history-tab"
-        :class="{ active: activeHistoryTab === 'options' }"
-        @click="activeHistoryTab = 'options'"
-      >
-        期權訂單
+    <!-- 底部：委託/倉位區域與篩選 -->
+    <div class="bottom-section">
+      <div class="bottom-header">
+        <div class="bottom-tabs">
+          <div
+            class="tab"
+            :class="{ active: activeBottomTab === 'orders' }"
+            @click="activeBottomTab = 'orders'"
+          >
+            委託({{ entrustCount }})
+            <van-icon name="arrow-down" class="tab-arrow" @click.stop="showEntrustTypePopup = true" />
+          </div>
+          <div
+            class="tab"
+            :class="{ active: activeBottomTab === 'positions' }"
+            @click="activeBottomTab = 'positions'"
+          >
+            倉位
+          </div>
+        </div>
+        <div class="right-action" @click="handleRightAction">
+          {{ activeBottomTab === 'orders' ? '大量撤單' : '一鍵平倉' }}
+        </div>
       </div>
-      <div
-        class="history-tab"
-        :class="{ active: activeHistoryTab === 'history' }"
-        @click="activeHistoryTab = 'history'"
-      >
-        歷史訂單
+
+      <div class="filter-row">
+        <van-checkbox v-model="onlyCurrentSymbol" shape="square">目前交易品種</van-checkbox>
+        <div class="filter-trigger" @click="showEntrustTypePopup = true">
+          <span>{{ entrustTypeLabel }}</span>
+          <van-icon name="arrow-down" />
+        </div>
+      </div>
+
+      <div class="order-history-content bottom-content">
+        <div v-if="orderList.length === 0" class="empty-orders">
+          <van-icon name="orders-o" size="48" color="#c8c9cc" />
+          <p>暫無數據</p>
+        </div>
+        <div v-else class="orders-list">
+          <!-- 列表內容 -->
+        </div>
       </div>
     </div>
 
-    <!-- 订单历史内容 -->
-    <div class="order-history-content">
-      <div v-if="orderList.length === 0" class="empty-orders">
-        <van-icon name="orders-o" size="48" color="#c8c9cc" />
-        <p>暫無數據</p>
+    <!-- 委託類型選擇彈窗 -->
+    <van-popup
+      v-model:show="showEntrustTypePopup"
+      class="filter-popup"
+      round
+      position="bottom"
+    >
+      <div class="popup-handle" />
+      <div class="filter-list">
+        <div class="filter-item" :class="{ active: entrustType === 'all' }" @click="selectEntrustType('all')">
+          <van-icon name="orders-o" />
+          <span>全部</span>
+        </div>
+        <div class="filter-item" :class="{ active: entrustType === 'limit' }" @click="selectEntrustType('limit')">
+          <van-icon name="link-o" />
+          <span>限價委託</span>
+        </div>
+        <div class="filter-item" :class="{ active: entrustType === 'stop' }" @click="selectEntrustType('stop')">
+          <van-icon name="warning-o" />
+          <span>止盈止損</span>
+        </div>
       </div>
-      <div v-else class="orders-list">
-        <!-- 订单列表 -->
-      </div>
-    </div>
+    </van-popup>
 
     <!-- 时间选择器 -->
     <van-popup v-model:show="showTimePicker" position="bottom">
@@ -115,7 +154,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from '@/i18n'
 import ChartComponent from '@/components/Home/ChartComponent.vue'
 import TradingPanel from '@/components/CoinDetail/TradingPanel.vue'
-import OrderBook from '@/components/CoinDetail/OrderBook.vue'
+// import OrderBook from '@/components/CoinDetail/OrderBook.vue'
 import CoinPairSearchModal from '@/components/Home/CoinPairSearchModal.vue'
 
 const route = useRoute()
@@ -151,8 +190,12 @@ const showIntervalPicker = ref(false)
 const showSearchModal = ref(false)
 const currentDate = ref(new Date())
 const isChartHidden = ref(false)
-const activeHistoryTab = ref('options')
+const activeBottomTab = ref('orders')
 const orderList = ref([])
+const entrustCount = ref(0)
+const onlyCurrentSymbol = ref(false)
+const showEntrustTypePopup = ref(false)
+const entrustType = ref('all')
 // 当前币对类型：spot(现货)、contract(合约)、options(期权)
 const coinType = ref(getCoinTypeFromQuery())
 
@@ -215,6 +258,16 @@ const confirmInterval = ({ selectedValues }) => {
   showIntervalPicker.value = false
 }
 
+const selectEntrustType = (type) => {
+  entrustType.value = type
+  showEntrustTypePopup.value = false
+}
+
+const handleRightAction = () => {
+  // 保留行為入口，後續可接入撤單/平倉邏輯
+  console.log(activeBottomTab.value === 'orders' ? '大量撤單' : '一鍵平倉')
+}
+
 // 处理币对选择
 const handleCoinPairSelect = (coin) => {
   // 保存币对类型
@@ -235,6 +288,12 @@ const handleCoinPairSelect = (coin) => {
 // 根据币对类型获取标签文案
 const typeLabel = computed(() => {
   return t(coinType.value) || t('options')
+})
+
+const entrustTypeLabel = computed(() => {
+  if (entrustType.value === 'limit') return '限價委託'
+  if (entrustType.value === 'stop') return '止盈止損'
+  return '全部'
 })
 
 // 监听路由查询参数变化，更新币对类型
@@ -368,30 +427,125 @@ onUnmounted(() => {
   }
 }
 
-.order-history-tabs {
-  display: flex;
+.bottom-section {
   background-color: #fff;
   margin: 12px;
-  border-radius: 8px 8px 0 0;
-  padding: 0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.bottom-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
   border-bottom: 1px solid #ebedf0;
+}
 
-  .history-tab {
-    flex: 1;
-    padding: 12px 16px;
-    text-align: center;
-    font-size: 14px;
-    color: #7e7e7e;
-    cursor: pointer;
-    transition: all 0.3s;
-    border-bottom: 2px solid transparent;
+.bottom-tabs {
+  display: flex;
+  gap: 16px;
+}
 
-    &.active {
-      color: #040303;
-      font-weight: 500;
-      border-bottom-color: #040303;
-    }
-  }
+.bottom-tabs .tab {
+  font-size: 14px;
+  color: #7e7e7e;
+  padding-bottom: 8px;
+  border-bottom: 2px solid transparent;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.bottom-tabs .tab.active {
+  color: #040303;
+  font-weight: 500;
+  border-bottom-color: #040303;
+}
+
+.tab-arrow {
+  font-size: 12px;
+  color: #969799;
+}
+
+.right-action {
+  font-size: 12px;
+  color: #7e7e7e;
+}
+
+.filter-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+}
+
+.filter-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: #040303;
+  padding: 6px 10px;
+  background: #f7f8fa;
+  border-radius: 16px;
+}
+
+.bottom-content {
+  margin: 0;
+  border-radius: 0 0 8px 8px;
+}
+
+.filter-popup {
+  width: 100%;
+  max-width: none;
+  padding: 6px 0 0;
+  border-radius: 16px 16px 0 0;
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-bottom: constant(safe-area-inset-bottom);
+}
+
+.popup-handle {
+  width: 36px;
+  height: 4px;
+  background: #e5e6eb;
+  border-radius: 4px;
+  margin: 8px auto 6px;
+}
+
+.filter-list {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.filter-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  font-size: 14px;
+  color: #040303;
+  cursor: pointer;
+}
+
+.filter-item + .filter-item {
+  border-top: 1px solid #ebedf0;
+}
+
+.filter-item.active {
+  background: #f7f8fa;
+}
+
+.filter-row :deep(.van-checkbox) {
+  --van-checkbox-size: 16px;
+}
+
+.filter-row :deep(.van-checkbox__label) {
+  font-size: 12px;
+  color: #040303;
 }
 
 .order-history-content {
