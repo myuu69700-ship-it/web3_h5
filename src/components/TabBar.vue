@@ -123,7 +123,6 @@ const onChange = (name) => {
   margin-top: -6vw;
   color: #040303;
   object-fit: contain;
-  z-index: 99;
 }
 
 :deep(.van-tabbar-item[name="trade"].van-tabbar-item--active) {

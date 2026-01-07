@@ -335,9 +335,9 @@ onUnmounted(() => {
 
 <style lang="scss" scoped>
 .coin-detail {
-  min-height: 100vh;
-  background-color: #f7f8fa;
-  padding-bottom: 80px;
+  // min-height: 100vh;
+  // background-color: #f7f8fa;
+  // padding-bottom: 80px;
 }
 
 .top-bar {
@@ -429,9 +429,10 @@ onUnmounted(() => {
 
 .bottom-section {
   background-color: #fff;
-  margin: 12px;
+  // margin: 12px;
   border-radius: 8px;
   overflow: hidden;
+  height: 100%;
 }
 
 .bottom-header {
