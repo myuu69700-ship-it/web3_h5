@@ -2,10 +2,12 @@
   <div class="login-page">
     <!-- 顶部导航栏 -->
     <div class="header">
-      <van-icon name="arrow-left" class="back-icon" @click="goBack" />
-      <div class="title">{{ t("loginWeb3") }}</div>
-      <van-icon name="service-o" class="service-icon" />
+      <img :src="leftArrowIcon" class="back-icon" @click="goBack" alt="返回" />
+      <img :src="kfuIcon" class="service-icon" alt="客服" />
     </div>
+
+    <!-- 标题 -->
+    <div class="title">{{ t("loginWeb3") }}</div>
 
     <!-- 登录方式标签 -->
     <div class="tabs">
@@ -109,13 +111,7 @@
 
     <!-- 登录按钮 -->
     <div class="button-group">
-      <van-button
-        type="primary"
-        block
-        class="login-btn"
-        :disabled="!canLogin"
-        @click="handleLogin"
-      >
+      <van-button type="primary" block class="login-btn" @click="handleLogin">
         {{ t("login") }}
       </van-button>
       <van-button block class="wallet-login-btn" @click="handleWalletLogin">
@@ -165,6 +161,8 @@
 import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
 import { useI18n } from "@/i18n";
+import leftArrowIcon from "@/assets/images/left_arrow.svg";
+import kfuIcon from "@/assets/images/kfu.svg";
 
 const router = useRouter();
 const { t } = useI18n();
@@ -374,7 +372,7 @@ const goToRegister = () => {
 };
 
 const openTerms = () => {
-  router.push('/terms-of-service');
+  router.push("/terms-of-service");
 };
 
 const openPrivacy = () => {
@@ -401,43 +399,46 @@ const openAntiMoneyLaundering = () => {
   align-items: center;
   justify-content: space-between;
   padding: 16px 0;
-  position: relative;
 
   .back-icon {
-    font-size: 20px;
-    color: #323233;
+    width: 20.8px;
+    height: 20.8px;
     cursor: pointer;
-  }
-
-  .title {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 20px;
-    font-weight: bold;
-    color: #323233;
+    display: block;
   }
 
   .service-icon {
+    width: 20.8px;
+    height: 20.8px;
     font-size: 20px;
     color: #323233;
     cursor: pointer;
   }
 }
 
+.title {
+  font-size: 6.4vw;
+  font-weight: 700;
+  color: #000;
+  margin-top: 8px;
+}
+
 .tabs {
   display: flex;
   gap: 32px;
-  margin-top: 24px;
+  margin-top: 44px;
   border-bottom: 1px solid #ebedf0;
 
   .tab {
     padding-bottom: 12px;
-    font-size: 16px;
-    color: #969799;
+    color: #909090;
+    font-size: 4.26667vw;
     cursor: pointer;
     position: relative;
     transition: color 0.3s;
+    padding: 0 5.33333vw;
+    height: 46.8px;
+    line-height: 46.8px;
 
     &.active {
       color: #323233;
@@ -463,7 +464,8 @@ const openAntiMoneyLaundering = () => {
 .input-group {
   display: flex;
   align-items: center;
-  margin-bottom: 16px;
+  margin-bottom: 30px;
+  margin-top: 40px;
   border: 1px solid #ebedf0;
   border-radius: 8px;
   overflow: hidden;
@@ -472,19 +474,20 @@ const openAntiMoneyLaundering = () => {
     display: flex;
     align-items: center;
     padding: 0 12px;
-    border-right: 1px solid #ebedf0;
+    border-right: 1px solid #ebedf05d;
     cursor: pointer;
     min-width: 60px;
 
     .country-code {
-      font-size: 14px;
-      color: #323233;
+      font-size: 16px;
+      color: #040303;
       margin-right: 4px;
+      padding-left: 20px;
     }
 
     .arrow-icon {
-      font-size: 12px;
-      color: #969799;
+      font-size: 16px;
+      color: #040303;
     }
   }
 
@@ -495,10 +498,31 @@ const openAntiMoneyLaundering = () => {
     .van-field__control {
       font-size: 14px;
       color: #323233;
+
+      &::placeholder {
+        font-size: 4vw;
+        color: #909090;
+      }
+
+      &::-webkit-input-placeholder {
+        font-size: 4vw;
+        color: #909090;
+      }
+
+      &::-moz-placeholder {
+        font-size: 4vw;
+        color: #909090;
+      }
+
+      &:-ms-input-placeholder {
+        font-size: 4vw;
+        color: #909090;
+      }
     }
 
     .van-field__placeholder {
-      color: #c8c9cc;
+      font-size: 4vw;
+      color: #909090;
     }
   }
 
@@ -527,7 +551,8 @@ const openAntiMoneyLaundering = () => {
 
   span {
     font-size: 14px;
-    color: #323233;
+    color: #000;
+    font-weight: 700;
     cursor: pointer;
   }
 }
@@ -537,20 +562,27 @@ const openAntiMoneyLaundering = () => {
   align-items: flex-start;
   margin-bottom: 24px;
   gap: 8px;
+  margin: 0 20px;
+  margin-bottom: 40px;
 
   :deep(.van-checkbox) {
     margin-top: 2px;
+    border: 1px solid #000;
+    border-radius: 1.06667vw;
   }
 
   .agreement-text {
     flex: 1;
     font-size: 12px;
-    color: #646566;
+    color: #040303 !important;
     line-height: 1.5;
+    padding: 0 15px 0 0;
+    // font-weight: 500;
 
     .link {
-      color: #1989fa;
+      color: #000000 !important;
       cursor: pointer;
+      font-weight: 700;
     }
   }
 }
@@ -559,38 +591,51 @@ const openAntiMoneyLaundering = () => {
   margin-bottom: 24px;
 
   .login-btn {
-    height: 48px;
-    background-color: #323233;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.33333vw;
+    margin: 0 auto;
+    width: 91.46667vw;
+    height: 12.8vw;
+    background-color: #000;
+    border-radius: 266.4vw;
+    font-size: 4vw;
+    color: #fff;
     border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 500;
-    margin-bottom: 12px;
 
     &:disabled {
-      background-color: #c8c9cc;
+      // background-color: #c8c9cc;
       color: #fff;
     }
   }
 
   .wallet-login-btn {
-    height: 48px;
-    background-color: #fff;
-    border: 1px solid #323233;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 500;
-    color: #323233;
+    width: 91.46667vw;
+    height: 12.8vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 5.33333vw auto 0;
+    border-radius: 6.4vw;
+    background: #fff;
+    color: #000;
+    border: 1px solid #000;
+    font-size: 4vw;
+    cursor: pointer;
+    font-weight: 400;
+    box-sizing: border-box;
   }
 }
 
 .register-link {
   text-align: center;
   font-size: 14px;
-  color: #646566;
+  color: #040303;
 
   .link {
-    color: #1989fa;
+    color: #000;
+    font-weight: 700;
     cursor: pointer;
     margin-left: 4px;
   }
@@ -664,4 +709,3 @@ const openAntiMoneyLaundering = () => {
   }
 }
 </style>
-
