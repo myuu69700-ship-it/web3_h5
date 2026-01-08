@@ -7,8 +7,8 @@
       <div class="account-section">
         <!-- 从账户 -->
         <div class="account-row">
-          <div class="account-label">從</div>
           <div class="select-field" @click="openFromAccountPicker">
+            <span class="account-label">從</span>
             <span class="account-name">{{ fromAccount }}</span>
             <van-icon name="arrow-down" class="arrow-icon" />
           </div>
@@ -27,8 +27,8 @@
         
         <!-- 到账户 -->
         <div class="account-row">
-          <div class="account-label">到</div>
           <div class="select-field" @click="openToAccountPicker">
+            <span class="account-label">到</span>
             <span class="account-name">{{ toAccount }}</span>
             <van-icon name="arrow-down" class="arrow-icon" />
           </div>
@@ -307,20 +307,10 @@ const goBack = () => {
   margin-bottom: 32px;
 
   .account-row {
-    display: flex;
-    align-items: center;
     margin-bottom: 16px;
-
-    .account-label {
-      font-size: 14px;
-      color: #323233;
-      width: 40px;
-      font-weight: 500;
-      flex-shrink: 0;
-    }
-
+    height: 58.23px;
     .select-field {
-      flex: 1;
+      width: 100%;
       background-color: #f7f8fa;
       border: none;
       border-radius: 8px;
@@ -335,15 +325,27 @@ const goBack = () => {
         background-color: #ebedf0;
       }
 
+      .account-label {
+        font-size: 14px;
+        color: #323233;
+        font-weight: 500;
+        flex-shrink: 0;
+      }
+
       .account-name {
         font-size: 16px;
         color: #323233;
         font-weight: 500;
+        flex: 1;
+        text-align: right;
+        margin-left: 8px;
       }
 
       .arrow-icon {
         font-size: 14px;
         color: #969799;
+        flex-shrink: 0;
+        margin-left: 8px;
       }
     }
   }
@@ -486,9 +488,9 @@ const goBack = () => {
       background-color: transparent;
       border: none;
       font-size: 14px;
-      color: #26a17b;
+      color: #2b6d16;
       cursor: pointer;
-      font-weight: 500;
+      font-weight: 400;
       white-space: nowrap;
 
       &:active {
@@ -499,7 +501,7 @@ const goBack = () => {
 
   .max-amount-hint {
     font-size: 12px;
-    color: #323233;
+    color: #040303;
     padding-left: 4px;
   }
 }
@@ -511,9 +513,11 @@ const goBack = () => {
 
   .buy-link {
     font-size: 14px;
-    color: #323233;
+    // color: #323233;
     cursor: pointer;
     text-decoration: underline;
+    color: #000;
+    display: block;
 
     &:active {
       opacity: 0.7;
@@ -531,6 +535,7 @@ const goBack = () => {
     background-color: #000000;
     border: none;
     color: #ffffff;
+    margin-top: 160px;
 
     &:active {
       opacity: 0.8;
