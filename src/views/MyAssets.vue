@@ -145,99 +145,99 @@
         <div class="section-title">資產分佈</div>
         <div class="distribution-cards">
           <div class="distribution-card">
-            <div class="card-icon spot-icon">
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M21 16V8C21 7.46957 20.7893 6.96086 20.4142 6.58579C20.0391 6.21071 19.5304 6 19 6H5C4.46957 6 3.96086 6.21071 3.58579 6.58579C3.21071 6.96086 3 7.46957 3 8V16C3 16.5304 3.21071 17.0391 3.58579 17.4142C3.96086 17.7893 4.46957 18 5 18H19C19.5304 18 20.0391 17.7893 20.4142 17.4142C20.7893 17.0391 21 16.5304 21 16Z"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M7 10H17M7 14H12"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-            </div>
-            <div class="card-content">
+            <div class="card-header">
+              <div class="card-icon spot-icon">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M21 16V8C21 7.46957 20.7893 6.96086 20.4142 6.58579C20.0391 6.21071 19.5304 6 19 6H5C4.46957 6 3.96086 6.21071 3.58579 6.58579C3.21071 6.96086 3 7.46957 3 8V16C3 16.5304 3.21071 17.0391 3.58579 17.4142C3.96086 17.7893 4.46957 18 5 18H19C19.5304 18 20.0391 17.7893 20.4142 17.4142C20.7893 17.0391 21 16.5304 21 16Z"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M7 10H17M7 14H12"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </div>
               <div class="card-percentage">{{ spotPercentage }}%</div>
-              <div class="card-label">現貨帳户</div>
-              <div class="card-balance">
-                <span v-if="balanceVisible">{{ spotBalance }}</span>
-                <span v-else class="masked">*******.**</span>
-              </div>
+            </div>
+            <div class="card-label">現貨帳户</div>
+            <div class="card-balance">
+              <span v-if="balanceVisible">{{ spotBalance }}</span>
+              <span v-else class="masked">*******.**</span>
             </div>
           </div>
           <div class="distribution-card">
-            <div class="card-icon trading-icon">
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M12 2L2 7L12 12L22 7L12 2Z"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M2 17L12 22L22 17"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M2 12L12 17L22 12"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-            </div>
-            <div class="card-content">
+            <div class="card-header">
+              <div class="card-icon trading-icon">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12 2L2 7L12 12L22 7L12 2Z"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M2 17L12 22L22 17"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M2 12L12 17L22 12"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </div>
               <div class="card-percentage">{{ tradingPercentage }}%</div>
-              <div class="card-label">交易賬戶</div>
-              <div class="card-balance">
-                <span v-if="balanceVisible">{{ tradingBalance }}</span>
-                <span v-else class="masked">*******.**</span>
-              </div>
+            </div>
+            <div class="card-label">交易賬戶</div>
+            <div class="card-balance">
+              <span v-if="balanceVisible">{{ tradingBalance }}</span>
+              <span v-else class="masked">*******.**</span>
             </div>
           </div>
           <div class="distribution-card">
-            <div class="card-icon wealth-icon">
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-            </div>
-            <div class="card-content">
-              <div class="card-percentage">{{ wealthPercentage }}%</div>
-              <div class="card-label">理財帳户</div>
-              <div class="card-balance">
-                <span v-if="balanceVisible">{{ wealthBalance }}</span>
-                <span v-else class="masked">*******.**</span>
+            <div class="card-header">
+              <div class="card-icon wealth-icon">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
               </div>
+              <div class="card-percentage">{{ wealthPercentage }}%</div>
+            </div>
+            <div class="card-label">理財帳户</div>
+            <div class="card-balance">
+              <span v-if="balanceVisible">{{ wealthBalance }}</span>
+              <span v-else class="masked">*******.**</span>
             </div>
           </div>
         </div>
@@ -280,10 +280,10 @@
                 <span v-if="balanceVisible">${{ asset.value }}</span>
                 <span v-else class="masked">*********</span>
               </div>
-              <div class="asset-profit">
+              <!-- <div class="asset-profit">
                 <span v-if="balanceVisible">${{ asset.profit }}</span>
                 <span v-else class="masked">*********</span>
-              </div>
+              </div> -->
             </div>
           </div>
         </div>
@@ -559,8 +559,8 @@ const handleConvert = () => {
       padding: 4.26667vw 3.2vw;
       display: flex;
       flex-direction: column;
-      align-items: flex-start !important;
-      justify-content: flex-start;
+      align-items: flex-start;
+      justify-content: space-between;
       cursor: pointer;
       transition: all 0.2s;
       border: none;
@@ -571,43 +571,49 @@ const handleConvert = () => {
       height: 112.7px;
       pointer-events: auto;
 
-      .card-icon {
-        width: 20.8px;
-        height: 20.8px;
-        margin-bottom: 12px;
+      .card-header {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        margin-bottom: 8px;
 
-        svg {
-          width: 100%;
-          height: 100%;
-          color: #969799;
+        .card-icon {
+          width: 20.8px;
+          height: 20.8px;
+          flex-shrink: 0;
+          margin-right: 8px;
+
+          svg {
+            width: 100%;
+            height: 100%;
+            color: #969799;
+          }
+        }
+
+        .card-percentage {
+          font-size: 3.2vw;
+          font-weight: 500;
+          color: #2b6d16;
+          margin-left: 5.5vw;
+          margin-top: -2vw;
         }
       }
 
-      .card-content {
-        text-align: center;
-        width: 100%;
+      .card-label {
+        margin-bottom: auto;
+        margin-top: 4px;
+        font-size: 3.73333vw;
+        color: #333;
+      }
 
-        .card-percentage {
-          font-size: 14px;
-          font-weight: 500;
-          color: #07c160;
-          margin-bottom: 4px;
-        }
+      .card-balance {
+        font-size: 3.46667vw;
+        font-weight: 500;
+        color: #333;
+        margin-top: auto;
 
-        .card-label {
-          font-size: 12px;
-          color: #646566;
-          margin-bottom: 8px;
-        }
-
-        .card-balance {
-          font-size: 14px;
-          font-weight: 500;
-          color: #323233;
-
-          .masked {
-            letter-spacing: 1px;
-          }
+        .masked {
+          letter-spacing: 1px;
         }
       }
     }
@@ -623,15 +629,14 @@ const handleConvert = () => {
     margin-bottom: 16px;
 
     .section-title {
-      font-size: 16px;
-      font-weight: 500;
-      color: #040303;
+      font-size: 4.26667vw;
+      color: #333;
     }
 
     .filter-option {
       :deep(.van-checkbox) {
-        font-size: 12px;
-        color: #646566;
+        font-size: 3.2vw;
+        // color: #040303 !important;
       }
     }
   }
@@ -647,6 +652,8 @@ const handleConvert = () => {
 
       .header-col {
         flex: 1;
+        font-size: 3.2vw;
+        color: #040303;
       }
     }
 
@@ -684,15 +691,15 @@ const handleConvert = () => {
 
         .asset-info {
           .asset-name {
-            font-size: 16px;
+            font-size: 4vw;
             font-weight: 500;
-            color: #323233;
+            color: #040303;
             margin-bottom: 4px;
           }
 
           .asset-quantity {
-            font-size: 12px;
-            color: #969799;
+            font-size: 3.73333vw;
+            color: #040303;
           }
         }
       }
@@ -701,9 +708,9 @@ const handleConvert = () => {
         text-align: right;
 
         .asset-value {
-          font-size: 14px;
+          font-size: 4.3vw;
           font-weight: 500;
-          color: #323233;
+          color: #040303;
           margin-bottom: 4px;
 
           .masked {

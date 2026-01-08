@@ -62,7 +62,11 @@
             @click="activeBottomTab = 'orders'"
           >
             委託({{ entrustCount }})
-            <van-icon name="arrow-down" class="tab-arrow" @click.stop="showEntrustTypePopup = true" />
+            <van-icon
+              name="arrow-down"
+              class="tab-arrow"
+              @click.stop="showEntrustTypePopup = true"
+            />
           </div>
           <div
             class="tab"
@@ -73,12 +77,14 @@
           </div>
         </div>
         <div class="right-action" @click="handleRightAction">
-          {{ activeBottomTab === 'orders' ? '大量撤單' : '一鍵平倉' }}
+          {{ activeBottomTab === "orders" ? "大量撤單" : "一鍵平倉" }}
         </div>
       </div>
 
       <div class="filter-row">
-        <van-checkbox v-model="onlyCurrentSymbol" shape="square">目前交易品種</van-checkbox>
+        <van-checkbox v-model="onlyCurrentSymbol" shape="square"
+          >目前交易品種</van-checkbox
+        >
         <div class="filter-trigger" @click="showEntrustTypePopup = true">
           <span>{{ entrustTypeLabel }}</span>
           <van-icon name="arrow-down" />
@@ -105,15 +111,27 @@
     >
       <div class="popup-handle" />
       <div class="filter-list">
-        <div class="filter-item" :class="{ active: entrustType === 'all' }" @click="selectEntrustType('all')">
+        <div
+          class="filter-item"
+          :class="{ active: entrustType === 'all' }"
+          @click="selectEntrustType('all')"
+        >
           <van-icon name="orders-o" />
           <span>全部</span>
         </div>
-        <div class="filter-item" :class="{ active: entrustType === 'limit' }" @click="selectEntrustType('limit')">
+        <div
+          class="filter-item"
+          :class="{ active: entrustType === 'limit' }"
+          @click="selectEntrustType('limit')"
+        >
           <van-icon name="link-o" />
           <span>限價委託</span>
         </div>
-        <div class="filter-item" :class="{ active: entrustType === 'stop' }" @click="selectEntrustType('stop')">
+        <div
+          class="filter-item"
+          :class="{ active: entrustType === 'stop' }"
+          @click="selectEntrustType('stop')"
+        >
           <van-icon name="warning-o" />
           <span>止盈止損</span>
         </div>
@@ -149,59 +167,59 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { useI18n } from '@/i18n'
-import ChartComponent from '@/components/Home/ChartComponent.vue'
-import TradingPanel from '@/components/CoinDetail/TradingPanel.vue'
+import { ref, computed, onMounted, onUnmounted, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import { useI18n } from "@/i18n";
+import ChartComponent from "@/components/Home/ChartComponent.vue";
+import TradingPanel from "@/components/CoinDetail/TradingPanel.vue";
 // import OrderBook from '@/components/CoinDetail/OrderBook.vue'
-import CoinPairSearchModal from '@/components/Home/CoinPairSearchModal.vue'
+import CoinPairSearchModal from "@/components/Home/CoinPairSearchModal.vue";
 
-const route = useRoute()
-const router = useRouter()
-const { t } = useI18n()
+const route = useRoute();
+const router = useRouter();
+const { t } = useI18n();
 
 // 从路由参数获取币种信息
 const coinPair = computed(() => {
-  const pair = route.params.pair || 'FIL/USDT'
-  return decodeURIComponent(pair)
-})
+  const pair = route.params.pair || "FIL/USDT";
+  return decodeURIComponent(pair);
+});
 
 // 从查询参数获取币对类型
 const getCoinTypeFromQuery = () => {
-  const type = route.query.type
-  if (type === 'spot' || type === 'perpetual' || type === 'options') {
-    return type
+  const type = route.query.type;
+  if (type === "spot" || type === "perpetual" || type === "options") {
+    return type;
   }
-  return 'options' // 默认类型
-}
+  return "options"; // 默认类型
+};
 
-const tradeType = ref('instant') // 'instant' | 'timed'
-const direction = ref('up') // 'up' | 'down'
-const currentBalance = ref(0)
-const minBuy = ref(1)
-const maxBuy = ref(5000000)
-const tradingInterval = ref('30s-15%')
-const selectedTime = ref('')
-const amount = ref('0')
-const sliderValue = ref(0)
-const showTimePicker = ref(false)
-const showIntervalPicker = ref(false)
-const showSearchModal = ref(false)
-const currentDate = ref(new Date())
-const isChartHidden = ref(false)
-const activeBottomTab = ref('orders')
-const orderList = ref([])
-const entrustCount = ref(0)
-const onlyCurrentSymbol = ref(false)
-const showEntrustTypePopup = ref(false)
-const entrustType = ref('all')
+const tradeType = ref("instant"); // 'instant' | 'timed'
+const direction = ref("up"); // 'up' | 'down'
+const currentBalance = ref(0);
+const minBuy = ref(1);
+const maxBuy = ref(5000000);
+const tradingInterval = ref("30s-15%");
+const selectedTime = ref("");
+const amount = ref("0");
+const sliderValue = ref(0);
+const showTimePicker = ref(false);
+const showIntervalPicker = ref(false);
+const showSearchModal = ref(false);
+const currentDate = ref(new Date());
+const isChartHidden = ref(false);
+const activeBottomTab = ref("orders");
+const orderList = ref([]);
+const entrustCount = ref(0);
+const onlyCurrentSymbol = ref(false);
+const showEntrustTypePopup = ref(false);
+const entrustType = ref("all");
 // 当前币对类型：spot(现货)、contract(合约)、options(期权)
-const coinType = ref(getCoinTypeFromQuery())
+const coinType = ref(getCoinTypeFromQuery());
 
 // 当前价格和涨跌幅 - 根据图片使用 FIL/USDT 的价格范围
-const currentPrice = ref(1.5885)
-const priceChange = ref(5.94)
+const currentPrice = ref(1.5885);
+const priceChange = ref(5.94);
 
 // 订单簿数据 - 根据图片调整价格范围
 const buyOrders = ref([
@@ -211,7 +229,7 @@ const buyOrders = ref([
   { price: 1.5924, amount: 148.8, highlight: false },
   { price: 1.5889, amount: 318.7354, highlight: true },
   { price: 1.5897, amount: 247.9009, highlight: false },
-])
+]);
 
 const sellOrders = ref([
   { price: 1.5847, amount: 148.8, highlight: false },
@@ -220,117 +238,131 @@ const sellOrders = ref([
   { price: 1.5864, amount: 1742.1762, highlight: true },
   { price: 1.5844, amount: 148.3, highlight: false },
   { price: 1.5856, amount: 630.1997, highlight: false },
-])
+]);
 
 const intervalColumns = [
-  { text: '30s-15%', value: '30s-15%' },
-  { text: '1m-20%', value: '1m-20%' },
-  { text: '5m-30%', value: '5m-30%' },
-  { text: '15m-50%', value: '15m-50%' },
-]
+  { text: "30s-15%", value: "30s-15%" },
+  { text: "1m-20%", value: "1m-20%" },
+  { text: "5m-30%", value: "5m-30%" },
+  { text: "15m-50%", value: "15m-50%" },
+];
 
-let priceUpdateInterval = null
+let priceUpdateInterval = null;
 
 const goBack = () => {
-  router.back()
-}
+  router.back();
+};
 
 // const toggleChart = () => {
 //   isChartHidden.value = !isChartHidden.value
 // }
 
 const handleTrade = (tradeData) => {
-  console.log('交易:', {
+  console.log("交易:", {
     coinPair: coinPair.value,
-    ...tradeData
-  })
+    ...tradeData,
+  });
   // 这里可以添加交易逻辑
-}
+};
 
 const confirmTime = (value) => {
-  const date = new Date(value)
-  selectedTime.value = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`
-  showTimePicker.value = false
-}
+  const date = new Date(value);
+  selectedTime.value = `${date.getFullYear()}-${String(
+    date.getMonth() + 1
+  ).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")} ${String(
+    date.getHours()
+  ).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}`;
+  showTimePicker.value = false;
+};
 
 const confirmInterval = ({ selectedValues }) => {
-  tradingInterval.value = selectedValues[0].text
-  showIntervalPicker.value = false
-}
+  tradingInterval.value = selectedValues[0].text;
+  showIntervalPicker.value = false;
+};
 
 const selectEntrustType = (type) => {
-  entrustType.value = type
-  showEntrustTypePopup.value = false
-}
+  entrustType.value = type;
+  showEntrustTypePopup.value = false;
+};
 
 const handleRightAction = () => {
   // 保留行為入口，後續可接入撤單/平倉邏輯
-  console.log(activeBottomTab.value === 'orders' ? '大量撤單' : '一鍵平倉')
-}
+  console.log(activeBottomTab.value === "orders" ? "大量撤單" : "一鍵平倉");
+};
 
 // 处理币对选择
 const handleCoinPairSelect = (coin) => {
   // 保存币对类型
   if (coin.type) {
-    coinType.value = coin.type
+    coinType.value = coin.type;
   }
   // 构建币对字符串
-  let pair = coin.pair || '/USDT'
-  if (pair.startsWith('/')) {
-    pair = `${coin.symbol}${pair}`
+  let pair = coin.pair || "/USDT";
+  if (pair.startsWith("/")) {
+    pair = `${coin.symbol}${pair}`;
   }
   // 如果选择的币对与当前不同，则跳转
   if (pair !== coinPair.value) {
-    router.push(`/coin/${encodeURIComponent(pair)}`)
+    router.push(`/coin/${encodeURIComponent(pair)}`);
   }
-}
+};
 
 // 根据币对类型获取标签文案
 const typeLabel = computed(() => {
-  return t(coinType.value) || t('options')
-})
+  return t(coinType.value) || t("options");
+});
 
 const entrustTypeLabel = computed(() => {
-  if (entrustType.value === 'limit') return '限價委託'
-  if (entrustType.value === 'stop') return '止盈止損'
-  return '全部'
-})
+  if (entrustType.value === "limit") return "限價委託";
+  if (entrustType.value === "stop") return "止盈止損";
+  return "全部";
+});
 
 // 监听路由查询参数变化，更新币对类型
-watch(() => route.query.type, (newType) => {
-  if (newType === 'spot' || newType === 'perpetual' || newType === 'options') {
-    coinType.value = newType
+watch(
+  () => route.query.type,
+  (newType) => {
+    if (
+      newType === "spot" ||
+      newType === "perpetual" ||
+      newType === "options"
+    ) {
+      coinType.value = newType;
+    }
   }
-})
+);
 
 // 模拟实时更新价格
 onMounted(() => {
   priceUpdateInterval = setInterval(() => {
     // 模拟价格波动 - FIL/USDT 价格范围
-    const change = (Math.random() - 0.5) * 0.01
-    currentPrice.value = Math.max(1.58, Math.min(1.60, currentPrice.value + change))
-    priceChange.value = Number((Math.random() * 6).toFixed(2))
-    
+    const change = (Math.random() - 0.5) * 0.01;
+    currentPrice.value = Math.max(
+      1.58,
+      Math.min(1.6, currentPrice.value + change)
+    );
+    priceChange.value = Number((Math.random() * 6).toFixed(2));
+
     // 更新订单簿价格 - 随机高亮某些订单
     buyOrders.value = buyOrders.value.map((order, index) => ({
       price: order.price + (Math.random() - 0.5) * 0.001,
       amount: order.amount,
-      highlight: Math.random() > 0.7 // 随机高亮
-    }))
-    
+      highlight: Math.random() > 0.7, // 随机高亮
+    }));
+
     sellOrders.value = sellOrders.value.map((order, index) => ({
       price: order.price + (Math.random() - 0.5) * 0.001,
       amount: order.amount,
-      highlight: Math.random() > 0.7 // 随机高亮
-    }))
-  }, 3000)
-})
+      highlight: Math.random() > 0.7, // 随机高亮
+    }));
+  }, 3000);
+});
 
 onUnmounted(() => {
   if (priceUpdateInterval) {
-    clearInterval(priceUpdateInterval)
+    clearInterval(priceUpdateInterval);
   }
-})
+});
 </script>
 
 <style lang="scss" scoped>
@@ -545,7 +577,7 @@ onUnmounted(() => {
 }
 
 .filter-row :deep(.van-checkbox__label) {
-  font-size: 12px;
+  font-size: 3.2vw;
   color: #040303;
 }
 
@@ -571,4 +603,3 @@ onUnmounted(() => {
   }
 }
 </style>
-
