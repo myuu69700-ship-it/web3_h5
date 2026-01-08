@@ -10,8 +10,8 @@
             <span>{{ marginMode === 'isolated' ? '逐倉' : '全倉' }}</span>
             <van-icon name="arrow-down" size="12" />
           </div>
-          <div class="select-btn leverage">
-            <span>1x</span>
+          <div class="select-btn leverage" @click="openLeveragePopup">
+            <span>{{ currentLeverage }}x</span>
             <van-icon name="arrow-down" size="12" />
           </div>
         </div>
@@ -289,6 +289,113 @@
       </div>
     </div>
 
+    <!-- 杠杆调整弹窗 -->
+    <van-popup
+      v-model:show="showLeveragePopup"
+      position="bottom"
+      round
+      :style="{ padding: '0' }"
+    >
+      <div class="leverage-popup">
+        <div class="leverage-popup-header">
+          <div class="leverage-popup-title">調整槓桿</div>
+          <van-icon
+            name="cross"
+            size="16"
+            class="leverage-popup-close"
+            @click="showLeveragePopup = false"
+          />
+        </div>
+
+        <!-- 杠杆输入区域 -->
+        <div class="leverage-input-section">
+          <button
+            class="leverage-btn decrease-btn"
+            @click="decreaseLeverage"
+            :disabled="tempLeverage <= 1"
+          >
+            <van-icon name="minus" size="14" />
+          </button>
+          <div class="leverage-value">{{ tempLeverage }}</div>
+          <button
+            class="leverage-btn increase-btn"
+            @click="increaseLeverage"
+            :disabled="tempLeverage >= maxLeverage"
+          >
+            <van-icon name="plus" size="14" />
+          </button>
+        </div>
+
+        <!-- 预设杠杆选项 -->
+        <div class="leverage-presets">
+          <button
+            v-for="preset in leveragePresets"
+            :key="preset"
+            class="leverage-preset-btn"
+            :class="{ active: tempLeverage === preset }"
+            @click="selectPresetLeverage(preset)"
+          >
+            {{ preset }}x
+          </button>
+        </div>
+
+        <!-- 杠杆信息 -->
+        <div class="leverage-info">
+          <div class="leverage-info-item">
+            <span class="info-label">當前最大槓桿倍數</span>
+            <span class="info-value">{{ maxLeverage }}x</span>
+          </div>
+          <div class="leverage-info-item">
+            <span class="info-label">最大可開</span>
+            <span class="info-value">0 張</span>
+          </div>
+        </div>
+
+        <!-- 确认按钮 -->
+        <div class="leverage-confirm" @click="confirmLeverage">確認</div>
+
+        <!-- 数字键盘 -->
+        <div class="leverage-keypad">
+          <div class="keypad-row">
+            <button
+              v-for="num in [1, 2, 3]"
+              :key="num"
+              class="keypad-btn"
+              @click="inputNumber(num)"
+            >
+              {{ num }}
+            </button>
+          </div>
+          <div class="keypad-row">
+            <button
+              v-for="num in [4, 5, 6]"
+              :key="num"
+              class="keypad-btn"
+              @click="inputNumber(num)"
+            >
+              {{ num }}
+            </button>
+          </div>
+          <div class="keypad-row">
+            <button
+              v-for="num in [7, 8, 9]"
+              :key="num"
+              class="keypad-btn"
+              @click="inputNumber(num)"
+            >
+              {{ num }}
+            </button>
+          </div>
+          <div class="keypad-row keypad-row-last">
+            <button class="keypad-btn" @click="inputNumber(0)">0</button>
+            <button class="keypad-btn delete-btn" @click="deleteNumber">
+              <van-icon name="cross" size="16" />
+            </button>
+          </div>
+        </div>
+      </div>
+    </van-popup>
+
     <!-- 保证金模式选择弹窗 -->
     <van-popup
       v-model:show="showMarginModePopup"
@@ -450,6 +557,57 @@ const openMarginModePopup = () => {
 const confirmMarginMode = () => {
   marginMode.value = selectedMarginMode.value;
   showMarginModePopup.value = false;
+};
+
+// 杠杆相关
+const currentLeverage = ref(1);
+const showLeveragePopup = ref(false);
+const tempLeverage = ref(1); // 弹窗中临时选择的杠杆值
+const maxLeverage = ref(125); // 最大杠杆倍数
+const leveragePresets = ref([1, 3, 5, 10, 30]);
+
+const openLeveragePopup = () => {
+  tempLeverage.value = currentLeverage.value;
+  showLeveragePopup.value = true;
+};
+
+const confirmLeverage = () => {
+  currentLeverage.value = tempLeverage.value;
+  showLeveragePopup.value = false;
+};
+
+const decreaseLeverage = () => {
+  if (tempLeverage.value > 1) {
+    tempLeverage.value--;
+  }
+};
+
+const increaseLeverage = () => {
+  if (tempLeverage.value < maxLeverage.value) {
+    tempLeverage.value++;
+  }
+};
+
+const selectPresetLeverage = (preset) => {
+  if (preset <= maxLeverage.value) {
+    tempLeverage.value = preset;
+  }
+};
+
+const inputNumber = (num) => {
+  const newValue = parseInt(String(tempLeverage.value) + String(num));
+  if (newValue <= maxLeverage.value) {
+    tempLeverage.value = newValue;
+  }
+};
+
+const deleteNumber = () => {
+  const str = String(tempLeverage.value);
+  if (str.length > 1) {
+    tempLeverage.value = parseInt(str.slice(0, -1));
+  } else {
+    tempLeverage.value = 1;
+  }
 };
 
 const selectIncrement = (value) => {
@@ -1575,5 +1733,208 @@ onUnmounted(() => {
   &:active {
     opacity: 0.8;
   }
+}
+
+// 杠杆调整弹窗样式
+.leverage-popup {
+  background: #fff;
+  border-radius: 16px 16px 0 0;
+  padding: 20px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.leverage-popup-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+}
+
+.leverage-popup-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #040303;
+  text-align: center;
+}
+
+.leverage-popup-close {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #040303;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #040303;
+  color: #fff;
+}
+
+.leverage-input-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding: 0 20px;
+}
+
+.leverage-btn {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #040303;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  cursor: pointer;
+  transition: opacity 0.3s;
+
+  &:active {
+    opacity: 0.7;
+  }
+
+  &:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+}
+
+.leverage-value {
+  flex: 1;
+  text-align: center;
+  font-size: 24px;
+  font-weight: 600;
+  color: #040303;
+  min-width: 60px;
+}
+
+.leverage-presets {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  padding: 0 20px;
+  justify-content: space-between;
+}
+
+.leverage-preset-btn {
+  flex: 1;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 18px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #040303;
+  background: #fff;
+  border: 1px solid #ebedf0;
+  cursor: pointer;
+  transition: all 0.3s;
+
+  &.active {
+    border-color: #1dbf73;
+    border-width: 2px;
+    background: #fff;
+  }
+
+  &:active {
+    opacity: 0.8;
+  }
+}
+
+.leverage-info {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding: 0 20px;
+}
+
+.leverage-info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  color: #969799;
+
+  .info-label {
+    color: #969799;
+  }
+
+  .info-value {
+    color: #040303;
+    font-weight: 500;
+  }
+}
+
+.leverage-confirm {
+  width: calc(100% - 40px);
+  margin: 0 20px 20px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #040303;
+  color: #fff;
+  border-radius: 22px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.3s;
+
+  &:active {
+    opacity: 0.8;
+  }
+}
+
+.leverage-keypad {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0 20px 20px;
+}
+
+.keypad-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.keypad-row-last {
+  grid-template-columns: 2fr 1fr;
+}
+
+.keypad-btn {
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f3f3f3;
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: 500;
+  color: #040303;
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  &:active {
+    background-color: #e5e5e5;
+  }
+}
+
+.delete-btn {
+  background: #969799;
+  color: #fff;
 }
 </style>
