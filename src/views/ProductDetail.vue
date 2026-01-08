@@ -14,8 +14,8 @@
         <div class="status-value">{{ borrowedAmount }}</div>
       </div>
       <div class="status-item">
-        <div class="status-label">剩餘還幣數量(USDT)</div>
-        <div class="status-value">{{ remainingAmount }}</div>
+        <div class="status-label1">剩餘還幣數量(USDT)</div>
+        <div class="status-value1">{{ remainingAmount }}</div>
       </div>
     </div>
 
@@ -47,8 +47,11 @@
             placeholder="請輸入"
             type="number"
             class="amount-input"
-          />
-          <button class="max-btn" @click="setMaxAmount">MAX</button>
+          >
+            <template #button>
+              <button class="max-btn" @click="setMaxAmount">MAX</button>
+            </template>
+          </van-field>
           <div class="currency-selector" @click="showCurrencyModal = true">
             <img
               :src="getCurrencyIcon(selectedCurrency)"
@@ -69,15 +72,15 @@
         <div class="section-title">■ 可借數量</div>
         <div class="borrowable-amount-display">
           <span class="amount-value">{{ borrowableAmount }}</span>
-          <img
-            :src="getCurrencyIcon(selectedCurrency)"
-            class="currency-icon-small"
-            alt=""
-          />
+          <div class="currency-icon-small-box">
+            <img
+              :src="getCurrencyIcon(selectedCurrency)"
+              class="currency-icon-small"
+              alt=""
+            />
+          </div>
         </div>
-        <div class="borrowable-note">
-          根據個人資產情況進行,同步借幣額度
-        </div>
+        <div class="borrowable-note">根據個人資產情況進行,同步借幣額度</div>
       </div>
 
       <!-- 借幣期限 -->
@@ -107,15 +110,21 @@
         </div>
         <div class="fee-item">
           <div class="fee-label">總幣息</div>
-          <div class="fee-value">{{ totalInterest }} {{ selectedCurrency }}</div>
+          <div class="fee-value">
+            {{ totalInterest }} {{ selectedCurrency }}
+          </div>
         </div>
         <div class="fee-item">
           <div class="fee-label">總服務費</div>
-          <div class="fee-value">{{ totalServiceFee }} {{ selectedCurrency }}</div>
+          <div class="fee-value">
+            {{ totalServiceFee }} {{ selectedCurrency }}
+          </div>
         </div>
         <div class="fee-item">
           <div class="fee-label">預估應還</div>
-          <div class="fee-value highlight">{{ estimatedRepayment }} {{ selectedCurrency }}</div>
+          <div class="fee-value highlight">
+            {{ estimatedRepayment }} {{ selectedCurrency }}
+          </div>
         </div>
       </div>
 
@@ -128,11 +137,7 @@
       </div>
 
       <!-- 立即借幣按鈕 -->
-      <button
-        class="borrow-btn"
-        :disabled="!canBorrow"
-        @click="handleBorrow"
-      >
+      <button class="borrow-btn" :disabled="!canBorrow" @click="handleBorrow">
         立即借幣
       </button>
     </div>
@@ -239,12 +244,13 @@ const goBack = () => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 16px;
+  height: 62.39px;
+  padding: 0 16px;
   background-color: #fff;
   position: sticky;
   top: 0;
   z-index: 100;
-  border-bottom: 1px solid #ebedf0;
+  // border-bottom: 1px solid #ebedf0;
 
   .back-icon,
   .info-icon {
@@ -269,6 +275,13 @@ const goBack = () => {
   background-color: #fff;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  width: calc(100% - 8.53333vw);
+  margin: 0 auto;
+  background: #fff;
+  box-shadow: 0 0 2.66667vw #0000001a;
+  border-radius: 2.66667vw;
+  padding: 5.33333vw 4.26667vw;
+  margin: 10px auto;
 
   .status-item {
     flex: 1;
@@ -280,11 +293,24 @@ const goBack = () => {
       color: #969799;
       margin-bottom: 8px;
     }
+    .status-label1 {
+      font-size: 14px;
+      color: #969799;
+      margin-bottom: 8px;
+      text-align: right;
+    }
 
     .status-value {
-      font-size: 20px;
-      font-weight: bold;
-      color: #323233;
+      // font-size: 20px;
+      // font-weight: bold;
+      color: #040303;
+      font-size: 6.4vw;
+      text-align: lift;
+    }
+    .status-value1 {
+      color: #040303;
+      font-size: 6.4vw;
+      text-align: right;
     }
   }
 }
@@ -331,9 +357,9 @@ const goBack = () => {
   margin-bottom: 24px;
 
   .section-title {
-    font-size: 16px;
-    font-weight: 500;
-    color: #323233;
+    font-size: 4.26667vw;
+    // font-weight: 500;
+    color: #040303;
     margin-bottom: 12px;
   }
 }
@@ -347,20 +373,38 @@ const goBack = () => {
 
   .amount-input {
     flex: 1;
+    border: 1px solid #f3f3f3;
+    position: relative;
+    border-radius: 2.66667vw;
     :deep(.van-field__control) {
       font-size: 16px;
+      padding-right: 55px;
+    }
+    :deep(.van-field__button) {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 1;
+      right: -2px;
     }
   }
 
   .max-btn {
-    padding: 8px 16px;
-    background-color: #323233;
+    padding: 4px 12px;
+    background-color: #040303;
     color: #fff;
     border: none;
     border-radius: 4px;
     font-size: 14px;
     cursor: pointer;
     white-space: nowrap;
+    width: 41px;
+    height: 31px;
+    line-height: 31px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .currency-selector {
@@ -393,33 +437,45 @@ const goBack = () => {
 
 .available-amount {
   font-size: 14px;
-  color: #969799;
+  color: #040303;
   margin-top: 8px;
 }
 
 // 可借數量區域
 .borrowable-amount-display {
+  // padding: 51px;
+  height: 51px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  border: 1px solid #f3f3f3;
   gap: 8px;
   margin-bottom: 8px;
+  border-radius: 2.66667vw;
 
   .amount-value {
     font-size: 24px;
     font-weight: bold;
     color: #323233;
+    padding-left: 20px;
+  }
+
+  .currency-icon-small-box {
+    padding-right: 30px;
   }
 
   .currency-icon-small {
-    width: 20px;
-    height: 20px;
+    width: 20.8px;
+    height: 20.8px;
     border-radius: 50%;
+    // padding-right: 40px;
+    // padding-right: 120px;
   }
 }
 
 .borrowable-note {
   font-size: 12px;
-  color: #969799;
+  color: #040303;
   line-height: 1.5;
 }
 
@@ -432,31 +488,42 @@ const goBack = () => {
   .term-option {
     padding: 12px;
     text-align: center;
-    background-color: #f7f8fa;
-    border-radius: 8px;
+    // background-color: #f7f8fa;
+    border-radius: 266.4vw;
     font-size: 14px;
     color: #323233;
     cursor: pointer;
     transition: all 0.2s;
 
     &.active {
-      background-color: #323233;
-      color: #fff;
+      font-size: 14px;
+      background-color: #040303;
+      color: #ffffff;
     }
   }
 }
 
 // 費用詳情區域
 .fee-section {
+  background-color: #f3f3f3;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 24px;
+
   .fee-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 12px 0;
-    border-bottom: 1px solid #ebedf0;
+    border-bottom: 1px solid #f0f0f0;
 
     &:last-child {
       border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    &:first-child {
+      padding-top: 0;
     }
 
     .fee-label {
@@ -464,22 +531,31 @@ const goBack = () => {
       align-items: center;
       gap: 4px;
       font-size: 14px;
-      color: #323233;
+      color: #040303;
 
       .question-icon {
-        font-size: 14px;
-        color: #26a17b;
+        font-size: 12px;
+        width: 16px;
+        height: 16px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #26a17b;
+        border-radius: 50%;
+        color: #fff;
+        margin-left: 4px;
       }
     }
 
     .fee-value {
       font-size: 14px;
-      color: #323233;
+      color: #040303;
       font-weight: 500;
+      text-align: right;
 
       &.highlight {
-        font-weight: bold;
-        color: #323233;
+        // font-weight: bold;
+        color: #040303;
       }
     }
   }
@@ -490,33 +566,51 @@ const goBack = () => {
   display: flex;
   align-items: flex-start;
   gap: 8px;
-  margin-bottom: 24px;
+  margin-top: 50px;
+  // margin-bottom: 24px;
   padding: 16px 0;
+
+  :deep(.van-checkbox) {
+    margin-top: 2px;
+  }
+
+  :deep(.van-checkbox__icon) {
+    border-color: #323233;
+    background-color: #323233;
+  }
+
+  :deep(.van-checkbox__icon--checked) {
+    background-color: #323233;
+    border-color: #323233;
+  }
 
   .agreement-text {
     font-size: 14px;
-    color: #323233;
+    color: #040303;
     line-height: 1.5;
     flex: 1;
+   
 
     .link {
-      color: #1989fa;
+      color: #2b6d16;
+      // text-decoration: none;
+      padding-left: 4px;
     }
   }
 }
 
 // 立即借幣按鈕
 .borrow-btn {
-  width: 100%;
-  padding: 14px;
-  background-color: #323233;
+  width: 92vw;
+  height: 10.66667vw;
+  line-height: 10.66667vw;
+  text-align: center;
+  border: 0;
   color: #fff;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: opacity 0.2s;
+  font-weight: 700;
+  font-size: 3.2vw;
+  background: #040303;
+  border-radius: 266.4vw;
 
   &:disabled {
     opacity: 0.5;
@@ -528,4 +622,3 @@ const goBack = () => {
   }
 }
 </style>
-
