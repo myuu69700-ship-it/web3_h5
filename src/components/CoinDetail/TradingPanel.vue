@@ -120,7 +120,7 @@
             icon-size="13px"
             checked-color="#040303"
           ></van-checkbox>
-          <div>止盈止損</div>
+          <div class="stop-loss-profit-label">止盈止損</div>
         </div>
 
         <!-- 止盈止损输入框 -->
@@ -683,7 +683,7 @@ onUnmounted(() => {
   width: 100%;
   height: 8.53333vw;
   line-height: 8.53333vw;
-  margin-bottom: 4vw;
+  margin-bottom: 2vw;
   line-height: 1;
 }
 
@@ -728,7 +728,7 @@ onUnmounted(() => {
   border-radius: 2.13333vw;
   // padding: 0 2.13333vw;
   padding-left: 2vw;
-  margin-bottom: 2.93333vw;
+  margin-bottom: 2vw;
   display: flex;
   align-items: center;
   // justify-content: space-between;
@@ -813,7 +813,14 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-
+  .balance-label {
+    color: #040303;
+    font-size: 12px;
+  }
+  .balance-value {
+    color: #040303;
+    font-size: 12px;
+  }
   .exchange-icon {
     color: #040303;
     cursor: pointer;
@@ -969,7 +976,12 @@ onUnmounted(() => {
   font-size: 11px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 8px;
+  .stop-loss-profit-label {
+    color: #040303;
+    font-size: 12px;
+  }
 }
 
 .stop-loss-profit-inputs {
