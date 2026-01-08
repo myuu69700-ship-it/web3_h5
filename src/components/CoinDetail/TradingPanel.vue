@@ -6,8 +6,8 @@
       <div class="bet-main-left">
         <!-- 保证金模式和杠杆 -->
         <div class="margin-leverage">
-          <div class="select-btn margin-mode">
-            <span>逐倉</span>
+          <div class="select-btn margin-mode" @click="openMarginModePopup">
+            <span>{{ marginMode === 'isolated' ? '逐倉' : '全倉' }}</span>
             <van-icon name="arrow-down" size="12" />
           </div>
           <div class="select-btn leverage">
@@ -288,6 +288,67 @@
         </van-popup>
       </div>
     </div>
+
+    <!-- 保证金模式选择弹窗 -->
+    <van-popup
+      v-model:show="showMarginModePopup"
+      position="bottom"
+      round
+      :style="{ padding: '0' }"
+    >
+      <div class="margin-mode-popup">
+        <div class="margin-mode-header">
+          <div class="margin-mode-title">保證金模式</div>
+          <van-icon
+            name="cross"
+            size="16"
+            class="margin-mode-close"
+            @click="showMarginModePopup = false"
+          />
+        </div>
+        
+        <div class="margin-mode-selector">
+          <div
+            class="mode-option"
+            :class="{ active: selectedMarginMode === 'isolated' }"
+            @click="selectedMarginMode = 'isolated'"
+          >
+            逐倉
+          </div>
+          <div
+            class="mode-option"
+            :class="{ active: selectedMarginMode === 'cross' }"
+            @click="selectedMarginMode = 'cross'"
+          >
+            全倉
+          </div>
+        </div>
+
+        <div class="margin-mode-notice">
+          <div class="notice-text">調整保證金模式僅對目前交易標的生效</div>
+          <div class="notice-link">什麼是全倉和逐倉保證金模式</div>
+        </div>
+
+        <div class="margin-mode-description">
+          <div class="description-item">
+            <div class="description-title">全倉模式:</div>
+            <div class="description-content">
+              保證金資產相同的全倉位共享對應資產的全倉保證金,在強平事件中,交易者可能隨時全部對應保證金和對應保證金資產下的所有全倉位
+            </div>
+          </div>
+          <div class="description-item">
+            <div class="description-title">逐倉模式:</div>
+            <div class="description-content">
+              下單成交後,所形成部位保證金及盈虧獨立核算,逐倉部位風險與全倉位隔離,在強平事件中,交易者只會損失該部位下的全部保證金
+            </div>
+          </div>
+        </div>
+
+        <div class="margin-mode-confirm" @click="confirmMarginMode">
+          確認
+        </div>
+      </div>
+    </van-popup>
   </div>
 </template>
 
@@ -375,6 +436,21 @@ const incrementOptions = ref([
   "0.00001",
   "0.000001",
 ]);
+
+// 保证金模式
+const marginMode = ref("isolated"); // 'isolated' 逐倉, 'cross' 全倉
+const showMarginModePopup = ref(false);
+const selectedMarginMode = ref("isolated"); // 弹窗中选择的模式（未确认前）
+
+const openMarginModePopup = () => {
+  selectedMarginMode.value = marginMode.value;
+  showMarginModePopup.value = true;
+};
+
+const confirmMarginMode = () => {
+  marginMode.value = selectedMarginMode.value;
+  showMarginModePopup.value = false;
+};
 
 const selectIncrement = (value) => {
   selectedIncrement.value = value;
@@ -1358,6 +1434,146 @@ onUnmounted(() => {
     background-color: #f7f8fa;
     color: #040303;
     font-weight: 500;
+  }
+}
+
+// 保证金模式弹窗样式
+.margin-mode-popup {
+  background: #fff;
+  border-radius: 16px 16px 0 0;
+  padding: 20px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.margin-mode-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #ebedf0;
+}
+
+.margin-mode-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #040303;
+  text-align: center;
+}
+
+.margin-mode-close {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #323233;
+  cursor: pointer;
+  padding: 8px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #f3f3f3;
+}
+
+.margin-mode-selector {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.mode-option {
+  flex: 1;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 22px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #040303;
+  background: #fff;
+  border: 1px solid #ebedf0;
+  cursor: pointer;
+  transition: all 0.3s;
+
+  &.active {
+    background: #040303;
+    color: #fff;
+    border-color: #040303;
+  }
+
+  &:active {
+    opacity: 0.8;
+  }
+}
+
+.margin-mode-notice {
+  margin-bottom: 20px;
+  padding: 12px;
+  background: #f7f8fa;
+  border-radius: 8px;
+}
+
+.notice-text {
+  font-size: 13px;
+  color: #646566;
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+
+.notice-link {
+  font-size: 13px;
+  color: #1989fa;
+  cursor: pointer;
+  line-height: 1.5;
+}
+
+.margin-mode-description {
+  margin-bottom: 24px;
+}
+
+.description-item {
+  margin-bottom: 16px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.description-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #040303;
+  margin-bottom: 8px;
+}
+
+.description-content {
+  font-size: 13px;
+  color: #646566;
+  line-height: 1.6;
+}
+
+.margin-mode-confirm {
+  width: 100%;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #040303;
+  color: #fff;
+  border-radius: 22px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.3s;
+
+  &:active {
+    opacity: 0.8;
   }
 }
 </style>
