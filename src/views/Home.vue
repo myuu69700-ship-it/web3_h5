@@ -129,20 +129,7 @@
     </div>
 
     <!-- 菜单抽屉 -->
-    <van-popup
-      v-model:show="showMenu"
-      position="left"
-      :style="{ width: '70%', height: '100%' }"
-    >
-      <div class="menu-content">
-        <div class="menu-header">{{ t("menu") }}</div>
-        <van-cell-group>
-          <van-cell :title="t('settings')" is-link />
-          <van-cell :title="t('help')" is-link />
-          <van-cell :title="t('about')" is-link @click="goToAbout" />
-        </van-cell-group>
-      </div>
-    </van-popup>
+    <MenuDrawer v-model="showMenu" />
 
     <!-- 币对搜索弹窗 -->
     <CoinPairSearchModal
@@ -203,6 +190,7 @@ import zhusImage from "@/assets/images/zhus.png";
 import galleryViewIcon from "@/assets/images/gallery-view.svg";
 import diqiuIcon from "@/assets/images/diqiu.svg";
 import MenuSection from "@/components/Home/MenuSection.vue";
+import MenuDrawer from "@/components/Home/MenuDrawer.vue";
 import TabSection from "@/components/Home/TabSection.vue";
 import CoinPairSearchModal from "@/components/Home/CoinPairSearchModal.vue";
 
@@ -793,16 +781,6 @@ onUnmounted(() => {
   }
 }
 
-// 菜单内容
-.menu-content {
-  padding: 20px;
-
-  .menu-header {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 20px;
-  }
-}
 
 // 语言选择对话框
 .language-popup {
