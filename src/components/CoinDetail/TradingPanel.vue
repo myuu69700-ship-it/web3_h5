@@ -919,6 +919,7 @@ onUnmounted(() => {
   line-height: 8.53333vw;
   margin-bottom: 2vw;
   line-height: 1;
+  font-size: 16px;
 }
 
 .select-btn {
