@@ -8,9 +8,19 @@
     <div class="menu-drawer">
       <!-- 顶部导航栏 -->
       <div class="drawer-header">
-        <van-icon name="arrow-left" class="back-icon" @click="handleClose" />
+        <img
+          :src="leftArrowIcon"
+          class="back-icon"
+          @click="handleClose"
+          alt="返回"
+        />
         <div class="header-right">
-          <van-icon name="service-o" class="header-icon" @click="handleService" />
+          <img
+            :src="kfuIcon"
+            class="header-icon"
+            @click="handleService"
+            alt="客服"
+          />
           <van-icon name="chat-o" class="header-icon" @click="handleMessage" />
         </div>
       </div>
@@ -18,7 +28,7 @@
       <!-- 用户登录/个人资料部分 -->
       <div class="user-section" @click="handleUserProfile">
         <div class="user-avatar">
-          <van-icon name="user-circle-o" size="60" />
+          <van-icon name="user-circle-o" size="62.39" />
         </div>
         <div class="user-info">
           <div class="user-title">{{ t("loginImmediately") }}</div>
@@ -28,11 +38,11 @@
       </div>
 
       <!-- 常用功能 -->
-      <div class="menu-group">
+      <div class="menu-group tutorial-group">
         <div class="group-title">{{ t("commonFunctions") }}</div>
-        <div class="function-item" @click="handleTutorial">
+        <div class="function-item tutorial-item" @click="handleTutorial">
           <div class="function-icon-wrapper">
-            <van-icon name="info-o" size="20" />
+            <van-icon name="info-o" size="27.03" />
           </div>
           <span class="function-label">{{ t("newbieTutorial") }}</span>
         </div>
@@ -44,19 +54,19 @@
         <div class="function-row">
           <div class="function-item" @click="handleDeposit">
             <div class="function-icon-wrapper">
-              <van-icon name="balance-o" size="20" />
+              <van-icon name="balance-o" size="27.03" />
             </div>
             <span class="function-label">{{ t("deposit") }}</span>
           </div>
           <div class="function-item" @click="handleWithdraw">
             <div class="function-icon-wrapper">
-              <van-icon name="friends-o" size="20" />
+              <van-icon name="friends-o" size="27.03" />
             </div>
             <span class="function-label">{{ t("withdraw") }}</span>
           </div>
           <div class="function-item" @click="handleQuickBuy">
             <div class="function-icon-wrapper">
-              <van-icon name="gold-coin-o" size="20" />
+              <van-icon name="gold-coin-o" size="27.03" />
             </div>
             <span class="function-label">{{ t("quickBuy") }}</span>
           </div>
@@ -69,25 +79,25 @@
         <div class="function-row">
           <div class="function-item" @click="handleOptions">
             <div class="function-icon-wrapper">
-              <van-icon name="chart-trending-o" size="20" />
+              <van-icon name="chart-trending-o" size="27.03" />
             </div>
             <span class="function-label">{{ t("options") }}</span>
           </div>
           <div class="function-item" @click="handleSpot">
             <div class="function-icon-wrapper">
-              <van-icon name="share-o" size="20" />
+              <van-icon name="share-o" size="27.03" />
             </div>
             <span class="function-label">{{ t("spot") }}</span>
           </div>
           <div class="function-item" @click="handleContract">
             <div class="function-icon-wrapper">
-              <van-icon name="apps-o" size="20" />
+              <van-icon name="apps-o" size="27.03" />
             </div>
             <span class="function-label">{{ t("contract") }}</span>
           </div>
           <div class="function-item" @click="handleNFT">
             <div class="function-icon-wrapper">
-              <van-icon name="photo-o" size="20" />
+              <van-icon name="photo-o" size="27.03" />
             </div>
             <span class="function-label">{{ t("nft") }}</span>
           </div>
@@ -95,7 +105,7 @@
         <div class="function-row">
           <div class="function-item" @click="handleAIStrategy">
             <div class="function-icon-wrapper">
-              <van-icon name="setting-o" size="20" />
+              <van-icon name="setting-o" size="27.03" />
             </div>
             <span class="function-label">{{ t("aiStrategyTrading") }}</span>
           </div>
@@ -108,19 +118,19 @@
         <div class="function-row">
           <div class="function-item" @click="handleDeFiLending">
             <div class="function-icon-wrapper">
-              <van-icon name="like-o" size="20" />
+              <van-icon name="like-o" size="27.03" />
             </div>
             <span class="function-label">{{ t("defiLending") }}</span>
           </div>
           <div class="function-item" @click="handlePortfolio">
             <div class="function-icon-wrapper">
-              <van-icon name="cluster-o" size="20" />
+              <van-icon name="cluster-o" size="27.03" />
             </div>
             <span class="function-label">{{ t("investmentPortfolio") }}</span>
           </div>
           <div class="function-item" @click="handleLockedStaking">
             <div class="function-icon-wrapper">
-              <van-icon name="lock" size="20" />
+              <van-icon name="lock" size="27.03" />
             </div>
             <span class="function-label">{{ t("lockedStaking") }}</span>
           </div>
@@ -133,25 +143,25 @@
         <div class="function-row">
           <div class="function-item" @click="handleAssetCenter">
             <div class="function-icon-wrapper">
-              <van-icon name="shield-o" size="20" />
+              <van-icon name="shield-o" size="27.03" />
             </div>
             <span class="function-label">{{ t("assetCenter") }}</span>
           </div>
           <div class="function-item" @click="handleAddressBook">
             <div class="function-icon-wrapper">
-              <van-icon name="notes-o" size="20" />
+              <van-icon name="notes-o" size="27.03" />
             </div>
             <span class="function-label">{{ t("addressBook") }}</span>
           </div>
           <div class="function-item" @click="handleCharity">
             <div class="function-icon-wrapper">
-              <van-icon name="like-o" size="20" />
+              <van-icon name="like-o" size="27.03" />
             </div>
             <span class="function-label">{{ t("charity") }}</span>
           </div>
           <div class="function-item" @click="handlePlatformNotifications">
             <div class="function-icon-wrapper">
-              <van-icon name="bell-o" size="20" />
+              <van-icon name="bell-o" size="27.03" />
             </div>
             <span class="function-label">{{ t("platformNotifications") }}</span>
           </div>
@@ -159,13 +169,13 @@
         <div class="function-row">
           <div class="function-item" @click="handleSecurityCenter">
             <div class="function-icon-wrapper">
-              <van-icon name="shield-o" size="20" />
+              <van-icon name="shield-o" size="27.03" />
             </div>
             <span class="function-label">{{ t("securityCenter") }}</span>
           </div>
           <div class="function-item" @click="handleLanguageSelect">
             <div class="function-icon-wrapper">
-              <van-icon name="globe-o" size="20" />
+              <van-icon name="globe-o" size="27.03" />
             </div>
             <span class="function-label">{{ t("traditionalChinese") }}</span>
           </div>
@@ -189,6 +199,8 @@
 import { computed } from "vue";
 import { useRouter } from "vue-router";
 import { useI18n } from "@/i18n";
+import leftArrowIcon from "@/assets/images/left_arrow.svg";
+import kfuIcon from "@/assets/images/kfu.svg";
 
 const props = defineProps({
   modelValue: {
@@ -369,22 +381,30 @@ const handleClearCache = () => {
   justify-content: space-between;
   align-items: center;
   padding: 16px 20px;
-  border-bottom: 1px solid #ebedf0;
+  // border-bottom: 1px solid #ebedf0;
 
   .back-icon {
-    font-size: 20px;
-    color: #040303;
+    width: 20px;
+    height: 20px;
     cursor: pointer;
+    display: block;
   }
 
   .header-right {
     display: flex;
     gap: 16px;
+    align-items: center;
 
     .header-icon {
-      font-size: 20px;
-      color: #040303;
+      width: 20px;
+      height: 20px;
       cursor: pointer;
+      display: block;
+
+      &.van-icon {
+        font-size: 20px;
+        color: #040303;
+      }
     }
   }
 }
@@ -392,11 +412,13 @@ const handleClearCache = () => {
 .user-section {
   display: flex;
   align-items: center;
-  padding: 20px;
+  padding: 15px;
   cursor: pointer;
-  border-bottom: 1px solid #ebedf0;
+  // border-bottom: 1px solid #ebedf0;
 
   .user-avatar {
+    width: 62.39px;
+    height: 62.39px;
     margin-right: 12px;
     color: #040303;
   }
@@ -405,32 +427,36 @@ const handleClearCache = () => {
     flex: 1;
 
     .user-title {
-      font-size: 18px;
-      font-weight: 500;
+      font-size: 14px;
       color: #040303;
       margin-bottom: 4px;
     }
 
     .user-subtitle {
       font-size: 14px;
-      color: #969799;
+      color: #040303;
     }
   }
 
   .arrow-icon {
     font-size: 16px;
-    color: #969799;
+    color: #040303;
+    font-weight: 600;
   }
 }
 
 .menu-group {
   padding: 16px 20px 0;
+  border-bottom: 1px solid #ebedf0;
+  width: 95%;
+  margin: 0 auto;
 
   .group-title {
-    font-size: 16px;
+    font-size: 3.73333vw;
     font-weight: 600;
     color: #040303;
     margin-bottom: 12px;
+    margin-left: -15px;
   }
 
   .function-row {
@@ -444,10 +470,11 @@ const handleClearCache = () => {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: flex-start;
     cursor: pointer;
     min-width: 60px;
     padding: 8px 0;
-    flex: 0 0 auto;
+    // flex: 0 0 auto;
 
     .function-icon-wrapper {
       width: 40px;
@@ -464,12 +491,49 @@ const handleClearCache = () => {
     .function-label {
       font-size: 12px;
       color: #040303;
-      text-align: center;
+      // text-align: center;
       line-height: 1.4;
     }
 
     &:active {
       opacity: 0.7;
+    }
+  }
+
+  // 新手教程样式 - 最左侧
+  &.tutorial-group {
+    padding: 16px 20px 0;
+    // padding-left: 30px;
+    
+    .tutorial-item {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+      width: auto;
+      padding: 12px 0;
+      margin-left: 10px;
+
+      .function-icon-wrapper {
+        width: 40px;
+        height: 40px;
+        margin-right: 0;
+        margin-bottom: 8px;
+        background-color: transparent;
+        border-radius: 0;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #040303;
+      }
+
+      .function-label {
+        font-size: 12px;
+        color: #040303;
+        text-align: left;
+        line-height: 1.4;
+      }
     }
   }
 
@@ -490,8 +554,13 @@ const handleClearCache = () => {
     }
 
     .function-label {
-      font-size: 14px;
+      font-size: 4vw;
+      color: #040303;
+      // font-weight: 600;
     }
   }
+}
+.menu-group:last-child {
+  border-bottom: none;
 }
 </style>
