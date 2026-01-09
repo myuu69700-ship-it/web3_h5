@@ -1,13 +1,10 @@
 <template>
-  <div class="login-page">
+  <div class="forgot-password-page">
     <!-- 顶部导航栏 -->
     <div class="header">
       <img :src="leftArrowIcon" class="back-icon" @click="goBack" alt="返回" />
       <img :src="kfuIcon" class="service-icon" alt="客服" />
     </div>
-
-    <!-- 标题 -->
-    <div class="title">{{ t("loginWeb3") }}</div>
 
     <!-- 登录方式标签 -->
     <div class="tabs">
@@ -27,9 +24,9 @@
       </div>
     </div>
 
-    <!-- 手机登录表单 -->
+    <!-- 手机找回表单 -->
     <div v-if="activeTab === 'phone'" class="form-container">
-      <div class="input-group">
+      <div class="input-group" style="margin-top: 40px;">
         <div class="country-selector" @click="showCountryPicker = true">
           <span class="country-code">{{ selectedCountry.code }}</span>
           <van-icon name="arrow-down" class="arrow-icon" />
@@ -41,12 +38,29 @@
         />
       </div>
 
-      <div class="input-group">
+      <div class="verification-code-group">
         <van-field
-          v-model="password"
+          v-model="verificationCode"
+          :placeholder="t('enterVerificationCode')"
+          class="verification-input"
+        />
+        <van-button
+          type="primary"
+          class="send-code-btn"
+          @click="handleSendCode"
+          :disabled="countdown > 0"
+        >
+          {{ countdown > 0 ? `${countdown}s` : t("sendCode") }}
+        </van-button>
+      </div>
+
+      <div class="label">{{ t("loginPassword") }}</div>
+      <div class="password-input-group">
+        <van-field
+          v-model="loginPassword"
           :type="showPassword ? 'text' : 'password'"
-          :placeholder="t('enterPassword')"
-          class="password-input"
+          :placeholder="t('enterLoginPassword')"
+          class="password-input-field"
         >
           <template #right-icon>
             <van-icon
@@ -58,14 +72,28 @@
         </van-field>
       </div>
 
-      <div class="forgot-password">
-        <span @click="handleForgotPassword">{{ t("forgotPassword") }}</span>
+      <div class="label">{{ t("confirmPassword") }}</div>
+      <div class="password-input-group">
+        <van-field
+          v-model="confirmPassword"
+          :type="showConfirmPassword ? 'text' : 'password'"
+          :placeholder="t('enterLoginPasswordAgain')"
+          class="password-input-field"
+        >
+          <template #right-icon>
+            <van-icon
+              :name="showConfirmPassword ? 'eye-o' : 'closed-eye'"
+              @click="showConfirmPassword = !showConfirmPassword"
+              class="eye-icon"
+            />
+          </template>
+        </van-field>
       </div>
     </div>
 
-    <!-- 邮箱登录表单 -->
+    <!-- 邮箱找回表单 -->
     <div v-if="activeTab === 'email'" class="form-container">
-      <div class="input-group">
+      <div class="input-group" style="margin-top: 40px;">
         <van-field
           v-model="emailOrAccount"
           :placeholder="t('enterEmailAccount')"
@@ -73,12 +101,29 @@
         />
       </div>
 
-      <div class="input-group">
+      <div class="verification-code-group">
         <van-field
-          v-model="password"
+          v-model="verificationCode"
+          :placeholder="t('enterVerificationCode')"
+          class="verification-input"
+        />
+        <van-button
+          type="primary"
+          class="send-code-btn"
+          @click="handleSendCode"
+          :disabled="countdown > 0"
+        >
+          {{ countdown > 0 ? `${countdown}s` : t("sendCode") }}
+        </van-button>
+      </div>
+
+      <div class="label">{{ t("loginPassword") }}</div>
+      <div class="password-input-group">
+        <van-field
+          v-model="loginPassword"
           :type="showPassword ? 'text' : 'password'"
-          :placeholder="t('enterPassword')"
-          class="password-input"
+          :placeholder="t('enterLoginPassword')"
+          class="password-input-field"
         >
           <template #right-icon>
             <van-icon
@@ -90,39 +135,36 @@
         </van-field>
       </div>
 
-      <div class="forgot-password">
-        <span @click="handleForgotPassword">{{ t("forgotPassword") }}</span>
+      <div class="label">{{ t("confirmPassword") }}</div>
+      <div class="password-input-group">
+        <van-field
+          v-model="confirmPassword"
+          :type="showConfirmPassword ? 'text' : 'password'"
+          :placeholder="t('enterLoginPasswordAgain')"
+          class="password-input-field"
+        >
+          <template #right-icon>
+            <van-icon
+              :name="showConfirmPassword ? 'eye-o' : 'closed-eye'"
+              @click="showConfirmPassword = !showConfirmPassword"
+              class="eye-icon"
+            />
+          </template>
+        </van-field>
       </div>
     </div>
 
-    <!-- 协议同意 -->
-    <div class="agreement">
-      <van-checkbox v-model="agreed" shape="square" />
-      <div class="agreement-text">
-        {{ t("agreementText") }}
-        <span class="link" @click="openTerms">{{ t("termsOfService") }}</span>
-        <span class="link" @click="openPrivacy">{{ t("privacyPolicy") }}</span>
-        {{ t("and") }}
-        <span class="link" @click="openAntiMoneyLaundering">{{
-          t("antiMoneyLaundering")
-        }}</span>
-      </div>
-    </div>
-
-    <!-- 登录按钮 -->
+    <!-- 提交按钮 -->
     <div class="button-group">
-      <van-button type="primary" block class="login-btn" @click="handleLogin">
-        {{ t("login") }}
-      </van-button>
-      <van-button block class="wallet-login-btn" @click="handleWalletLogin">
-        {{ t("walletLogin") }}
+      <van-button type="primary" block class="submit-btn" @click="handleSubmit">
+        {{ t("submit") }}
       </van-button>
     </div>
 
-    <!-- 注册链接 -->
-    <div class="register-link">
-      <span>{{ t("noAccount") }}</span>
-      <span class="link" @click="goToRegister">{{ t("registerNow") }}</span>
+    <!-- 取消找回链接 -->
+    <div class="cancel-link">
+      <span>{{ t("cancelRecovery") }}, </span>
+      <span class="link" @click="goToLogin">{{ t("login") }}</span>
     </div>
 
     <!-- 国家选择器 -->
@@ -158,7 +200,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useI18n } from "@/i18n";
 import leftArrowIcon from "@/assets/images/left_arrow.svg";
@@ -170,12 +212,16 @@ const { t } = useI18n();
 const activeTab = ref("phone");
 const phoneNumber = ref("");
 const emailOrAccount = ref("");
-const password = ref("");
+const verificationCode = ref("");
+const loginPassword = ref("");
+const confirmPassword = ref("");
 const showPassword = ref(false);
-const agreed = ref(false);
+const showConfirmPassword = ref(false);
 const showCountryPicker = ref(false);
+const countdown = ref(0);
+let countdownTimer = null;
 
-// 国家列表
+// 国家列表（复用登录页面的国家列表）
 const countries = ref([
   { code: "1", name: "美国" },
   { code: "7", name: "俄罗斯" },
@@ -331,62 +377,63 @@ const selectCountry = (country) => {
   showCountryPicker.value = false;
 };
 
-const canLogin = computed(() => {
-  if (!agreed.value) return false;
-  if (activeTab.value === "phone") {
-    return phoneNumber.value && password.value;
-  } else {
-    return emailOrAccount.value && password.value;
-  }
-});
-
 const goBack = () => {
   router.back();
 };
 
-const handleLogin = () => {
-  if (!canLogin.value) return;
-  // TODO: 实现登录逻辑
-  console.log("登录", {
+const handleSendCode = () => {
+  if (countdown.value > 0) return;
+
+  // TODO: 实现发送验证码逻辑
+  if (activeTab.value === "phone") {
+    if (!phoneNumber.value) {
+      // 可以添加提示
+      return;
+    }
+  } else {
+    if (!emailOrAccount.value) {
+      // 可以添加提示
+      return;
+    }
+  }
+
+  // 开始倒计时
+  countdown.value = 60;
+  countdownTimer = setInterval(() => {
+    countdown.value--;
+    if (countdown.value <= 0) {
+      clearInterval(countdownTimer);
+      countdownTimer = null;
+    }
+  }, 1000);
+
+  console.log("发送验证码", {
     type: activeTab.value,
     phone: phoneNumber.value,
     email: emailOrAccount.value,
-    password: password.value,
+  });
+};
+
+const handleSubmit = () => {
+  // TODO: 实现提交逻辑
+  console.log("提交", {
+    type: activeTab.value,
+    phone: phoneNumber.value,
+    email: emailOrAccount.value,
+    code: verificationCode.value,
+    password: loginPassword.value,
+    confirmPassword: confirmPassword.value,
     countryCode: selectedCountry.value.code,
   });
 };
 
-const handleWalletLogin = () => {
-  // TODO: 实现钱包登录逻辑
-  console.log("钱包登录");
-};
-
-const handleForgotPassword = () => {
-  router.push("/forgot-password");
-};
-
-const goToRegister = () => {
-  // TODO: 跳转到注册页面
-  console.log("跳转到注册");
-};
-
-const openTerms = () => {
-  router.push("/terms-of-service");
-};
-
-const openPrivacy = () => {
-  // TODO: 打开隐私协议
-  console.log("隐私协议");
-};
-
-const openAntiMoneyLaundering = () => {
-  // TODO: 打开反洗钱协议
-  console.log("反洗钱协议");
+const goToLogin = () => {
+  router.push("/login");
 };
 </script>
 
 <style lang="scss" scoped>
-.login-page {
+.forgot-password-page {
   min-height: 100vh;
   background-color: #fff;
   padding: 0 16px;
@@ -415,27 +462,22 @@ const openAntiMoneyLaundering = () => {
   }
 }
 
-.title {
-  font-size: 6.4vw;
-  font-weight: 700;
-  color: #000;
-  margin-top: 8px;
-}
-
 .tabs {
   display: flex;
-  gap: 32px;
+  gap: 0;
   margin-top: 44px;
   border-bottom: 1px solid #ebedf0;
 
   .tab {
+    flex: 1;
+    width: 50%;
+    text-align: center;
     padding-bottom: 12px;
     color: #909090;
     font-size: 4.26667vw;
     cursor: pointer;
     position: relative;
     transition: color 0.3s;
-    padding: 0 5.33333vw;
     height: 46.8px;
     line-height: 46.8px;
 
@@ -462,26 +504,30 @@ const openAntiMoneyLaundering = () => {
 
 .input-group {
   display: flex;
-  align-items: center;
-  margin-bottom: 30px;
-  margin-top: 40px;
+  align-items: stretch;
+  margin-bottom: 0;
+  margin-top: 0;
   border: 1px solid #ebedf0;
   border-radius: 8px;
   overflow: hidden;
+  background-color: #fff;
+  min-height: 48px;
 
   .country-selector {
     display: flex;
     align-items: center;
+    justify-content: center;
     padding: 0 12px;
-    border-right: 1px solid #ebedf05d;
+    border-right: 1px solid #ebedf0;
     cursor: pointer;
     min-width: 60px;
+    background-color: #fff;
+    flex-shrink: 0;
 
     .country-code {
       font-size: 16px;
       color: #040303;
       margin-right: 4px;
-      padding-left: 20px;
     }
 
     .arrow-icon {
@@ -491,152 +537,184 @@ const openAntiMoneyLaundering = () => {
   }
 
   :deep(.van-field) {
-    padding: 12px 16px;
+    padding: 14px 16px;
     background-color: #fff;
+    border: none;
+    flex: 1;
+    min-height: 48px;
 
     .van-field__control {
-      font-size: 14px;
+      font-size: 16px;
       color: #323233;
+      line-height: 1.5;
 
       &::placeholder {
-        font-size: 4vw;
-        color: #909090;
-      }
-
-      &::-webkit-input-placeholder {
-        font-size: 4vw;
-        color: #909090;
-      }
-
-      &::-moz-placeholder {
-        font-size: 4vw;
-        color: #909090;
-      }
-
-      &:-ms-input-placeholder {
-        font-size: 4vw;
+        font-size: 16px;
         color: #909090;
       }
     }
 
     .van-field__placeholder {
-      font-size: 4vw;
+      font-size: 16px;
       color: #909090;
     }
   }
 
   .phone-input {
     flex: 1;
+    border: none;
   }
 
   .email-input {
     flex: 1;
+    border: none;
+  }
+}
+
+.verification-code-group {
+  margin-top: 30px;
+  display: flex;
+  align-items: stretch;
+  border: 1px solid #ebedf0;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #fff;
+  min-height: 48px;
+
+  .verification-input {
+    flex: 1;
+    border: none;
+
+    :deep(.van-field) {
+      border: none;
+      padding: 14px 16px;
+      min-height: 48px;
+
+      .van-field__control {
+        font-size: 16px;
+        color: #323233;
+
+        &::placeholder {
+          font-size: 16px;
+          color: #909090;
+        }
+      }
+
+      .van-field__placeholder {
+        font-size: 16px;
+        color: #909090;
+      }
+    }
   }
 
-  .password-input {
-    flex: 1;
+  .send-code-btn {
+    min-width: 100px;
+    height: auto;
+    background-color: #000;
+    border: none;
+    border-radius: 0 8px 8px 0;
+    border-left: 1px solid #ebedf0;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 0 20px;
+    white-space: nowrap;
+    min-height: 48px;
 
-    .eye-icon {
-      font-size: 18px;
-      color: #969799;
-      cursor: pointer;
+    &:disabled {
+      opacity: 0.6;
     }
   }
 }
 
-.forgot-password {
-  text-align: right;
-  margin-bottom: 24px;
-
-  span {
-    font-size: 14px;
-    color: #000;
-    font-weight: 700;
-    cursor: pointer;
-  }
+.label {
+  font-size: 16px;
+  color: #323233;
+  margin-top: 30px;
+  margin-bottom: 12px;
+  font-weight: 500;
 }
 
-.agreement {
-  display: flex;
-  align-items: flex-start;
-  margin-bottom: 24px;
-  gap: 8px;
-  margin: 0 20px;
-  margin-bottom: 40px;
+.password-input-group {
+  width: 100%;
+  max-width: 100%;
+  margin-top: 0;
+  margin-bottom: 0;
+}
 
-  :deep(.van-checkbox) {
-    margin-top: 2px;
-    border: 1px solid #000;
-    border-radius: 1.06667vw;
+.password-input-field {
+  width: 100%;
+  border: 1px solid #ebedf0;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #fff;
+  min-height: 48px;
+
+  .eye-icon {
+    font-size: 18px;
+    color: #969799;
+    cursor: pointer;
   }
 
-  .agreement-text {
-    flex: 1;
-    font-size: 12px;
-    color: #040303 !important;
-    line-height: 1.5;
-    padding: 0 15px 0 0;
-    // font-weight: 500;
+  :deep(.van-field) {
+    width: 100%;
+    padding: 14px 16px;
+    border: none;
+    min-height: 48px;
 
-    .link {
-      color: #000000 !important;
-      cursor: pointer;
-      font-weight: 700;
+    .van-field__control {
+      font-size: 16px;
+      color: #323233;
+
+      &::placeholder {
+        font-size: 16px;
+        color: #909090;
+      }
+    }
+
+    .van-field__placeholder {
+      font-size: 16px;
+      color: #909090;
     }
   }
 }
 
 .button-group {
+  margin-top: 40px;
   margin-bottom: 24px;
 
-  .login-btn {
+  .submit-btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 1.33333vw;
     margin: 0 auto;
-    width: 91.46667vw;
-    height: 12.8vw;
+    width: 100%;
+    max-width: 100%;
+    height: 50px;
     background-color: #000;
-    border-radius: 266.4vw;
-    font-size: 4vw;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
     color: #fff;
     border: none;
 
     &:disabled {
-      // background-color: #c8c9cc;
+      opacity: 0.6;
       color: #fff;
     }
   }
-
-  .wallet-login-btn {
-    width: 91.46667vw;
-    height: 12.8vw;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 5.33333vw auto 0;
-    border-radius: 6.4vw;
-    background: #fff;
-    color: #000;
-    border: 1px solid #000;
-    font-size: 4vw;
-    cursor: pointer;
-    font-weight: 400;
-    box-sizing: border-box;
-  }
 }
 
-.register-link {
+.cancel-link {
   text-align: center;
   font-size: 14px;
   color: #040303;
+  margin-top: 16px;
 
   .link {
     color: #000;
     font-weight: 700;
     cursor: pointer;
-    margin-left: 4px;
   }
 }
 
@@ -708,3 +786,4 @@ const openAntiMoneyLaundering = () => {
   }
 }
 </style>
+

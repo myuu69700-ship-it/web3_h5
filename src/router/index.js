@@ -66,6 +66,14 @@ const routes = [
     }
   },
   {
+    path: '/forgot-password',
+    name: 'ForgotPassword',
+    component: () => import('@/views/ForgotPassword.vue'),
+    meta: {
+      title: '忘记密码'
+    }
+  },
+  {
     path: '/terms-of-service',
     name: 'TermsOfService',
     component: () => import('@/views/TermsOfService/index.vue'),
