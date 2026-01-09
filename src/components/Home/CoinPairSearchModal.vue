@@ -404,7 +404,14 @@ const handleSelectCoin = (coin) => {
   if (pair.startsWith('/')) {
     pair = `${coin.symbol}${pair}`;
   }
-  router.push(`/coin/${encodeURIComponent(pair)}`);
+  // 根据 coin.type 确定类型参数：spot -> spot, contract -> perpetual, options -> options
+  const typeMap = {
+    spot: 'spot',
+    contract: 'perpetual',
+    options: 'options'
+  };
+  const typeParam = typeMap[coin.type] || 'spot';
+  router.push(`/coin/${encodeURIComponent(pair)}?type=${typeParam}`);
 };
 
 // 搜索

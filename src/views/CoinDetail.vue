@@ -28,6 +28,7 @@
       <div class="main-content">
         <!-- 左侧：交易控制区域 -->
         <TradingPanel
+          :coin-type="coinType"
           v-model:trade-type="tradeType"
           v-model:direction="direction"
           v-model:amount="amount"
@@ -367,9 +368,7 @@ onUnmounted(() => {
 
 <style lang="scss" scoped>
 .coin-detail {
-  // min-height: 100vh;
-  // background-color: #f7f8fa;
-  // padding-bottom: 80px;
+  min-height: 100vh;
 }
 
 .top-bar {

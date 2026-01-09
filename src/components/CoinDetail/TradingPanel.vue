@@ -4,178 +4,451 @@
     <div class="bet-main">
       <!-- 左侧：交易控制面板 (216px) -->
       <div class="bet-main-left">
-        <!-- 保证金模式和杠杆 -->
-        <div class="margin-leverage">
-          <div class="select-btn margin-mode" @click="openMarginModePopup">
-            <span>{{ marginMode === "isolated" ? "逐倉" : "全倉" }}</span>
-            <van-icon name="arrow-down" size="12" />
+        <!-- 现货交易面板 -->
+        <template v-if="isSpot">
+          <!-- 买入/卖出切换 -->
+          <div class="buy-sell-toggle">
+            <div
+              class="toggle-btn buy-btn"
+              :class="{ active: props.direction === 'up' }"
+              @click="emit('update:direction', 'up')"
+            >
+              買入
+            </div>
+            <div
+              class="toggle-btn sell-btn"
+              :class="{ active: props.direction === 'down' }"
+              @click="emit('update:direction', 'down')"
+            >
+              賣出
+            </div>
           </div>
-          <div class="select-btn leverage" @click="openLeveragePopup">
-            <span>{{ currentLeverage }}x</span>
-            <van-icon name="arrow-down" size="12" />
-          </div>
-        </div>
 
-        <!-- 订单类型 -->
-        <div class="order-type">
-          <div class="select-btn2">
-            <span>市價</span>
-            <van-icon name="arrow-down" size="12" />
-          </div>
-        </div>
-
-        <!-- 价格输入 -->
-        <div class="price-input-wrapper">
-          <input
-            type="text"
-            class="price-input"
-            :value="displayPrice"
-            @input="handlePriceInput"
-            placeholder="0"
-          />
-          <span class="input-unit">USDT</span>
-        </div>
-
-        <!-- 数量输入 -->
-        <div class="quantity-input-wrapper">
-          <div class="quantity-input-container">
-            <input
-              type="text"
-              class="quantity-input"
-              v-model="inputAmount"
-              placeholder="0"
-            />
-            <div class="quantity-unit-selector">
-              <span>張</span>
+          <!-- 订单类型 -->
+          <div class="order-type">
+            <div class="select-btn2">
+              <span>市價委託</span>
               <van-icon name="arrow-down" size="12" />
             </div>
           </div>
-        </div>
 
-        <!-- 可用余额 -->
-        <div class="available-balance">
-          <span class="balance-label">可用</span>
-          <div class="balance-value">
-            <span>{{ currentBalance }} USDT</span>
-            <van-icon name="exchange" size="14" class="exchange-icon" />
-          </div>
-        </div>
-
-        <!-- 百分比滑块 -->
-        <div class="slider-wrapper">
-          <div class="slider-container">
-            <van-slider
-              v-model="sliderPercent"
-              :min="0"
-              :max="100"
-              :step="1"
-              active-color="#040303"
-              inactive-color="#e5e5e5"
-              button-size="12px"
-              :show-tooltip="false"
-              @change="handleSliderMove"
-              @drag-start="handleSliderDragStart"
-              @drag="handleSliderDrag"
-              @drag-end="handleSliderDragEnd"
+          <!-- 市价输入 -->
+          <div class="price-input-wrapper">
+            <input
+              type="text"
+              class="price-input"
+              :value="displayPrice"
+              @input="handlePriceInput"
+              placeholder="0"
             />
-            <!-- 自定义工具提示 -->
-            <div
-              class="custom-tooltip"
-              :class="{ show: isSliderDragging }"
-              :style="{ left: sliderPercent + '%' }"
-            >
-              <div class="tooltip-content">
-                {{ Math.round(sliderPercent) }}%
+            <span class="input-unit">USDT</span>
+          </div>
+
+          <!-- 成交额输入 -->
+          <div class="quantity-input-wrapper">
+            <div class="quantity-input-container">
+              <input
+                type="text"
+                class="quantity-input"
+                v-model="inputAmount"
+                placeholder="0"
+              />
+              <div class="quantity-unit-selector">
+                <span>USDT</span>
+                <van-icon name="arrow-down" size="12" />
               </div>
-              <div class="tooltip-arrow"></div>
             </div>
-            <!-- 节点标记 -->
-            <div class="slider-nodes">
+          </div>
+
+          <!-- 百分比滑块 -->
+          <div class="slider-wrapper">
+            <div class="slider-container">
+              <van-slider
+                v-model="sliderPercent"
+                :min="0"
+                :max="100"
+                :step="1"
+                active-color="#040303"
+                inactive-color="#e5e5e5"
+                button-size="12px"
+                :show-tooltip="false"
+                @change="handleSliderMove"
+                @drag-start="handleSliderDragStart"
+                @drag="handleSliderDrag"
+                @drag-end="handleSliderDragEnd"
+              />
               <div
-                v-for="(mark, index) in [0, 25, 50, 75, 100]"
-                :key="index"
-                class="slider-node"
-                :class="{
-                  passed: sliderPercent >= mark,
-                  covered: Math.abs(sliderPercent - mark) < 2,
-                }"
-                :style="{ left: mark + '%' }"
-              ></div>
+                class="custom-tooltip"
+                :class="{ show: isSliderDragging }"
+                :style="{ left: sliderPercent + '%' }"
+              >
+                <div class="tooltip-content">
+                  {{ Math.round(sliderPercent) }}%
+                </div>
+                <div class="tooltip-arrow"></div>
+              </div>
+              <div class="slider-nodes">
+                <div
+                  v-for="(mark, index) in [0, 25, 50, 75, 100]"
+                  :key="index"
+                  class="slider-node"
+                  :class="{
+                    passed: sliderPercent >= mark,
+                    covered: Math.abs(sliderPercent - mark) < 2,
+                  }"
+                  :style="{ left: mark + '%' }"
+                ></div>
+              </div>
+            </div>
+            <div class="slider-marks">
+              <span :class="{ active: sliderPercent >= 0 }">0</span>
+              <span :class="{ active: sliderPercent >= 25 }">25%</span>
+              <span :class="{ active: sliderPercent >= 50 }">50%</span>
+              <span :class="{ active: sliderPercent >= 75 }">75%</span>
+              <span :class="{ active: sliderPercent >= 100 }">100%</span>
             </div>
           </div>
-          <div class="slider-marks">
-            <span :class="{ active: sliderPercent >= 0 }">0</span>
-            <span :class="{ active: sliderPercent >= 25 }">25%</span>
-            <span :class="{ active: sliderPercent >= 50 }">50%</span>
-            <span :class="{ active: sliderPercent >= 75 }">75%</span>
-            <span :class="{ active: sliderPercent >= 100 }">100%</span>
+
+          <!-- 可用余额和可买 -->
+          <div class="available-balance">
+            <span class="balance-label">可用</span>
+            <div class="balance-value">
+              <span>{{ currentBalance }} USDT</span>
+              <van-icon name="plus" size="14" class="exchange-icon" />
+            </div>
           </div>
-        </div>
+          <div class="can-buy">
+            <span class="balance-label">可買</span>
+            <span class="balance-value">0 BTC</span>
+          </div>
 
-        <!-- 止盈止损 -->
-        <div class="stop-loss-profit">
-          <van-checkbox
-            v-model="stopLossProfitEnabled"
-            shape="square"
-            icon-size="13px"
-            checked-color="#040303"
-          ></van-checkbox>
-          <div class="stop-loss-profit-label">止盈止損</div>
-        </div>
+          <!-- 买入/卖出按钮 -->
+          <div
+            class="trade-button"
+            :class="{
+              'buy-button': props.direction === 'up',
+              'sell-button': props.direction === 'down',
+            }"
+            @click="props.direction === 'up' ? handleBuy() : handleSell()"
+          >
+            <div class="button-text">
+              {{ props.direction === "up" ? "買入 BTC" : "賣出 BTC" }}
+            </div>
+          </div>
+        </template>
 
-        <!-- 止盈止损输入框 -->
-        <div v-if="stopLossProfitEnabled" class="stop-loss-profit-inputs">
-          <div class="profit-loss-input-wrapper">
+        <!-- 合约交易面板 -->
+        <template v-if="isPerpetual">
+          <!-- 保证金模式和杠杆 -->
+          <div class="margin-leverage">
+            <div class="select-btn margin-mode" @click="openMarginModePopup">
+              <span>{{ marginMode === "isolated" ? "逐倉" : "全倉" }}</span>
+              <van-icon name="arrow-down" size="12" />
+            </div>
+            <div class="select-btn leverage" @click="openLeveragePopup">
+              <span>{{ currentLeverage }}x</span>
+              <van-icon name="arrow-down" size="12" />
+            </div>
+          </div>
+
+          <!-- 订单类型 -->
+          <div class="order-type">
+            <div class="select-btn2">
+              <span>市價</span>
+              <van-icon name="arrow-down" size="12" />
+            </div>
+          </div>
+
+          <!-- 价格输入 -->
+          <div class="price-input-wrapper">
             <input
               type="text"
-              class="profit-loss-input"
-              v-model="takeProfitPrice"
+              class="price-input"
+              :value="displayPrice"
+              @input="handlePriceInput"
               placeholder="0"
             />
-            <span class="profit-loss-label">止盈價格</span>
+            <span class="input-unit">USDT</span>
           </div>
-          <div class="profit-loss-input-wrapper">
-            <input
-              type="text"
-              class="profit-loss-input"
-              v-model="stopLossPrice"
-              placeholder="0"
-            />
-            <span class="profit-loss-label">止損價格</span>
-          </div>
-        </div>
 
-        <!-- 买入按钮 -->
-        <div class="trade-button buy-button" @click="handleBuy">
-          <div class="button-text">買進(做多) 1x</div>
-          <div class="button-desc">≈ 0 張</div>
-        </div>
-        <div class="buy-info">
-          <div class="info-item">
-            <span class="info-label">可開張數</span>
-            <span class="info-value">0 張</span>
+          <!-- 数量输入 -->
+          <div class="quantity-input-wrapper">
+            <div class="quantity-input-container">
+              <input
+                type="text"
+                class="quantity-input"
+                v-model="inputAmount"
+                placeholder="0"
+              />
+              <div class="quantity-unit-selector">
+                <span>張</span>
+                <van-icon name="arrow-down" size="12" />
+              </div>
+            </div>
           </div>
-          <div class="info-item">
-            <span class="info-label">保證金</span>
-            <span class="info-value">≈ 0 USDT</span>
-          </div>
-        </div>
 
-        <!-- 卖出按钮 -->
-        <div class="trade-button sell-button" @click="handleSell">
-          <div class="button-text">賣出(做空) 1x</div>
-          <div class="button-desc">≈ 0 張</div>
-        </div>
-        <div class="sell-info">
-          <div class="info-item">
-            <span class="info-label">可開張數</span>
-            <span class="info-value">0 張</span>
+          <!-- 可用余额 -->
+          <div class="available-balance">
+            <span class="balance-label">可用</span>
+            <div class="balance-value">
+              <span>{{ currentBalance }} USDT</span>
+              <van-icon name="exchange" size="14" class="exchange-icon" />
+            </div>
           </div>
-          <div class="info-item">
-            <span class="info-label">保證金</span>
-            <span class="info-value">≈ 0 USDT</span>
+
+          <!-- 百分比滑块 -->
+          <div class="slider-wrapper">
+            <div class="slider-container">
+              <van-slider
+                v-model="sliderPercent"
+                :min="0"
+                :max="100"
+                :step="1"
+                active-color="#040303"
+                inactive-color="#e5e5e5"
+                button-size="12px"
+                :show-tooltip="false"
+                @change="handleSliderMove"
+                @drag-start="handleSliderDragStart"
+                @drag="handleSliderDrag"
+                @drag-end="handleSliderDragEnd"
+              />
+              <div
+                class="custom-tooltip"
+                :class="{ show: isSliderDragging }"
+                :style="{ left: sliderPercent + '%' }"
+              >
+                <div class="tooltip-content">
+                  {{ Math.round(sliderPercent) }}%
+                </div>
+                <div class="tooltip-arrow"></div>
+              </div>
+              <div class="slider-nodes">
+                <div
+                  v-for="(mark, index) in [0, 25, 50, 75, 100]"
+                  :key="index"
+                  class="slider-node"
+                  :class="{
+                    passed: sliderPercent >= mark,
+                    covered: Math.abs(sliderPercent - mark) < 2,
+                  }"
+                  :style="{ left: mark + '%' }"
+                ></div>
+              </div>
+            </div>
+            <div class="slider-marks">
+              <span :class="{ active: sliderPercent >= 0 }">0</span>
+              <span :class="{ active: sliderPercent >= 25 }">25%</span>
+              <span :class="{ active: sliderPercent >= 50 }">50%</span>
+              <span :class="{ active: sliderPercent >= 75 }">75%</span>
+              <span :class="{ active: sliderPercent >= 100 }">100%</span>
+            </div>
           </div>
-        </div>
+
+          <!-- 止盈止损 -->
+          <div class="stop-loss-profit">
+            <van-checkbox
+              v-model="stopLossProfitEnabled"
+              shape="square"
+              icon-size="13px"
+              checked-color="#040303"
+            ></van-checkbox>
+            <div class="stop-loss-profit-label">止盈止損</div>
+          </div>
+
+          <!-- 止盈止损输入框 -->
+          <div v-if="stopLossProfitEnabled" class="stop-loss-profit-inputs">
+            <div class="profit-loss-input-wrapper">
+              <input
+                type="text"
+                class="profit-loss-input"
+                v-model="takeProfitPrice"
+                placeholder="0"
+              />
+              <span class="profit-loss-label">止盈價格</span>
+            </div>
+            <div class="profit-loss-input-wrapper">
+              <input
+                type="text"
+                class="profit-loss-input"
+                v-model="stopLossPrice"
+                placeholder="0"
+              />
+              <span class="profit-loss-label">止損價格</span>
+            </div>
+          </div>
+
+          <!-- 买入按钮 -->
+          <div class="trade-button buy-button" @click="handleBuy">
+            <div class="button-text">買進(做多) {{ currentLeverage }}x</div>
+            <div class="button-desc">≈ 0 張</div>
+          </div>
+          <div class="buy-info">
+            <div class="info-item">
+              <span class="info-label">可開張數</span>
+              <span class="info-value">0 張</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">保證金</span>
+              <span class="info-value">≈ 0 USDT</span>
+            </div>
+          </div>
+
+          <!-- 卖出按钮 -->
+          <div class="trade-button sell-button" @click="handleSell">
+            <div class="button-text">賣出(做空) {{ currentLeverage }}x</div>
+            <div class="button-desc">≈ 0 張</div>
+          </div>
+          <div class="sell-info">
+            <div class="info-item">
+              <span class="info-label">可開張數</span>
+              <span class="info-value">0 張</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">保證金</span>
+              <span class="info-value">≈ 0 USDT</span>
+            </div>
+          </div>
+        </template>
+
+        <!-- 期权交易面板 -->
+        <template v-if="isOptions">
+          <!-- 立即交易/定时交易切换 -->
+          <div class="trade-type-toggle">
+            <div
+              class="toggle-btn"
+              :class="{ active: props.tradeType === 'instant' }"
+              @click="emit('update:tradeType', 'instant')"
+            >
+              立即交易
+            </div>
+            <div
+              class="toggle-btn"
+              :class="{ active: props.tradeType === 'timed' }"
+              @click="emit('update:tradeType', 'timed')"
+            >
+              定時交易
+            </div>
+          </div>
+
+          <!-- 买涨/买跌切换 -->
+          <div class="buy-sell-toggle">
+            <div
+              class="toggle-btn buy-btn"
+              :class="{ active: props.direction === 'up' }"
+              @click="emit('update:direction', 'up')"
+            >
+              買漲
+            </div>
+            <div
+              class="toggle-btn sell-btn"
+              :class="{ active: props.direction === 'down' }"
+              @click="emit('update:direction', 'down')"
+            >
+              買跌
+            </div>
+          </div>
+
+          <!-- 账户信息 -->
+          <div class="account-info">
+            <div class="info-row">
+              <span class="info-label">當前餘額</span>
+              <span class="info-value">${{ currentBalance }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">最低買入</span>
+              <span class="info-value">{{ minBuy }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">最高買入</span>
+              <span class="info-value">{{ maxBuy.toLocaleString() }}</span>
+            </div>
+          </div>
+
+          <!-- 交易区间 -->
+          <div class="order-type">
+            <div class="select-btn2" @click="emit('show-interval-picker')">
+              <span>交易區間{{ tradingInterval }}</span>
+              <van-icon name="arrow-down" size="12" />
+            </div>
+          </div>
+
+          <!-- 投入金额 -->
+          <div class="quantity-input-wrapper">
+            <div class="quantity-input-container">
+              <input
+                type="text"
+                class="quantity-input"
+                v-model="inputAmount"
+                placeholder="投入金額"
+              />
+              <!-- <span class="input-label">投入金額</span> -->
+            </div>
+          </div>
+
+          <!-- 百分比滑块 -->
+          <div class="slider-wrapper">
+            <div class="slider-container">
+              <van-slider
+                v-model="sliderPercent"
+                :min="0"
+                :max="100"
+                :step="1"
+                active-color="#040303"
+                inactive-color="#e5e5e5"
+                button-size="12px"
+                :show-tooltip="false"
+                @change="handleSliderMove"
+                @drag-start="handleSliderDragStart"
+                @drag="handleSliderDrag"
+                @drag-end="handleSliderDragEnd"
+              />
+              <div
+                class="custom-tooltip"
+                :class="{ show: isSliderDragging }"
+                :style="{ left: sliderPercent + '%' }"
+              >
+                <div class="tooltip-content">
+                  {{ Math.round(sliderPercent) }}%
+                </div>
+                <div class="tooltip-arrow"></div>
+              </div>
+              <div class="slider-nodes">
+                <div
+                  v-for="(mark, index) in [0, 25, 50, 75, 100]"
+                  :key="index"
+                  class="slider-node"
+                  :class="{
+                    passed: sliderPercent >= mark,
+                    covered: Math.abs(sliderPercent - mark) < 2,
+                  }"
+                  :style="{ left: mark + '%' }"
+                ></div>
+              </div>
+            </div>
+            <div class="slider-marks">
+              <span :class="{ active: sliderPercent >= 0 }">0</span>
+              <span :class="{ active: sliderPercent >= 25 }">25%</span>
+              <span :class="{ active: sliderPercent >= 50 }">50%</span>
+              <span :class="{ active: sliderPercent >= 75 }">75%</span>
+              <span :class="{ active: sliderPercent >= 100 }">100%</span>
+            </div>
+          </div>
+
+          <!-- 买入/卖出按钮 -->
+          <div
+            class="trade-button"
+            :class="{
+              'buy-button': props.direction === 'up',
+              'sell-button': props.direction === 'down',
+            }"
+            @click="props.direction === 'up' ? handleBuy() : handleSell()"
+          >
+            <div class="button-text">
+              {{ props.direction === "up" ? "買漲" : "買跌" }}
+            </div>
+          </div>
+        </template>
       </div>
 
       <!-- 右侧：订单簿 (134px) -->
@@ -461,6 +734,10 @@
 import { ref, computed, onMounted, onUnmounted, nextTick, watch } from "vue";
 
 const props = defineProps({
+  coinType: {
+    type: String,
+    default: "spot", // 'spot' | 'perpetual' | 'options'
+  },
   currentBalance: {
     type: Number,
     default: 0,
@@ -508,6 +785,11 @@ const emit = defineEmits([
   "update:amount",
   "update:sliderValue",
 ]);
+
+// 计算属性：判断当前类型
+const isSpot = computed(() => props.coinType === "spot");
+const isPerpetual = computed(() => props.coinType === "perpetual");
+const isOptions = computed(() => props.coinType === "options");
 
 // 将 props 映射到内部状态
 const tab = computed({
@@ -742,12 +1024,16 @@ const formatPrice = (price) => {
 };
 
 const handleBuy = () => {
-  emit("update:direction", "up");
+  if (isSpot.value || isOptions.value) {
+    emit("update:direction", "up");
+  }
   handleSubmit();
 };
 
 const handleSell = () => {
-  emit("update:direction", "down");
+  if (isSpot.value || isOptions.value) {
+    emit("update:direction", "down");
+  }
   handleSubmit();
 };
 
@@ -1012,6 +1298,7 @@ onUnmounted(() => {
   align-items: center;
   justify-content: space-between;
   color: #040303;
+  
 }
 
 .quantity-input {
@@ -1259,19 +1546,16 @@ onUnmounted(() => {
 
 .trade-button {
   width: 100%;
-  min-height: 13.33333vw;
-  line-height: 4vw;
+  height: 8vw;
+  line-height: 1;
   text-align: center;
   border-radius: 26.66667vw;
-  font-size: 3.73333vw;
-  color: var(--font-btn);
+  color: #fff;
   display: flex;
   flex-wrap: initial;
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  flex-wrap: column;
-  color: #ffffff;
 
   &:active {
     opacity: 0.8;
@@ -1938,5 +2222,102 @@ onUnmounted(() => {
 .delete-btn {
   background: #969799;
   color: #fff;
+}
+
+// 买入/卖出切换按钮样式
+.buy-sell-toggle {
+  display: flex;
+  // gap: 1.6vw;
+  margin-bottom: 2.13333vw;
+}
+
+.toggle-btn {
+  display: flex;
+  flex-wrap: initial;
+  flex-direction: initial;
+  align-items: initial;
+  justify-content: initial;
+  padding: 0.53333vw;
+  background-color: #fafafa;
+  border-radius: 3.46667vw;
+  width: 100%;
+  height: 6.66667vw;
+  margin-bottom: 3.2vw;
+  color: #9d9d9d;
+  font-size: 3.46667vw;
+  display: flex;
+  flex-wrap: initial;
+  flex-direction: initial;
+  align-items: center;
+  justify-content: center;
+
+  &.active {
+    color: #040303;
+  }
+
+  &.buy-btn.active {
+    background: #1dbf73;
+    border-color: #1dbf73;
+    color: #fff;
+  }
+
+  &.sell-btn.active {
+    background: #ec4b6d;
+    border-color: #ec4b6d;
+    color: #fff;
+  }
+
+  &:active {
+    opacity: 0.7;
+  }
+}
+
+// 可买显示
+.can-buy {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2.13333vw;
+  font-size: 3.2vw;
+  color: #040303;
+}
+
+// 交易类型切换（期权）
+.trade-type-toggle {
+  display: flex;
+  // gap: 1.6vw;
+  margin-bottom: 2.13333vw;
+}
+
+// 账户信息（期权）
+.account-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6vw;
+  margin-bottom: 2.13333vw;
+  padding: 2.13333vw;
+  background: #f3f3f3;
+  border-radius: 1.06667vw;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 3.2vw;
+
+  .info-label {
+    color: #040303;
+  }
+
+  .info-value {
+    color: #040303;
+    font-weight: 500;
+  }
+}
+
+// 买入按钮激活状态
+.buy-button.active {
+  background: #1dbf73;
 }
 </style>
