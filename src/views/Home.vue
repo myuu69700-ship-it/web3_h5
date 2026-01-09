@@ -261,8 +261,7 @@ const handleLogin = () => {
 };
 
 const handleRegister = () => {
-  // 处理注册逻辑
-  console.log("注册");
+  router.push("/register");
 };
 
 const handleDeposit = () => {
