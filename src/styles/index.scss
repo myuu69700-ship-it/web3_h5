@@ -25,22 +25,9 @@ body::-webkit-scrollbar {
   display: none;
 }
 
-// 移动端适配
-html {
-  font-size: 16px;
-}
-
-@media screen and (max-width: 375px) {
-  html {
-    font-size: 14px;
-  }
-}
-
-@media screen and (min-width: 414px) {
-  html {
-    font-size: 18px;
-  }
-}
+// 移动端适配：基于 750px 设计稿
+// 根字体大小由 main.js 动态设置，1rem = 75px (设计稿 750px / 10)
+// 使用 postcss-pxtorem 自动将 px 转换为 rem
 
 // 通用工具类
 .flex {

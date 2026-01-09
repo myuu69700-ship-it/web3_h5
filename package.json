@@ -16,6 +16,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.0",
+    "postcss-pxtorem": "^6.1.0",
     "sass": "^1.69.5",
     "unplugin-vue-components": "^0.25.2",
     "vite": "^5.0.0"
