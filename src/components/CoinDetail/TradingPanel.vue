@@ -183,7 +183,7 @@
         <!-- 订单簿标题 -->
         <div class="order-book-header">
           <div>價格 (USDT)</div>
-          <div style="margin-left: 65px">數量 (ETH)</div>
+          <div class="order-book-header-right">數量 (ETH)</div>
         </div>
 
         <!-- 卖盘（绿色，在上方） -->
@@ -870,39 +870,42 @@ onUnmounted(() => {
   width: 100%;
   // max-width: 350px;
   background: #fff;
-  border-radius: 8px;
+  border-radius: 2.13333vw;
   justify-content: space-between;
   padding: 0 3.2vw 8vw;
   // overflow: hidden;
 }
 
 .bet-main-left {
-  width: 228.55px;
+  width: 61vw;
+  max-width: 228.55px;
+  min-width: 180px;
   // padding: 12px;
   background: #fff;
   // border-right: 1px solid #ebedf0;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 2.13333vw;
 }
 
 .bet-main-right {
-  width: 141.72px;
+  width: 37.8vw;
+  max-width: 141.72px;
+  min-width: 110px;
   // padding: 0px 4px;
   background: #fff;
   display: flex;
   flex-direction: column;
-  font-size: 10px;
   font-size: 3.2vw;
   position: relative;
   flex-shrink: 0;
-  padding-left: 4px;
+  padding-left: 1.06667vw;
 }
 // 左侧面板样式
 .margin-leverage {
   display: flex;
-  gap: 6px;
-  margin-bottom: 8px;
+  gap: 1.6vw;
+  margin-bottom: 2.13333vw;
 }
 
 .select-btn2 {
@@ -919,7 +922,7 @@ onUnmounted(() => {
   line-height: 8.53333vw;
   margin-bottom: 2vw;
   line-height: 1;
-  font-size: 16px;
+  font-size: 4.26667vw;
 }
 
 .select-btn {
@@ -928,10 +931,10 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 12px 22px;
+  padding: 3.2vw 5.86667vw;
   background: #f3f3f3;
-  border-radius: 4px;
-  font-size: 16px;
+  border-radius: 1.06667vw;
+  font-size: 4.26667vw;
   color: #040303;
   cursor: pointer;
   border: 1px solid #ebedf0;
@@ -989,13 +992,13 @@ onUnmounted(() => {
 }
 
 .quantity-input-wrapper {
-  margin-bottom: 8px;
+  margin-bottom: 2.13333vw;
 }
 
 .input-label {
-  font-size: 11px;
+  font-size: 2.93333vw;
   color: #040303;
-  margin-bottom: 4px;
+  margin-bottom: 1.06667vw;
 }
 
 .quantity-input-container {
@@ -1032,12 +1035,12 @@ onUnmounted(() => {
 .quantity-unit-selector {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 1.06667vw;
   font-size: 3.2vw;
   color: #040303;
   cursor: pointer;
   flex-shrink: 0;
-  // padding-left: 8px;
+  // padding-left: 2.13333vw;
 
   span {
     font-size: 3.2vw;
@@ -1050,11 +1053,11 @@ onUnmounted(() => {
   justify-content: space-between;
   .balance-label {
     color: #040303;
-    font-size: 12px;
+    font-size: 3.2vw;
   }
   .balance-value {
     color: #040303;
-    font-size: 12px;
+    font-size: 3.2vw;
   }
   .exchange-icon {
     color: #040303;
@@ -1064,14 +1067,14 @@ onUnmounted(() => {
 
 .slider-wrapper {
   position: relative;
-  padding: 8px 0 20px 0;
-  margin-bottom: 8px;
+  padding: 2.13333vw 0 5.33333vw 0;
+  margin-bottom: 2.13333vw;
 }
 
 .slider-container {
   position: relative;
   width: 100%;
-  padding: 8px 0;
+  padding: 2.13333vw 0;
   display: flex;
   align-items: center;
 }
@@ -1079,34 +1082,34 @@ onUnmounted(() => {
 /* Vant Slider 样式覆盖 */
 .slider-container :deep(.van-slider) {
   width: 100%;
-  height: 4px;
+  height: 1.06667vw;
   position: relative;
   z-index: 1;
 }
 
 .slider-container :deep(.van-slider__track) {
-  height: 4px;
+  height: 1.06667vw;
   background-color: #e5e5e5;
-  border-radius: 2px;
+  border-radius: 0.53333vw;
 }
 
 .slider-container :deep(.van-slider__bar) {
-  height: 4px;
+  height: 1.06667vw;
   background-color: #040303;
-  border-radius: 2px 0 0 2px;
+  border-radius: 0.53333vw 0 0 0.53333vw;
 }
 
 .slider-container :deep(.van-slider__button) {
-  width: 12px;
-  height: 12px;
+  width: 3.2vw;
+  height: 3.2vw;
   background: #fff;
-  border: 2px solid #040303;
-  box-shadow: 0 0 8px rgba(4, 3, 3, 0.15);
+  border: 0.53333vw solid #040303;
+  box-shadow: 0 0 2.13333vw rgba(4, 3, 3, 0.15);
 }
 
 .slider-container :deep(.van-slider__button-wrapper) {
-  width: 12px;
-  height: 12px;
+  width: 3.2vw;
+  height: 3.2vw;
   z-index: 4;
 }
 
@@ -1117,18 +1120,18 @@ onUnmounted(() => {
   left: 0;
   right: 0;
   transform: translateY(-50%);
-  height: 4px;
+  height: 1.06667vw;
   pointer-events: none;
   z-index: 2;
 }
 
 .slider-node {
   position: absolute;
-  width: 8px;
-  height: 8px;
+  width: 2.13333vw;
+  height: 2.13333vw;
   border-radius: 50%;
   background: #fff;
-  border: 2px solid #e5e5e5;
+  border: 0.53333vw solid #e5e5e5;
   transform: translate(-50%, -50%);
   top: 50%;
   transition: all 0.2s ease;
@@ -1146,7 +1149,7 @@ onUnmounted(() => {
 /* 自定义工具提示样式 */
 .custom-tooltip {
   position: absolute;
-  top: -36px;
+  top: -9.6vw;
   transform: translateX(-50%);
   z-index: 10;
   pointer-events: none;
@@ -1163,15 +1166,15 @@ onUnmounted(() => {
 .tooltip-content {
   background: #323233;
   color: #fff;
-  padding: 4px 10px;
-  border-radius: 4px;
-  font-size: 11px;
+  padding: 1.06667vw 2.66667vw;
+  border-radius: 1.06667vw;
+  font-size: 2.93333vw;
   white-space: nowrap;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 36px;
+  min-width: 9.6vw;
   text-align: center;
   font-weight: 400;
   line-height: 1.2;
@@ -1179,21 +1182,21 @@ onUnmounted(() => {
 
 .tooltip-arrow {
   position: absolute;
-  bottom: -5px;
+  bottom: -1.33333vw;
   left: 50%;
   transform: translateX(-50%);
   width: 0;
   height: 0;
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
-  border-top: 5px solid #323233;
+  border-left: 1.33333vw solid transparent;
+  border-right: 1.33333vw solid transparent;
+  border-top: 1.33333vw solid #323233;
 }
 
 .slider-marks {
   display: flex;
   justify-content: space-between;
-  margin-top: 6px;
-  font-size: 10px;
+  margin-top: 1.6vw;
+  font-size: 2.66667vw;
   color: #040303;
 }
 
@@ -1207,29 +1210,29 @@ onUnmounted(() => {
 }
 
 .stop-loss-profit {
-  margin-bottom: 8px;
-  font-size: 11px;
+  margin-bottom: 2.13333vw;
+  font-size: 2.93333vw;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
+  gap: 2.13333vw;
   .stop-loss-profit-label {
     color: #040303;
-    font-size: 12px;
+    font-size: 3.2vw;
   }
 }
 
 .stop-loss-profit-inputs {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  margin-bottom: 8px;
+  gap: 2.13333vw;
+  margin-bottom: 2.13333vw;
 }
 
 .profit-loss-input-wrapper {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 1.06667vw;
 }
 
 .profit-loss-input {
@@ -1278,7 +1281,7 @@ onUnmounted(() => {
     // font-size: 13px;
     font-size: 3.73333vw;
     font-weight: 600;
-    margin-bottom: 2px;
+    margin-bottom: 0.53333vw;
     color: #ffffff;
   }
 
@@ -1306,14 +1309,14 @@ onUnmounted(() => {
 
 .buy-info,
 .sell-info {
-  font-size: 10px;
+  font-size: 2.66667vw;
   color: #040303;
-  margin-bottom: 8px;
+  margin-bottom: 2.13333vw;
 
   .info-item {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 4px;
+    margin-bottom: 1.06667vw;
     font-size: 3.2vw;
 
     .info-label {
@@ -1330,10 +1333,9 @@ onUnmounted(() => {
 .order-book-header {
   display: flex;
   justify-content: space-between;
-  font-size: 10px;
+  font-size: 3.2vw;
   color: #040303;
-  margin-bottom: 8px;
-  padding: 0 4px;
+  padding: 0 1.06667vw;
   font-weight: 400;
   display: flex;
   flex-wrap: nowrap;
@@ -1342,21 +1344,23 @@ onUnmounted(() => {
   justify-content: initial;
   height: 4.8vw;
   line-height: 4.8vw;
-  margin-bottom: 1px;
-  width: 100%;
-  font-size: 3.2vw;
   margin-bottom: 5.5vw;
+  width: 100%;
+}
+
+.order-book-header-right {
+  margin-left: 17.33333vw;
 }
 
 .order-list {
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
-  max-height: 250px;
-  min-height: 140px;
+  max-height: 66.66667vw;
+  min-height: 37.33333vw;
 
   &::-webkit-scrollbar {
-    width: 2px;
+    width: 0.53333vw;
   }
 
   &::-webkit-scrollbar-track {
@@ -1365,23 +1369,22 @@ onUnmounted(() => {
 
   &::-webkit-scrollbar-thumb {
     background: #ebedf0;
-    border-radius: 1px;
+    border-radius: 0.26667vw;
   }
 }
 
 .order-row {
   position: relative;
-  padding: 3px 4px;
-  // font-size: 10px;
+  padding: 0.8vw 1.06667vw;
   font-size: 3.2vw;
   transition: background-color 0.2s;
   overflow: hidden;
   cursor: pointer;
-  min-height: 18px;
+  min-height: 4.8vw;
   display: flex;
   align-items: center;
   border-radius: 0;
-  margin: 2px 0;
+  margin: 0.53333vw 0;
 
   &:hover {
     background-color: rgba(0, 0, 0, 0.02);
@@ -1429,7 +1432,7 @@ onUnmounted(() => {
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  padding: 0 2px;
+  padding: 0 0.53333vw;
   pointer-events: none;
 }
 
@@ -1450,7 +1453,7 @@ onUnmounted(() => {
 .order-price {
   font-weight: 500;
   flex: 1;
-  font-size: 10px;
+  font-size: 3.2vw;
   line-height: 1.2;
 }
 
@@ -1458,17 +1461,16 @@ onUnmounted(() => {
   color: #040303;
   text-align: right;
   flex: 1;
-  font-size: 10px;
-  line-height: 1.2;
   font-size: 3.2vw;
+  line-height: 1.2;
 }
 
 .current-price-section {
   // text-align: center;
-  padding: 5px 0px;
+  padding: 1.33333vw 0px;
   // border-top: 1px solid #ebedf0;
   // border-bottom: 1px solid #ebedf0;
-  margin: 8px 0;
+  margin: 2.13333vw 0;
   flex-shrink: 0;
   background: #fff;
   z-index: 2;
@@ -1479,9 +1481,8 @@ onUnmounted(() => {
   font-size: 3.73333vw;
   font-weight: 600;
   color: #3abf74;
-  margin-bottom: 3px;
+  margin-bottom: 0.8vw;
   line-height: 1.2;
-  // font-size: 3.2vw;
 }
 
 .current-price-info {
@@ -1491,7 +1492,7 @@ onUnmounted(() => {
   font-weight: 700;
 
   .price-change {
-    margin-left: 4px;
+    margin-left: 1.06667vw;
     font-weight: 500;
 
     &.up {
@@ -1505,15 +1506,15 @@ onUnmounted(() => {
 }
 
 .price-increment {
-  margin-top: 6px;
+  margin-top: 1.6vw;
   flex-shrink: 0;
 }
 
 .increment-selector {
   display: flex;
   align-items: center;
-  gap: 4px;
-  padding: 4px 6px;
+  gap: 1.06667vw;
+  padding: 1.06667vw 1.6vw;
   cursor: pointer;
   font-size: 3.2vw;
   color: #040303;
