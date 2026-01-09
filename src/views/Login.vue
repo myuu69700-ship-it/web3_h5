@@ -374,13 +374,11 @@ const openTerms = () => {
 };
 
 const openPrivacy = () => {
-  // TODO: 打开隐私协议
-  console.log("隐私协议");
+  router.push("/privacy-policy");
 };
 
 const openAntiMoneyLaundering = () => {
-  // TODO: 打开反洗钱协议
-  console.log("反洗钱协议");
+  router.push("/anti-money-laundering");
 };
 </script>
 
