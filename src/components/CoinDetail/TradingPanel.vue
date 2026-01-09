@@ -7,7 +7,7 @@
         <!-- 保证金模式和杠杆 -->
         <div class="margin-leverage">
           <div class="select-btn margin-mode" @click="openMarginModePopup">
-            <span>{{ marginMode === 'isolated' ? '逐倉' : '全倉' }}</span>
+            <span>{{ marginMode === "isolated" ? "逐倉" : "全倉" }}</span>
             <van-icon name="arrow-down" size="12" />
           </div>
           <div class="select-btn leverage" @click="openLeveragePopup">
@@ -413,7 +413,7 @@
             @click="showMarginModePopup = false"
           />
         </div>
-        
+
         <div class="margin-mode-selector">
           <div
             class="mode-option"
@@ -451,9 +451,7 @@
           </div>
         </div>
 
-        <div class="margin-mode-confirm" @click="confirmMarginMode">
-          確認
-        </div>
+        <div class="margin-mode-confirm" @click="confirmMarginMode">確認</div>
       </div>
     </van-popup>
   </div>
@@ -870,14 +868,16 @@ onUnmounted(() => {
   display: flex;
   gap: 0;
   width: 100%;
-  max-width: 350px;
+  // max-width: 350px;
   background: #fff;
   border-radius: 8px;
+  justify-content: space-between;
+  padding: 0 3.2vw 8vw;
   // overflow: hidden;
 }
 
 .bet-main-left {
-  width: 216px;
+  width: 228.55px;
   // padding: 12px;
   background: #fff;
   // border-right: 1px solid #ebedf0;
@@ -887,7 +887,7 @@ onUnmounted(() => {
 }
 
 .bet-main-right {
-  width: 140px;
+  width: 141.72px;
   // padding: 0px 4px;
   background: #fff;
   display: flex;
@@ -1307,7 +1307,7 @@ onUnmounted(() => {
 .buy-info,
 .sell-info {
   font-size: 10px;
-  color: #040303;;
+  color: #040303;
   margin-bottom: 8px;
 
   .info-item {
