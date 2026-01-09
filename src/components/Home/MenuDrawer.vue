@@ -384,8 +384,8 @@ const handleClearCache = () => {
   // border-bottom: 1px solid #ebedf0;
 
   .back-icon {
-    width: 20px;
-    height: 20px;
+    width: 26px;
+    height: 26px;
     cursor: pointer;
     display: block;
   }
@@ -396,13 +396,13 @@ const handleClearCache = () => {
     align-items: center;
 
     .header-icon {
-      width: 20px;
-      height: 20px;
+      width: 24.95px;
+      height: 24.95px;
       cursor: pointer;
       display: block;
 
       &.van-icon {
-        font-size: 20px;
+        font-size: 24.95px;
         color: #040303;
       }
     }
