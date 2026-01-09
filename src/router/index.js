@@ -184,6 +184,14 @@ const routes = [
     meta: {
       title: '新手教程'
     }
+  },
+  {
+    path: '/quick-buy',
+    name: 'QuickBuy',
+    component: () => import('@/views/QuickBuy.vue'),
+    meta: {
+      title: '快捷買幣'
+    }
   }
 ]
 

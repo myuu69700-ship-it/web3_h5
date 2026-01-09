@@ -270,8 +270,7 @@ const handleDeposit = () => {
 };
 
 const handleQuickBuy = () => {
-  // 处理快捷買幣逻辑
-  console.log("快捷買幣");
+  router.push("/quick-buy");
 };
 
 const handleSelectCoinPair = (coin) => {
