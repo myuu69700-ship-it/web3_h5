@@ -41,6 +41,7 @@
       <!-- 主网标签 -->
       <div class="network-section">
         <div class="network-label">主網</div>
+        <div class="network-value">{{ networkDisplayName }}</div>
       </div>
 
       <!-- 说明文字区域 -->
@@ -67,16 +68,34 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
-import { useRouter } from "vue-router";
+import { ref, onMounted, computed } from "vue";
+import { useRouter, useRoute } from "vue-router";
 import { showToast } from "vant";
 
 const router = useRouter();
+const route = useRoute();
 const addressInput = ref(null);
 const qrCanvas = ref(null);
 
+// 从路由参数获取币种信息
+const coinName = computed(() => route.query.name || "USDT");
+const coinSymbol = computed(() => route.query.coin || "USDT");
+const network = computed(() => route.query.network || "ERC20");
+
 // 钱包地址（示例地址，实际应该从API获取）
 const walletAddress = ref("0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb5");
+
+// 主网显示名称映射
+const networkNames = {
+  TRC20: "Tron(TRC20)",
+  ERC20: "Ethereum(ERC20)",
+  BEP20: "Binance Smart Chain(BEP20)",
+  Bitcoin: "Bitcoin",
+};
+
+const networkDisplayName = computed(() => {
+  return networkNames[network.value] || network.value;
+});
 
 // 绘制二维码（模拟）
 const drawQRCode = () => {
@@ -314,6 +333,13 @@ const copyAddress = async () => {
   .network-label {
     font-size: 14px;
     color: #040303;
+    margin-bottom: 8px;
+  }
+
+  .network-value {
+    font-size: 14px;
+    color: #040303;
+    font-weight: 500;
   }
 }
 

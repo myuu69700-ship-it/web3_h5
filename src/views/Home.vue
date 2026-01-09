@@ -54,7 +54,7 @@
         </div>
         <div class="button-row margin-top-32">
           <button class="action-btn deposit-btn" @click="handleDeposit">
-            {{ t("deposit") }}
+            {{ t("onChainDeposit") }}
           </button>
           <button class="action-btn buy-btn" @click="handleQuickBuy">
             {{ t("quickBuy") }}
@@ -265,8 +265,8 @@ const handleRegister = () => {
 };
 
 const handleDeposit = () => {
-  // 处理鏈上充幣逻辑
-  console.log("鏈上充幣");
+  // 跳转到币种选择页面
+  router.push("/deposit-select");
 };
 
 const handleQuickBuy = () => {

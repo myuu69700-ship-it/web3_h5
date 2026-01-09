@@ -122,6 +122,14 @@ const routes = [
     }
   },
   {
+    path: '/deposit-select',
+    name: 'DepositSelect',
+    component: () => import('@/views/DepositSelect.vue'),
+    meta: {
+      title: '儲值'
+    }
+  },
+  {
     path: '/deposit-detail',
     name: 'DepositDetail',
     component: () => import('@/views/DepositDetail.vue'),
