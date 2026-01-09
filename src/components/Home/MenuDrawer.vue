@@ -251,8 +251,7 @@ const handleWithdraw = () => {
 };
 
 const handleQuickBuy = () => {
-  // 快捷买币逻辑
-  console.log("快捷买币");
+  router.push("/quick-buy");
   handleClose();
 };
 
