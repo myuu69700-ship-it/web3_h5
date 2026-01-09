@@ -1,5 +1,5 @@
 <template>
-  <div class="login-page">
+  <div class="register-page">
     <!-- 顶部导航栏 -->
     <div class="header">
       <img :src="leftArrowIcon" class="back-icon" @click="goBack" alt="返回" />
@@ -7,92 +7,121 @@
     </div>
 
     <!-- 标题 -->
-    <div class="title">{{ t("loginWeb3") }}</div>
+    <div class="title">{{ t("welcomeWeb3") }}</div>
 
-    <!-- 登录方式标签 -->
+    <!-- 注册方式标签 -->
     <div class="tabs">
       <div
         class="tab"
         :class="{ active: activeTab === 'phone' }"
         @click="activeTab = 'phone'"
       >
-        {{ t("phone") }}
+        {{ t("phoneRegistration") }}
       </div>
       <div
         class="tab"
         :class="{ active: activeTab === 'email' }"
         @click="activeTab = 'email'"
       >
-        {{ t("emailAccount") }}
+        {{ t("emailRegistration") }}
+      </div>
+      <div
+        class="tab"
+        :class="{ active: activeTab === 'account' }"
+        @click="activeTab = 'account'"
+      >
+        {{ t("accountRegistration") }}
       </div>
     </div>
 
-    <!-- 手机登录表单 -->
+    <!-- 手机注册表单 -->
     <div v-if="activeTab === 'phone'" class="form-container">
       <div class="input-group">
-        <div class="country-selector" @click="showCountryPicker = true">
-          <span class="country-code">{{ selectedCountry.code }}</span>
-          <van-icon name="arrow-down" class="arrow-icon" />
+        <label class="input-label">{{ t("mobileNumber") }}</label>
+        <div class="input-wrapper">
+          <div class="country-selector" @click="showCountryPicker = true">
+            <span class="country-code">{{ selectedCountry.code }}</span>
+            <van-icon name="arrow-down" class="arrow-icon" />
+          </div>
+          <van-field
+            v-model="phoneNumber"
+            :placeholder="t('enterPhoneNumber')"
+            class="phone-input"
+          />
         </div>
-        <van-field
-          v-model="phoneNumber"
-          :placeholder="t('enterPhoneNumber')"
-          class="phone-input"
-        />
       </div>
 
       <div class="input-group">
+        <label class="input-label" @click="showInvitationTip = !showInvitationTip">
+          {{ t("invitationCode") }} ({{ t("optional") }})
+          <span class="triangle-icon">▲</span>
+        </label>
         <van-field
-          v-model="password"
-          :type="showPassword ? 'text' : 'password'"
-          :placeholder="t('enterPassword')"
-          class="password-input"
-        >
-          <template #right-icon>
-            <van-icon
-              :name="showPassword ? 'eye-o' : 'closed-eye'"
-              @click="showPassword = !showPassword"
-              class="eye-icon"
-            />
-          </template>
-        </van-field>
-      </div>
-
-      <div class="forgot-password">
-        <span @click="handleForgotPassword">{{ t("forgotPassword") }}</span>
+          v-model="invitationCode"
+          :placeholder="t('enterInvitationCode')"
+          class="invitation-input"
+        />
       </div>
     </div>
 
-    <!-- 邮箱登录表单 -->
+    <!-- 邮箱注册表单 -->
     <div v-if="activeTab === 'email'" class="form-container">
       <div class="input-group">
+        <label class="input-label">{{ t("emailAccount") }}</label>
         <van-field
-          v-model="emailOrAccount"
-          :placeholder="t('enterEmailAccount')"
+          v-model="email"
+          :placeholder="t('enterEmail')"
           class="email-input"
         />
       </div>
 
       <div class="input-group">
+        <label class="input-label" @click="showInvitationTip = !showInvitationTip">
+          {{ t("invitationCode") }} ({{ t("optional") }})
+          <span class="triangle-icon">▲</span>
+        </label>
         <van-field
-          v-model="password"
-          :type="showPassword ? 'text' : 'password'"
-          :placeholder="t('enterPassword')"
-          class="password-input"
-        >
-          <template #right-icon>
-            <van-icon
-              :name="showPassword ? 'eye-o' : 'closed-eye'"
-              @click="showPassword = !showPassword"
-              class="eye-icon"
-            />
-          </template>
-        </van-field>
+          v-model="invitationCode"
+          :placeholder="t('enterInvitationCode')"
+          class="invitation-input"
+        />
+      </div>
+    </div>
+
+    <!-- 账号注册表单 -->
+    <div v-if="activeTab === 'account'" class="form-container">
+      <div class="input-group">
+        <label class="input-label">{{ t("accountLabel") }}</label>
+        <van-field
+          v-model="account"
+          :placeholder="t('enterAccount')"
+          class="account-input"
+        />
       </div>
 
-      <div class="forgot-password">
-        <span @click="handleForgotPassword">{{ t("forgotPassword") }}</span>
+      <div class="input-group">
+        <label class="input-label" @click="showInvitationTip = !showInvitationTip">
+          {{ t("invitationCode") }} ({{ t("optional") }})
+          <span class="triangle-icon">▲</span>
+        </label>
+        <van-field
+          v-model="invitationCode"
+          :placeholder="t('enterInvitationCode')"
+          class="invitation-input"
+        />
       </div>
+    </div>
+
+    <!-- 下一步按钮 -->
+    <div class="button-group">
+      <van-button type="primary" block class="next-btn" @click="handleNextStep">
+        {{ t("nextStep") }}
+      </van-button>
+    </div>
+
+    <!-- 已有账户登录链接 -->
+    <div class="login-link">
+      <span @click="goToLogin">{{ t("alreadyHaveAccount") }}</span>
     </div>
 
     <!-- 协议同意 -->
@@ -107,22 +136,6 @@
           t("antiMoneyLaundering")
         }}</span>
       </div>
-    </div>
-
-    <!-- 登录按钮 -->
-    <div class="button-group">
-      <van-button type="primary" block class="login-btn" @click="handleLogin">
-        {{ t("login") }}
-      </van-button>
-      <van-button block class="wallet-login-btn" @click="handleWalletLogin">
-        {{ t("walletLogin") }}
-      </van-button>
-    </div>
-
-    <!-- 注册链接 -->
-    <div class="register-link">
-      <span>{{ t("noAccount") }}</span>
-      <span class="link" @click="goToRegister">{{ t("registerNow") }}</span>
     </div>
 
     <!-- 国家选择器 -->
@@ -158,7 +171,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useI18n } from "@/i18n";
 import leftArrowIcon from "@/assets/images/left_arrow.svg";
@@ -169,13 +182,14 @@ const { t } = useI18n();
 
 const activeTab = ref("phone");
 const phoneNumber = ref("");
-const emailOrAccount = ref("");
-const password = ref("");
-const showPassword = ref(false);
-const agreed = ref(false);
+const email = ref("");
+const account = ref("");
+const invitationCode = ref("");
+const agreed = ref(true);
 const showCountryPicker = ref(false);
+const showInvitationTip = ref(false);
 
-// 国家列表
+// 国家列表（从 Login.vue 复制）
 const countries = ref([
   { code: "1", name: "美国" },
   { code: "7", name: "俄罗斯" },
@@ -331,42 +345,25 @@ const selectCountry = (country) => {
   showCountryPicker.value = false;
 };
 
-const canLogin = computed(() => {
-  if (!agreed.value) return false;
-  if (activeTab.value === "phone") {
-    return phoneNumber.value && password.value;
-  } else {
-    return emailOrAccount.value && password.value;
-  }
-});
-
 const goBack = () => {
   router.back();
 };
 
-const handleLogin = () => {
-  if (!canLogin.value) return;
-  // TODO: 实现登录逻辑
-  console.log("登录", {
+const handleNextStep = () => {
+  if (!agreed.value) {
+    // TODO: 显示提示
+    return;
+  }
+
+  // TODO: 实现注册逻辑
+  console.log("下一步", {
     type: activeTab.value,
     phone: phoneNumber.value,
-    email: emailOrAccount.value,
-    password: password.value,
+    email: email.value,
+    account: account.value,
+    invitationCode: invitationCode.value,
     countryCode: selectedCountry.value.code,
   });
-};
-
-const handleWalletLogin = () => {
-  // TODO: 实现钱包登录逻辑
-  console.log("钱包登录");
-};
-
-const handleForgotPassword = () => {
-  router.push("/forgot-password");
-};
-
-const goToRegister = () => {
-  router.push("/register");
 };
 
 const openTerms = () => {
@@ -374,18 +371,20 @@ const openTerms = () => {
 };
 
 const openPrivacy = () => {
-  // TODO: 打开隐私协议
-  console.log("隐私协议");
+  router.push("/privacy-policy");
 };
 
 const openAntiMoneyLaundering = () => {
-  // TODO: 打开反洗钱协议
-  console.log("反洗钱协议");
+  router.push("/anti-money-laundering");
+};
+
+const goToLogin = () => {
+  router.push("/login");
 };
 </script>
 
 <style lang="scss" scoped>
-.login-page {
+.register-page {
   min-height: 100vh;
   background-color: #fff;
   padding: 0 16px;
@@ -423,9 +422,11 @@ const openAntiMoneyLaundering = () => {
 
 .tabs {
   display: flex;
-  gap: 32px;
+  gap: 16px;
   margin-top: 44px;
   border-bottom: 1px solid #ebedf0;
+  flex-wrap: nowrap;
+  overflow-x: auto;
 
   .tab {
     padding-bottom: 12px;
@@ -434,9 +435,11 @@ const openAntiMoneyLaundering = () => {
     cursor: pointer;
     position: relative;
     transition: color 0.3s;
-    padding: 0 5.33333vw;
+    padding: 0 2.66667vw;
     height: 46.8px;
     line-height: 46.8px;
+    white-space: nowrap;
+    flex-shrink: 0;
 
     &.active {
       color: #323233;
@@ -460,38 +463,62 @@ const openAntiMoneyLaundering = () => {
 }
 
 .input-group {
-  display: flex;
-  align-items: center;
-  margin-bottom: 30px;
+  margin-bottom: 40px;
   margin-top: 40px;
-  border: 1px solid #ebedf0;
-  border-radius: 8px;
-  overflow: hidden;
 
-  .country-selector {
+  .input-label {
+    display: block;
+    font-size: 14px;
+    color: #000;
+    margin-bottom: 12px;
+    font-weight: 500;
     display: flex;
     align-items: center;
-    padding: 0 12px;
-    border-right: 1px solid #ebedf05d;
+    gap: 4px;
     cursor: pointer;
-    min-width: 60px;
 
-    .country-code {
-      font-size: 16px;
-      color: #040303;
-      margin-right: 4px;
-      padding-left: 20px;
+    .triangle-icon {
+      font-size: 10px;
+      color: #000;
+      display: inline-block;
+      transform: rotate(0deg);
+      transition: transform 0.3s;
     }
+  }
 
-    .arrow-icon {
-      font-size: 16px;
-      color: #040303;
+  .input-wrapper {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ebedf0;
+    border-radius: 8px;
+    overflow: hidden;
+
+    .country-selector {
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      border-right: 1px solid #ebedf05d;
+      cursor: pointer;
+      min-width: 60px;
+
+      .country-code {
+        font-size: 16px;
+        color: #040303;
+        margin-right: 4px;
+      }
+
+      .arrow-icon {
+        font-size: 16px;
+        color: #040303;
+      }
     }
   }
 
   :deep(.van-field) {
     padding: 12px 16px;
     background-color: #fff;
+    border: 1px solid #ebedf0;
+    border-radius: 8px;
 
     .van-field__control {
       font-size: 14px;
@@ -522,35 +549,59 @@ const openAntiMoneyLaundering = () => {
       font-size: 4vw;
       color: #909090;
     }
+
   }
 
   .phone-input {
     flex: 1;
+    border: none !important;
+    border-radius: 0 !important;
+    border-left: none !important;
+
+    :deep(.van-field__control) {
+      padding-left: 0;
+    }
   }
 
-  .email-input {
-    flex: 1;
+  .email-input,
+  .account-input,
+  .invitation-input {
+    width: 100%;
   }
+}
 
-  .password-input {
-    flex: 1;
+.button-group {
+  margin-top: 40px;
+  margin-bottom: 24px;
 
-    .eye-icon {
-      font-size: 18px;
-      color: #969799;
-      cursor: pointer;
+  .next-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.33333vw;
+    margin: 0 auto;
+    width: 91.46667vw;
+    height: 12.8vw;
+    background-color: #000;
+    border-radius: 266.4vw;
+    font-size: 4vw;
+    color: #fff;
+    border: none;
+
+    &:disabled {
+      color: #fff;
     }
   }
 }
 
-.forgot-password {
-  text-align: right;
+.login-link {
+  text-align: center;
+  font-size: 14px;
+  color: #040303;
   margin-bottom: 24px;
 
   span {
-    font-size: 14px;
     color: #000;
-    font-weight: 700;
     cursor: pointer;
   }
 }
@@ -575,67 +626,12 @@ const openAntiMoneyLaundering = () => {
     color: #040303 !important;
     line-height: 1.5;
     padding: 0 15px 0 0;
-    // font-weight: 500;
 
     .link {
       color: #000000 !important;
       cursor: pointer;
       font-weight: 700;
     }
-  }
-}
-
-.button-group {
-  margin-bottom: 24px;
-
-  .login-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1.33333vw;
-    margin: 0 auto;
-    width: 91.46667vw;
-    height: 12.8vw;
-    background-color: #000;
-    border-radius: 266.4vw;
-    font-size: 4vw;
-    color: #fff;
-    border: none;
-
-    &:disabled {
-      // background-color: #c8c9cc;
-      color: #fff;
-    }
-  }
-
-  .wallet-login-btn {
-    width: 91.46667vw;
-    height: 12.8vw;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 5.33333vw auto 0;
-    border-radius: 6.4vw;
-    background: #fff;
-    color: #000;
-    border: 1px solid #000;
-    font-size: 4vw;
-    cursor: pointer;
-    font-weight: 400;
-    box-sizing: border-box;
-  }
-}
-
-.register-link {
-  text-align: center;
-  font-size: 14px;
-  color: #040303;
-
-  .link {
-    color: #000;
-    font-weight: 700;
-    cursor: pointer;
-    margin-left: 4px;
   }
 }
 
@@ -707,3 +703,4 @@ const openAntiMoneyLaundering = () => {
   }
 }
 </style>
+
