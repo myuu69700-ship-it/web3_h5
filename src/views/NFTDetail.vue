@@ -207,6 +207,55 @@
           </div>
         </div>
       </div>
+
+      <!-- Web3 NFT 市場交易之旅 -->
+      <div class="section market-section">
+        <div class="market-title">開啟Web3 NFT 市場交易之旅</div>
+        
+        <!-- 暫無數據区域 -->
+        <div class="no-data-section">
+          <div class="no-data-icon">
+            <div class="documents-icon">
+              <div class="doc-stack">
+                <div class="doc-item"></div>
+                <div class="doc-item"></div>
+                <div class="doc-item"></div>
+              </div>
+              <div class="magnifier">
+                <div class="magnifier-circle"></div>
+                <div class="magnifier-handle"></div>
+              </div>
+              <div class="plus-icon">
+                <div class="plus-horizontal"></div>
+                <div class="plus-vertical"></div>
+              </div>
+            </div>
+          </div>
+          <div class="no-data-text">暫無數據</div>
+        </div>
+
+        <!-- 收益產出部分 -->
+        <div class="earnings-section">
+          <div class="section-header">
+            <span class="section-bullet">■</span>
+            <span class="section-title">收益產出</span>
+          </div>
+          <div class="earnings-table">
+            <div class="table-row" v-for="(item, index) in earningsData" :key="index">
+              <div class="table-cell address-cell">
+                <span class="address-text">{{ item.address }}</span>
+              </div>
+              <div class="table-cell nft-name-cell">
+                <span class="nft-id">{{ item.nftName }}</span>
+              </div>
+              <div class="table-cell earnings-cell">
+                <span class="earnings-value">{{ item.earnings }}</span>
+                <span class="currency-icon">〒</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -279,6 +328,18 @@ const pfpNFTs = ref([
   { id: 18, name: 'ChewZ', price: '15.0809', quantity: '15k', bgColor: '#FFC0CB', placeholder: 'ChewZ' },
   { id: 19, name: 'CLONEX-XTAKASHI...', price: '6560.18', quantity: '12k', bgColor: '#FFFFFF', placeholder: '⚡' },
   { id: 20, name: 'CoolCatsNFT', price: '2526.05', quantity: '48k', bgColor: '#FFC0CB', placeholder: '🐱' }
+])
+
+// 收益產出数据
+const earningsData = ref([
+  { address: '0xaedb716....bd945e6', nftName: '#7215', earnings: '5669.3' },
+  { address: '0xb6352ea....4fb0e58', nftName: '#232328527', earnings: '4144.36' },
+  { address: '0xaf57d66....b5438ff', nftName: '#231501273', earnings: '6224.57' },
+  { address: '0xdc1adb5....de5efb5', nftName: '#1643', earnings: '9840.87' },
+  { address: '0xee731aa....abbbf5c', nftName: '#1177', earnings: '9131.34' },
+  { address: '0x4d3e255....9e525bc', nftName: '#3241', earnings: '1209.14' },
+  { address: '0x635ce58....5cdbfed', nftName: '#7645', earnings: '2324.58' },
+  { address: '0xd53477a....98d9f34', nftName: '#9695', earnings: '6400.74' }
 ])
 </script>
 
@@ -607,6 +668,235 @@ const pfpNFTs = ref([
         .nft-quantity {
           font-size: 12px;
           color: #040303;
+        }
+      }
+    }
+  }
+}
+
+// Web3 NFT 市場交易之旅部分
+.market-section {
+  margin: 24px 0;
+
+  .market-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #040303;
+    margin-bottom: 24px;
+    padding: 0 4px;
+    text-align: left;
+  }
+
+  // 暫無數據区域
+  .no-data-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 50px 20px;
+    margin-bottom: 32px;
+    background-color: #fafafa;
+    border-radius: 12px;
+    min-height: 200px;
+
+    .no-data-icon {
+      margin-bottom: 20px;
+      position: relative;
+      width: 100px;
+      height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .documents-icon {
+        position: relative;
+        width: 100%;
+        height: 100%;
+
+        .doc-stack {
+          position: absolute;
+          top: 20%;
+          left: 20%;
+          width: 60px;
+          height: 70px;
+
+          .doc-item {
+            position: absolute;
+            width: 50px;
+            height: 60px;
+            background-color: #e0e0e0;
+            border: 1px solid #d0d0d0;
+            border-radius: 3px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+
+            &:nth-child(1) {
+              top: 0;
+              left: 0;
+              z-index: 3;
+              background-color: #f5f5f5;
+            }
+
+            &:nth-child(2) {
+              top: 5px;
+              left: 5px;
+              z-index: 2;
+              background-color: #e8e8e8;
+            }
+
+            &:nth-child(3) {
+              top: 10px;
+              left: 10px;
+              z-index: 1;
+              background-color: #dcdcdc;
+            }
+          }
+        }
+
+        .magnifier {
+          position: absolute;
+          top: 5%;
+          right: 10%;
+          width: 36px;
+          height: 36px;
+
+          .magnifier-circle {
+            width: 28px;
+            height: 28px;
+            border: 2.5px solid #040303;
+            border-radius: 50%;
+            position: absolute;
+            top: 0;
+            left: 0;
+          }
+
+          .magnifier-handle {
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            width: 12px;
+            height: 3px;
+            background-color: #040303;
+            border-radius: 1px;
+            transform: rotate(45deg);
+          }
+        }
+
+        .plus-icon {
+          position: absolute;
+          bottom: 15%;
+          left: 15%;
+          width: 20px;
+          height: 20px;
+
+          .plus-horizontal {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 2.5px;
+            background-color: #040303;
+            transform: translateY(-50%);
+            border-radius: 1px;
+          }
+
+          .plus-vertical {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            width: 2.5px;
+            height: 100%;
+            background-color: #040303;
+            transform: translateX(-50%);
+            border-radius: 1px;
+          }
+        }
+      }
+    }
+
+    .no-data-text {
+      font-size: 14px;
+      color: #666;
+      text-align: center;
+      font-weight: 400;
+    }
+  }
+
+  // 收益產出部分
+  .earnings-section {
+    margin-top: 24px;
+
+    .section-header {
+      margin-bottom: 16px;
+      padding: 0 4px;
+    }
+
+    .earnings-table {
+      background-color: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      // border: 1px solid #f0f0f0;
+
+      .table-row {
+        display: grid;
+        grid-template-columns: 2fr 1.5fr 1fr;
+        gap: 12px;
+        padding: 14px 16px;
+        border-bottom: 1px solid #f0f0f0;
+        align-items: center;
+        transition: background-color 0.2s;
+
+        &:hover {
+          background-color: #fafafa;
+        }
+
+        &:last-child {
+          border-bottom: none;
+        }
+
+        .table-cell {
+          display: flex;
+          align-items: center;
+          font-size: 13px;
+          color: #040303;
+          word-break: break-word;
+
+          &.address-cell {
+            justify-content: flex-start;
+            .address-text {
+              font-family: 'Courier New', monospace, 'Microsoft YaHei';
+              font-size: 12px;
+              color: #040303;
+              letter-spacing: 0.3px;
+            }
+          }
+
+          &.nft-name-cell {
+            justify-content: center;
+            .nft-id {
+              font-weight: 500;
+              color: #040303;
+              font-size: 13px;
+            }
+          }
+
+          &.earnings-cell {
+            justify-content: flex-end;
+            align-items: center;
+            gap: 4px;
+
+            .earnings-value {
+              font-weight: 600;
+              color: #040303;
+              font-size: 13px;
+            }
+
+            .currency-icon {
+              font-size: 14px;
+              color: #4CAF50;
+              font-weight: 600;
+              line-height: 1;
+            }
+          }
         }
       }
     }
