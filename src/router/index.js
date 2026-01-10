@@ -200,6 +200,14 @@ const routes = [
     meta: {
       title: '安全中心'
     }
+  },
+  {
+    path: '/platform-notifications',
+    name: 'PlatformNotifications',
+    component: () => import('@/views/PlatformNotifications.vue'),
+    meta: {
+      title: '平台通知'
+    }
   }
 ]
 

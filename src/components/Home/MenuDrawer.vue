@@ -372,8 +372,7 @@ const handleCharity = () => {
 };
 
 const handlePlatformNotifications = () => {
-  // 平台通知逻辑
-  console.log("平台通知");
+  router.push("/platform-notifications");
   handleClose();
 };
 
