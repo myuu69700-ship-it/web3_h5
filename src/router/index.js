@@ -232,6 +232,14 @@ const routes = [
     meta: {
       title: '投資組合'
     }
+  },
+  {
+    path: '/ai-strategy-trading',
+    name: 'AIStrategyTrading',
+    component: () => import('@/views/AIStrategyTrading.vue'),
+    meta: {
+      title: 'AI策略交易'
+    }
   }
 ]
 

@@ -283,7 +283,7 @@ const handleTutorial = () => {
 
 // 资产管理
 const handleDeposit = () => {
-  router.push("/deposit-detail");
+  router.push("/deposit-select");
   handleClose();
 };
 
@@ -329,8 +329,7 @@ const handleNFT = () => {
 };
 
 const handleAIStrategy = () => {
-  // AI策略交易逻辑
-  console.log("AI策略交易");
+  router.push("/ai-strategy-trading");
   handleClose();
 };
 
