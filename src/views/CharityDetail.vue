@@ -192,6 +192,20 @@
       </div>
     </div>
 
+    <!-- 合作单位 -->
+    <div class="partners-section">
+      <div class="section-title">
+        <span class="bullet">■</span>
+        <span>合作單位</span>
+      </div>
+    </div>
+
+    <div class="cooperative-list">
+      <div class="cooperative-item">
+        <div class="cooperative-logo"></div>
+      </div>
+    </div>
+
     <!-- 慈善捐款纪录 -->
     <div class="records-section">
       <div class="section-title">
@@ -210,8 +224,8 @@
             :key="index"
           >
             <div class="table-cell">
-              <div class="user-id">{{ record.userId }}</div>
               <div class="donation-time">{{ record.time }}</div>
+              <div class="user-id">{{ record.userId }}</div>
             </div>
             <div class="table-cell amount-cell">{{ record.amount }}</div>
           </div>
@@ -409,6 +423,10 @@ const donationRecords = ref([
   background-color: #fff;
   //   margin-top: 16px;
 }
+.cooperative-list {
+  height: 62.39px;
+  background-color: #f5f5f5;
+}
 
 .section-title {
   display: flex;
@@ -518,17 +536,17 @@ const donationRecords = ref([
 
 .stat-value {
   font-size: 32px;
-//   font-weight: 700;
+  //   font-weight: 700;
   line-height: 1.2;
 
   &.stat-beneficiaries {
     color: #1989fa;
-    font-size: 9.6vw
+    font-size: 9.6vw;
   }
 
   &.stat-amount {
     color: #07c160;
-    font-size: 9.6vw
+    font-size: 9.6vw;
   }
 }
 
@@ -538,6 +556,10 @@ const donationRecords = ref([
   gap: 16px;
   padding: 20px 0;
   flex-wrap: wrap;
+  min-height: 101.33333vw;
+  margin: 0 1.33333vw;
+  border-radius: 2.66667vw;
+  background-color: #f5f5f5;
 }
 
 .partner-item {
@@ -591,7 +613,7 @@ const donationRecords = ref([
 
 .records-table {
   margin-top: 16px;
-  border: 1px solid #ebedf0;
+//   border: 1px solid #ebedf0;
   border-radius: 8px;
   overflow: hidden;
   background-color: #fff;
@@ -599,18 +621,23 @@ const donationRecords = ref([
 
 .table-header {
   display: flex;
-  background-color: #f7f8fa;
-  border-bottom: 1px solid #ebedf0;
+  justify-content: space-between;
+//   background-color: #f7f8fa;
+//   border-bottom: 1px solid #ebedf0;
 
   .header-cell {
     flex: 1;
     padding: 12px 16px;
     font-size: 14px;
-    font-weight: 600;
+    // font-weight: 600;
     color: #040303;
 
     &:first-child {
-      border-right: 1px solid #ebedf0;
+      text-align: left;
+    }
+
+    &:last-child {
+      text-align: right;
     }
   }
 }
@@ -619,6 +646,7 @@ const donationRecords = ref([
   .table-row {
     display: flex;
     border-bottom: 1px solid #ebedf0;
+    height: 41.5px;
 
     &:last-child {
       border-bottom: none;
@@ -629,16 +657,17 @@ const donationRecords = ref([
     flex: 1;
     padding: 16px;
     font-size: 14px;
-    color: #323233;
-
-    &:first-child {
-      border-right: 1px solid #ebedf0;
-    }
+    color: #040303;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
 
     &.amount-cell {
       font-weight: 600;
-      color: #1989fa;
+      color: #040303;
       text-align: right;
+      align-items: flex-end;
     }
   }
 
@@ -649,7 +678,7 @@ const donationRecords = ref([
 
   .donation-time {
     font-size: 12px;
-    color: #969799;
+    color: #040303;
   }
 }
 
