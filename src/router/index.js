@@ -224,6 +224,14 @@ const routes = [
     meta: {
       title: '锁仓赚币'
     }
+  },
+  {
+    path: '/investment-portfolio-detail',
+    name: 'InvestmentPortfolioDetail',
+    component: () => import('@/views/InvestmentPortfolioDetail.vue'),
+    meta: {
+      title: '投資組合'
+    }
   }
 ]
 

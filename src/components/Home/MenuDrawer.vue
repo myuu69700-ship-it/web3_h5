@@ -341,8 +341,7 @@ const handleDeFiLending = () => {
 };
 
 const handlePortfolio = () => {
-  // 投资组合逻辑
-  console.log("投资组合");
+  router.push("/investment-portfolio-detail");
   handleClose();
 };
 
