@@ -323,8 +323,7 @@ const handleContract = () => {
 };
 
 const handleNFT = () => {
-  // NFT 逻辑
-  console.log("NFT");
+  router.push("/nft-detail");
   handleClose();
 };
 

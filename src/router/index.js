@@ -248,6 +248,14 @@ const routes = [
     meta: {
       title: 'AI策略交易'
     }
+  },
+  {
+    path: '/nft-detail',
+    name: 'NFTDetail',
+    component: () => import('@/views/NFTDetail.vue'),
+    meta: {
+      title: 'NFT'
+    }
   }
 ]
 
