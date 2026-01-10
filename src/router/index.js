@@ -240,6 +240,14 @@ const routes = [
     meta: {
       title: 'AI策略交易'
     }
+  },
+  {
+    path: '/ai-strategy-detail/:id',
+    name: 'AIStrategyDetail',
+    component: () => import('@/views/AIStrategyDetail.vue'),
+    meta: {
+      title: 'AI策略交易'
+    }
   }
 ]
 

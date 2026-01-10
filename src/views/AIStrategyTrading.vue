@@ -97,6 +97,7 @@
           class="strategy-card"
           v-for="strategy in strategyList"
           :key="strategy.id"
+          @click="handleCardClick(strategy)"
         >
           <!-- 策略头部 -->
           <div class="strategy-header">
@@ -219,7 +220,7 @@
                 <span>{{ strategy.users }}</span>
               </div>
             </div>
-            <button class="use-btn" @click="handleUse(strategy)">
+            <button class="use-btn" @click.stop="handleUse(strategy)">
               使用
             </button>
           </div>
@@ -260,15 +261,20 @@ const generateChartPoints = (id) => {
 const strategyList = ref([
   {
     id: 1,
-    pair: "BTC/ETH",
-    type: "CHATGPT預測",
-    pairIcons: ["btc", "eth"],
-    maxReturn: "45.2",
+    pair: "ETH/TRX",
+    type: "無限網格",
+    pairIcons: ["eth", "trx"],
+    maxReturn: "34.4",
     investmentAmount: ">2500",
-    maxDrawdown: "32.2",
-    duration: "6h43m",
+    maxDrawdown: "25.44",
+    duration: "4h16m",
     level: "L0",
-    users: "73",
+    users: "42",
+    followingFunds: "143,175.8631",
+    runtime: "4h16m",
+    lowestPrice: "9.7265",
+    gridProfitRate: "35",
+    maxServiceFee: "100",
     chartPoints: generateChartPoints(1),
   },
   {
@@ -282,6 +288,11 @@ const strategyList = ref([
     duration: "4h54m",
     level: "L0",
     users: "31",
+    followingFunds: "89,234.56",
+    runtime: "4h54m",
+    lowestPrice: "8.2341",
+    gridProfitRate: "28",
+    maxServiceFee: "80",
     chartPoints: generateChartPoints(2),
   },
   {
@@ -295,6 +306,11 @@ const strategyList = ref([
     duration: "8h12m",
     level: "L1",
     users: "156",
+    followingFunds: "256,789.12",
+    runtime: "8h12m",
+    lowestPrice: "12.4567",
+    gridProfitRate: "42",
+    maxServiceFee: "120",
     chartPoints: generateChartPoints(3),
   },
 ]);
@@ -316,6 +332,14 @@ const handleLevelRules = () => {
 const handleUse = (strategy) => {
   // 使用策略
   console.log("使用策略:", strategy);
+};
+
+const handleCardClick = (strategy) => {
+  // 跳转到策略详情页
+  router.push({
+    path: `/ai-strategy-detail/${strategy.id}`,
+    query: { pair: strategy.pair, type: strategy.type }
+  });
 };
 </script>
 
@@ -614,6 +638,13 @@ const handleUse = (strategy) => {
     padding: 16px;
     margin-bottom: 16px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+
+    &:active {
+      transform: scale(0.98);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+    }
 
     .strategy-header {
       display: flex;
