@@ -25,9 +25,11 @@ body::-webkit-scrollbar {
   display: none;
 }
 
-// 移动端适配：基于 750px 设计稿
-// 根字体大小由 main.js 动态设置，1rem = 75px (设计稿 750px / 10)
-// 使用 postcss-pxtorem 自动将 px 转换为 rem
+// 移动端适配：项目使用 vw 单位进行适配
+// 如果需要使用 rem 适配，需要：
+// 1. 启用 postcss.config.js 中的 postcss-pxtorem 插件
+// 2. 启用 main.js 中的 setRemUnit() 函数
+// 3. 将所有 vw 单位改为 px 单位（基于 750px 设计稿）
 
 // 通用工具类
 .flex {
