@@ -216,6 +216,14 @@ const routes = [
     meta: {
       title: '慈善详情'
     }
+  },
+  {
+    path: '/locked-staking-detail',
+    name: 'LockedStakingDetail',
+    component: () => import('@/views/LockedStakingDetail.vue'),
+    meta: {
+      title: '锁仓赚币'
+    }
   }
 ]
 

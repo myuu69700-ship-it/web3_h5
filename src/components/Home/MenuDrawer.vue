@@ -336,8 +336,7 @@ const handleAIStrategy = () => {
 
 // 赚币与奖励
 const handleDeFiLending = () => {
-  // DeFi借币逻辑
-  console.log("DeFi借币");
+  router.push("/product-detail");
   handleClose();
 };
 
@@ -348,8 +347,7 @@ const handlePortfolio = () => {
 };
 
 const handleLockedStaking = () => {
-  // 锁仓赚币逻辑
-  console.log("锁仓赚币");
+  router.push("/locked-staking-detail");
   handleClose();
 };
 
