@@ -192,6 +192,14 @@ const routes = [
     meta: {
       title: '快捷買幣'
     }
+  },
+  {
+    path: '/security-center',
+    name: 'SecurityCenter',
+    component: () => import('@/views/SecurityCenter.vue'),
+    meta: {
+      title: '安全中心'
+    }
   }
 ]
 

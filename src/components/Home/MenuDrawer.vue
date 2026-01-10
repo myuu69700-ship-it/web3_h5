@@ -378,8 +378,7 @@ const handlePlatformNotifications = () => {
 };
 
 const handleSecurityCenter = () => {
-  // 安全中心逻辑
-  console.log("安全中心");
+  router.push("/security-center");
   handleClose();
 };
 
