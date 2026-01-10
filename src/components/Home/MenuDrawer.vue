@@ -366,8 +366,7 @@ const handleAddressBook = () => {
 };
 
 const handleCharity = () => {
-  // 慈善逻辑
-  console.log("慈善");
+  router.push("/charity-detail");
   handleClose();
 };
 

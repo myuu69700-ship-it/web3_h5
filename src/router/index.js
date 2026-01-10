@@ -208,6 +208,14 @@ const routes = [
     meta: {
       title: '平台通知'
     }
+  },
+  {
+    path: '/charity-detail',
+    name: 'CharityDetail',
+    component: () => import('@/views/CharityDetail.vue'),
+    meta: {
+      title: '慈善详情'
+    }
   }
 ]
 
