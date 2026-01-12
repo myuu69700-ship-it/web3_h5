@@ -210,6 +210,14 @@ const routes = [
     }
   },
   {
+    path: '/notification-detail/:id',
+    name: 'NotificationDetail',
+    component: () => import('@/views/NotificationDetail.vue'),
+    meta: {
+      title: '通知详情'
+    }
+  },
+  {
     path: '/charity-detail',
     name: 'CharityDetail',
     component: () => import('@/views/CharityDetail.vue'),

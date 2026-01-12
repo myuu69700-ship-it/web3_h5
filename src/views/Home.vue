@@ -242,8 +242,8 @@ const selectLanguage = (code) => {
 };
 
 const viewMoreNotifications = () => {
-  // 可以跳转到通知详情页
-  console.log("查看更多通知");
+  // 跳转到通知列表页
+  router.push("/platform-notifications");
 };
 
 const openChat = () => {

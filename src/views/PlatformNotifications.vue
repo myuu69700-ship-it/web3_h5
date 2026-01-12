@@ -46,8 +46,8 @@ const goBack = () => {
 };
 
 const handleNotificationClick = (item) => {
-  // 处理通知点击事件，可以跳转到详情页
-  console.log("点击了通知:", item.title);
+  // 跳转到详情页
+  router.push(`/notification-detail/${item.id}`);
 };
 </script>
 
