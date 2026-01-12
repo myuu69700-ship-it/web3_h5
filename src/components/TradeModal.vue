@@ -28,6 +28,7 @@
 
 <script setup>
 import { h } from 'vue'
+import { useRouter } from 'vue-router'
 
 defineProps({
   show: {
@@ -37,6 +38,7 @@ defineProps({
 })
 
 const emit = defineEmits(['update:show', 'close'])
+const router = useRouter()
 
 // 菜单项数据
 const menuItems = [
@@ -222,8 +224,28 @@ const handleOverlayClick = () => {
 const handleMenuClick = (item) => {
   // 处理菜单项点击
   console.log('点击菜单项:', item.key)
-  // 可以在这里添加路由跳转或其他逻辑
-  handleClose()
+  
+  // 默认交易对
+  const defaultPair = 'BTC/USDT'
+  const encodedPair = encodeURIComponent(defaultPair)
+  
+  // 根据菜单项跳转到对应的币种详情页
+  if (item.key === 'spot') {
+    // 現貨
+    router.push(`/coin/${encodedPair}?type=spot`)
+    handleClose()
+  } else if (item.key === 'contract') {
+    // 合約
+    router.push(`/coin/${encodedPair}?type=perpetual`)
+    handleClose()
+  } else if (item.key === 'options') {
+    // 期權
+    router.push(`/coin/${encodedPair}?type=options`)
+    handleClose()
+  } else {
+    // 其他菜单项暂时只关闭弹窗
+    handleClose()
+  }
 }
 </script>
 

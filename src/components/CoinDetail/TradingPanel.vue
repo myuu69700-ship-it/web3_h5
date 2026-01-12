@@ -1757,7 +1757,7 @@ onUnmounted(() => {
   margin: 2.13333vw 0;
   flex-shrink: 0;
   background: #fff;
-  z-index: 2;
+  // z-index: 2;
   position: relative;
 }
 
