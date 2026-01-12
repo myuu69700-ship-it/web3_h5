@@ -288,6 +288,14 @@ const routes = [
     meta: {
       title: '初級認證'
     }
+  },
+  {
+    path: '/change-login-password',
+    name: 'ChangeLoginPassword',
+    component: () => import('@/views/ChangeLoginPassword.vue'),
+    meta: {
+      title: '修改登陸密碼'
+    }
   }
 ]
 

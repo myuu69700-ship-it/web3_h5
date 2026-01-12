@@ -77,8 +77,7 @@ const handlePrimaryAuth = () => {
 }
 
 const handleLoginPassword = () => {
-  // 处理登錄密碼点击
-  console.log('登錄密碼')
+  router.push('/change-login-password')
 }
 
 const handleEmailBinding = () => {
