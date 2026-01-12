@@ -224,6 +224,7 @@ const handleSubmit = () => {
     align-items: center;
     justify-content: space-between;
     cursor: pointer;
+    min-height: 48px;
 
     .select-content {
       flex: 1;
@@ -244,28 +245,37 @@ const handleSubmit = () => {
   :deep(.input-field) {
     background-color: #fff;
     border-radius: 8px;
-    padding: 12px 16px;
+    padding: 0;
 
     .van-field__control {
       font-size: 16px;
       color: #323233;
+      padding: 12px 16px;
+    }
+
+    .van-field__body {
+      padding: 0;
+    }
+
+    .van-field__label {
+      display: none;
     }
   }
 
   .upload-wrapper {
     background-color: #fff;
     border-radius: 8px;
-    width: 387px;
-    height: 154px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    width: 100%;
 
     :deep(.custom-uploader) {
       width: 100%;
 
       .van-uploader {
         width: 100%;
+      }
+
+      .van-uploader__wrapper {
+        display: block;
       }
 
       .van-uploader__upload {
@@ -279,6 +289,7 @@ const handleSubmit = () => {
         justify-content: center;
         background-color: #fff;
         transition: all 0.3s;
+        position: relative;
 
         &:active {
           opacity: 0.8;
@@ -286,11 +297,22 @@ const handleSubmit = () => {
         }
       }
 
+      .van-uploader__input {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+      }
+
       .upload-placeholder {
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        pointer-events: none;
 
         .upload-icon {
           width: 64px;
@@ -338,9 +360,10 @@ const handleSubmit = () => {
 
 .submit-section {
   margin-top: 32px;
+  padding-bottom: 20px;
 
   .submit-btn {
-    background-color: #323233;
+    background-color: #000;
     border: none;
     border-radius: 8px;
     height: 48px;
