@@ -5,7 +5,7 @@
       <van-search
         v-model="searchValue"
         placeholder="搜尋幣對"
-        @click="handleSearch"
+        @click="showSearchModal = true"
       />
     </div>
 
@@ -100,17 +100,25 @@
         </div>
       </div>
     </div>
+
+    <!-- 币对搜索弹窗 -->
+    <CoinPairSearchModal
+      v-model="showSearchModal"
+      @select="handleSelectCoinPair"
+    />
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import CoinPairSearchModal from '@/components/Home/CoinPairSearchModal.vue'
 
 const router = useRouter()
 const searchValue = ref('')
 const activeMainTab = ref('market')
 const activeSubTab = ref('spot')
+const showSearchModal = ref(false)
 
 // 交易对列表数据（根据图片中的示例数据）
 const coinList = ref([
@@ -287,10 +295,11 @@ const coinList = ref([
   }
 ])
 
-// 处理搜索
-const handleSearch = () => {
-  // 可以打开搜索模态框或跳转到搜索页面
-  console.log('搜索:', searchValue.value)
+// 处理选择交易对
+const handleSelectCoinPair = (coin) => {
+  // 处理选择交易对 - 跳转到详情页
+  const pair = coin.pair || `${coin.symbol}${coin.pair || '/USDT'}`
+  router.push(`/coin/${encodeURIComponent(pair)}`)
 }
 
 // 处理币种点击
