@@ -255,6 +255,11 @@ const handleSubmit = () => {
   .upload-wrapper {
     background-color: #fff;
     border-radius: 8px;
+    width: 387px;
+    height: 154px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     :deep(.custom-uploader) {
       width: 100%;
