@@ -137,6 +137,8 @@ const backFileList = ref([])
 // 類型選項
 const typeOptions = [
   { text: '身份認證', value: '身份認證' },
+  { text: '護照認證', value: '護照認證' },
+  { text: '駕駛證認證', value: '駕駛證認證' },
 ]
 
 const onTypeConfirm = ({ selectedOptions }) => {
