@@ -73,8 +73,7 @@ const goBack = () => {
 }
 
 const handlePrimaryAuth = () => {
-  // 处理初級認證点击
-  console.log('初級認證')
+  router.push('/primary-auth')
 }
 
 const handleLoginPassword = () => {

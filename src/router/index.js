@@ -280,6 +280,14 @@ const routes = [
     meta: {
       title: '新增地址'
     }
+  },
+  {
+    path: '/primary-auth',
+    name: 'PrimaryAuth',
+    component: () => import('@/views/PrimaryAuth.vue'),
+    meta: {
+      title: '初級認證'
+    }
   }
 ]
 
