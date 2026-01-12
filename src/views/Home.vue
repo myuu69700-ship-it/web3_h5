@@ -275,7 +275,7 @@ const handleQuickBuy = () => {
 
 const handleSelectCoinPair = (coin) => {
   // 处理选择交易对 - 跳转到详情页
-  const pair = coin.pair || `${coin.symbol}${coin.pair || '/USDT'}`;
+  const pair = coin.pair || `${coin.symbol}${coin.pair || "/USDT"}`;
   router.push(`/coin/${encodeURIComponent(pair)}`);
 };
 
@@ -507,8 +507,8 @@ onUnmounted(() => {
       &.login-btn {
         background-color: #e7ffb1;
         color: #2b6d16;
-        width: 169px;
-        height: 10.13333vw;
+        width: 176px;
+        height: 35px;
         border-radius: 5.06667vw;
         font-size: 3.2vw;
         cursor: pointer;
@@ -518,8 +518,8 @@ onUnmounted(() => {
       &.register-btn {
         background-color: #2b6d16;
         color: #fff;
-        width: 169px;
-        height: 10.13333vw;
+        width: 176px;
+        height: 35px;
         border-radius: 5.06667vw;
         font-size: 3.2vw;
         cursor: pointer;
@@ -529,8 +529,8 @@ onUnmounted(() => {
       &.deposit-btn {
         background-color: #2b6d16;
         color: #fff;
-        width: 169px;
-        height: 10.13333vw;
+        width: 176px;
+        height: 35px;
         border-radius: 5.06667vw;
         font-size: 3.2vw;
         cursor: pointer;
@@ -540,8 +540,8 @@ onUnmounted(() => {
       &.buy-btn {
         background-color: #2b6d16;
         color: #fff;
-        width: 169px;
-        height: 10.13333vw;
+        width: 176px;
+        height: 35px;
         border-radius: 5.06667vw;
         font-size: 3.2vw;
         cursor: pointer;
@@ -778,7 +778,6 @@ onUnmounted(() => {
     border-radius: 50%;
   }
 }
-
 
 // 语言选择对话框
 .language-popup {
