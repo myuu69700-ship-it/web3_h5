@@ -34,7 +34,7 @@
       </div>
     </div>
 
-    <!-- 子类别标签（仅市场页面显示） -->
+    <!-- 子类别标签（市场页面显示） -->
     <div v-if="activeMainTab === 'market'" class="sub-tabs">
       <div
         class="sub-tab-item"
@@ -63,6 +63,24 @@
         @click="activeSubTab = 'options'"
       >
         期權
+      </div>
+    </div>
+
+    <!-- 子类别标签（动态页面显示） -->
+    <div v-if="activeMainTab === 'dynamics'" class="dynamics-sub-tabs">
+      <div
+        class="dynamics-sub-tab-item"
+        :class="{ active: activeDynamicsSubTab === 'recommended' }"
+        @click="activeDynamicsSubTab = 'recommended'"
+      >
+        推薦
+      </div>
+      <div
+        class="dynamics-sub-tab-item"
+        :class="{ active: activeDynamicsSubTab === 'following' }"
+        @click="activeDynamicsSubTab = 'following'"
+      >
+        關注
       </div>
     </div>
 
@@ -155,6 +173,16 @@
       </div>
     </template>
 
+    <!-- 动态页面内容 -->
+    <template v-if="activeMainTab === 'dynamics'">
+      <div class="dynamics-content">
+        <div class="dynamics-empty-state">
+          <img :src="nomoreImage" alt="暂无数据" class="empty-icon" />
+          <div class="empty-text">暫無數據</div>
+        </div>
+      </div>
+    </template>
+
     <!-- 币对搜索弹窗 -->
     <CoinPairSearchModal
       v-model="showSearchModal"
@@ -169,11 +197,13 @@ import { useRouter } from 'vue-router'
 import CoinPairSearchModal from '@/components/Home/CoinPairSearchModal.vue'
 import btcImage from '@/assets/images/BTC.webp'
 import btc2Image from '@/assets/images/btc2.webp'
+import nomoreImage from '@/assets/images/nomore.png'
 
 const router = useRouter()
 const searchValue = ref('')
 const activeMainTab = ref('market')
 const activeSubTab = ref('spot')
+const activeDynamicsSubTab = ref('recommended')
 const showSearchModal = ref(false)
 
 // 交易对列表数据（根据图片中的示例数据）
@@ -648,6 +678,56 @@ const handleNewsClick = (article) => {
         width: 21.33333vw;
         height: 8vw;
       }
+    }
+  }
+}
+
+// 动态子标签样式
+.dynamics-sub-tabs {
+  display: flex;
+  padding: 8px 16px;
+  gap: 8px;
+  background-color: #fff;
+  
+  .dynamics-sub-tab-item {
+    padding: 6px 16px;
+    font-size: 14px;
+    color: #969799;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.3s;
+    
+    &.active {
+      background-color: #f3f3f3;
+      color: #323233;
+      font-weight: 500;
+    }
+  }
+}
+
+// 动态页面内容样式
+.dynamics-content {
+  background-color: #fff;
+  min-height: 400px;
+  
+  .dynamics-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 20px;
+    min-height: 400px;
+    
+    .empty-icon {
+      width: 140px;
+      height: auto;
+      margin-bottom: 24px;
+    }
+    
+    .empty-text {
+      font-size: 16px;
+      color: #323233;
+      font-weight: 400;
     }
   }
 }
