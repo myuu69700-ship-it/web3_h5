@@ -34,8 +34,8 @@
       </div>
     </div>
 
-    <!-- 子类别标签 -->
-    <div class="sub-tabs">
+    <!-- 子类别标签（仅市场页面显示） -->
+    <div v-if="activeMainTab === 'market'" class="sub-tabs">
       <div
         class="sub-tab-item"
         :class="{ active: activeSubTab === 'favorites' }"
@@ -66,40 +66,94 @@
       </div>
     </div>
 
-    <!-- 类别标签 -->
-    <div class="category-label">加密貨幣</div>
+    <!-- 市场页面内容 -->
+    <template v-if="activeMainTab === 'market'">
+      <!-- 类别标签 -->
+      <div class="category-label">加密貨幣</div>
 
-    <!-- 表头 -->
-    <div class="table-header">
-      <div class="header-col name-col">名稱 / 成交額</div>
-      <div class="header-col price-col">最新價</div>
-      <div class="header-col change-col">今日漲跌</div>
-    </div>
+      <!-- 表头 -->
+      <div class="table-header">
+        <div class="header-col name-col">名稱 / 成交額</div>
+        <div class="header-col price-col">最新價</div>
+        <div class="header-col change-col">今日漲跌</div>
+      </div>
 
-    <!-- 交易对列表 -->
-    <div class="coin-list">
-      <div
-        v-for="coin in coinList"
-        :key="coin.pair"
-        class="coin-item"
-        @click="handleCoinClick(coin)"
-      >
-        <div class="coin-icon" :style="{ backgroundColor: coin.color }">
-          <span class="coin-symbol">{{ coin.symbol }}</span>
-        </div>
-        <div class="coin-info">
-          <div class="coin-name">{{ coin.name }}</div>
-          <div class="coin-pair">{{ coin.pair }}</div>
-        </div>
-        <div class="coin-price">
-          <div class="price-value">{{ coin.price }}</div>
-          <div class="price-usd">${{ coin.price }}</div>
-        </div>
-        <div class="coin-change" :class="coin.change >= 0 ? 'up' : 'down'">
-          {{ coin.change >= 0 ? '+' : '' }}{{ coin.change }}%
+      <!-- 交易对列表 -->
+      <div class="coin-list">
+        <div
+          v-for="coin in coinList"
+          :key="coin.pair"
+          class="coin-item"
+          @click="handleCoinClick(coin)"
+        >
+          <div class="coin-icon" :style="{ backgroundColor: coin.color }">
+            <span class="coin-symbol">{{ coin.symbol }}</span>
+          </div>
+          <div class="coin-info">
+            <div class="coin-name">{{ coin.name }}</div>
+            <div class="coin-pair">{{ coin.pair }}</div>
+          </div>
+          <div class="coin-price">
+            <div class="price-value">{{ coin.price }}</div>
+            <div class="price-usd">${{ coin.price }}</div>
+          </div>
+          <div class="coin-change" :class="coin.change >= 0 ? 'up' : 'down'">
+            {{ coin.change >= 0 ? '+' : '' }}{{ coin.change }}%
+          </div>
         </div>
       </div>
-    </div>
+    </template>
+
+    <!-- 新闻页面内容 -->
+    <template v-if="activeMainTab === 'news'">
+      <div class="news-list">
+        <div
+          v-for="article in newsList"
+          :key="article.id"
+          class="news-item"
+          @click="handleNewsClick(article)"
+        >
+          <!-- 作者信息 -->
+          <div class="article-author">
+            <img :src="article.authorAvatar" :alt="article.authorName" class="author-avatar" />
+            <div class="author-info">
+              <div class="author-name">{{ article.authorName }}</div>
+              <div class="article-time">{{ article.timestamp }}</div>
+            </div>
+          </div>
+
+          <!-- 文章标题 -->
+          <div class="article-title">{{ article.title }}</div>
+
+          <!-- 缩略图 -->
+          <div class="article-thumbnail">
+            <img :src="article.thumbnail" :alt="article.title" />
+            <!-- 缩略图上的文字覆盖 -->
+            <div class="thumbnail-overlay">
+              <div class="overlay-title">{{ article.title }}</div>
+              <div class="overlay-author">{{ article.authorName }}</div>
+            </div>
+          </div>
+
+          <!-- 互动数据和价格更新 -->
+          <div class="article-footer">
+            <div class="engagement-metrics">
+              <div class="metric-item">
+                <van-icon name="good-job-o" class="metric-icon" />
+                <span class="metric-value">{{ article.likes }}</span>
+              </div>
+              <div class="metric-item">
+                <van-icon name="eye-o" class="metric-icon" />
+                <span class="metric-value">{{ article.views }}</span>
+              </div>
+            </div>
+            <div v-if="article.priceUpdate" class="price-update" :class="article.priceUpdate.change >= 0 ? 'up' : 'down'">
+              {{ article.priceUpdate.symbol }} {{ article.priceUpdate.change >= 0 ? '+' : '' }}{{ article.priceUpdate.change }}%
+            </div>
+          </div>
+        </div>
+      </div>
+    </template>
 
     <!-- 币对搜索弹窗 -->
     <CoinPairSearchModal
@@ -113,6 +167,8 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import CoinPairSearchModal from '@/components/Home/CoinPairSearchModal.vue'
+import btcImage from '@/assets/images/BTC.webp'
+import btc2Image from '@/assets/images/btc2.webp'
 
 const router = useRouter()
 const searchValue = ref('')
@@ -305,6 +361,80 @@ const handleSelectCoinPair = (coin) => {
 // 处理币种点击
 const handleCoinClick = (coin) => {
   router.push(`/coin/${coin.pair}`)
+}
+
+// 新闻列表数据
+const newsList = ref([
+  {
+    id: 1,
+    authorName: 'Opeyemi Sule',
+    authorAvatar: 'https://via.placeholder.com/40/cccccc/ffffff?text=OS',
+    timestamp: '01-11-2026 07:43:38',
+    title: 'Analyst Sets $105K As Next Bitcoin Price Target — Here\'s The Timeline',
+    thumbnail: btcImage,
+    likes: 5261,
+    views: 4270,
+    priceUpdate: null
+  },
+  {
+    id: 2,
+    authorName: 'Opeyemi Sule',
+    authorAvatar: 'https://via.placeholder.com/40/cccccc/ffffff?text=OS',
+    timestamp: '01-11-2026 06:32:01',
+    title: 'Attention, Bitcoin Bulls: Here\'s Why $99K Might Be The Next Crucial Level To Watch',
+    thumbnail: btc2Image,
+    likes: 3207,
+    views: 3662,
+    priceUpdate: {
+      symbol: 'AAVE',
+      change: 1.4976
+    }
+  },
+  {
+    id: 3,
+    authorName: 'Godspower Owie',
+    authorAvatar: 'https://via.placeholder.com/40/cccccc/ffffff?text=GO',
+    timestamp: '01-11-2026 02:47:02',
+    title: 'Chainlink Stuck In A Micro-Range As Traders Await A Clear Trigger',
+    thumbnail: btcImage,
+    likes: 2800,
+    views: 3200,
+    priceUpdate: null
+  },
+  {
+    id: 4,
+    authorName: 'Opeyemi Sule',
+    authorAvatar: 'https://via.placeholder.com/40/cccccc/ffffff?text=OS',
+    timestamp: '01-10-2026 18:20:15',
+    title: 'Bitcoin Market Analysis: Key Support Levels To Watch This Week',
+    thumbnail: btc2Image,
+    likes: 4500,
+    views: 5100,
+    priceUpdate: {
+      symbol: 'TRX',
+      change: -1.1984
+    }
+  },
+  {
+    id: 5,
+    authorName: 'Opeyemi Sule',
+    authorAvatar: 'https://via.placeholder.com/40/cccccc/ffffff?text=OS',
+    timestamp: '01-10-2026 15:30:45',
+    title: 'Ethereum Price Prediction: What Analysts Are Saying',
+    thumbnail: btcImage,
+    likes: 3800,
+    views: 4200,
+    priceUpdate: {
+      symbol: 'ETH',
+      change: 1.2658
+    }
+  }
+])
+
+// 处理新闻点击
+const handleNewsClick = (article) => {
+  // 可以跳转到新闻详情页
+  console.log('点击新闻:', article)
 }
 </script>
 
@@ -517,6 +647,150 @@ const handleCoinClick = (coin) => {
         border-radius: 1.06667vw;
         width: 21.33333vw;
         height: 8vw;
+      }
+    }
+  }
+}
+
+// 新闻列表样式
+.news-list {
+  background-color: #fff;
+  padding: 16px;
+  
+  .news-item {
+    margin-bottom: 24px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid #ebedf0;
+    cursor: pointer;
+    
+    &:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+    
+    .article-author {
+      display: flex;
+      align-items: center;
+      margin-bottom: 12px;
+      
+      .author-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-right: 12px;
+        object-fit: cover;
+      }
+      
+      .author-info {
+        flex: 1;
+        
+        .author-name {
+          font-size: 16px;
+          font-weight: bold;
+          color: #323233;
+          margin-bottom: 4px;
+        }
+        
+        .article-time {
+          font-size: 12px;
+          color: #969799;
+        }
+      }
+    }
+    
+    .article-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: #323233;
+      margin-bottom: 12px;
+      line-height: 1.4;
+    }
+    
+    .article-thumbnail {
+      width: 100%;
+      margin-bottom: 12px;
+      border-radius: 8px;
+      overflow: hidden;
+      position: relative;
+      aspect-ratio: 16 / 9;
+      
+      img {
+        width: 100%;
+        height: 100%;
+        display: block;
+        object-fit: cover;
+      }
+      
+      .thumbnail-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.4) 50%, transparent 100%);
+        padding: 16px 12px 12px;
+        color: #fff;
+        
+        .overlay-title {
+          font-size: 14px;
+          font-weight: 500;
+          line-height: 1.4;
+          margin-bottom: 6px;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+        
+        .overlay-author {
+          font-size: 12px;
+          opacity: 0.9;
+        }
+      }
+    }
+    
+    .article-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      
+      .engagement-metrics {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        
+        .metric-item {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          color: #969799;
+          
+          .metric-icon {
+            font-size: 16px;
+          }
+          
+          .metric-value {
+            font-size: 14px;
+          }
+        }
+      }
+      
+      .price-update {
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 500;
+        background-color: #f3f3f3;
+        white-space: nowrap;
+        
+        &.up {
+          color: #07c160;
+        }
+        
+        &.down {
+          color: #8b4513;
+        }
       }
     }
   }
