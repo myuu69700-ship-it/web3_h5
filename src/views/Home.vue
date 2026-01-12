@@ -661,7 +661,7 @@ onUnmounted(() => {
 
   .promo-left {
     // flex: 1;
-    width: 142.5px;
+    width: 151.27px;
     height: 149px;
     display: flex;
     flex-direction: column;
