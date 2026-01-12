@@ -256,6 +256,22 @@ const routes = [
     meta: {
       title: 'NFT'
     }
+  },
+  {
+    path: '/address-book',
+    name: 'AddressBook',
+    component: () => import('@/views/AddressBook.vue'),
+    meta: {
+      title: '地址管理'
+    }
+  },
+  {
+    path: '/add-address',
+    name: 'AddAddress',
+    component: () => import('@/views/AddAddress.vue'),
+    meta: {
+      title: '新增地址'
+    }
   }
 ]
 

@@ -355,8 +355,7 @@ const handleAssetCenter = () => {
 };
 
 const handleAddressBook = () => {
-  // 地址簿逻辑
-  console.log("地址簿");
+  router.push("/address-book");
   handleClose();
 };
 
