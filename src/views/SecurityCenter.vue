@@ -81,8 +81,7 @@ const handleLoginPassword = () => {
 }
 
 const handleEmailBinding = () => {
-  // 处理信箱綁定点击
-  console.log('信箱綁定')
+  router.push('/email-binding')
 }
 
 const handleTransactionPassword = () => {

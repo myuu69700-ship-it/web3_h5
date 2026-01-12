@@ -296,6 +296,14 @@ const routes = [
     meta: {
       title: '修改登陸密碼'
     }
+  },
+  {
+    path: '/email-binding',
+    name: 'EmailBinding',
+    component: () => import('@/views/EmailBinding.vue'),
+    meta: {
+      title: '郵箱認證'
+    }
   }
 ]
 
