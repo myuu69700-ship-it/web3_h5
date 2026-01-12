@@ -23,17 +23,22 @@
       {{ t("assets") }}
     </van-tabbar-item>
   </van-tabbar>
+  <TradeModal v-model:show="showTradeModal" />
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { ref, watch, nextTick } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useI18n } from "@/i18n";
 import refreshIcon from "@/assets/images/refresh.svg";
+import TradeModal from "./TradeModal.vue";
 
 const route = useRoute();
 const router = useRouter();
 const { t } = useI18n();
+
+// 交易弹窗显示状态
+const showTradeModal = ref(false);
 
 // 路由名称到 tabbar 名称的映射
 const routeToTab = {
@@ -46,7 +51,12 @@ const routeToTab = {
 
 // 根据当前路由设置激活的 tab
 const getActiveTab = (routeName) => {
-  return routeToTab[routeName] || "";
+  const tab = routeToTab[routeName] || "";
+  // 如果当前在 Trade 路由，不激活 trade tab
+  if (tab === "trade") {
+    return "";
+  }
+  return tab;
 };
 
 const active = ref(getActiveTab(route.name));
@@ -70,6 +80,16 @@ const onChange = (name) => {
     explore: "/explore",
     asset: "/asset",
   };
+
+  // 如果点击的是交易按钮，显示弹窗而不是跳转
+  if (name === "trade") {
+    showTradeModal.value = true;
+    // 恢复之前的 active 状态，因为 van-tabbar 的 v-model 已经自动更新了
+    nextTick(() => {
+      active.value = getActiveTab(route.name);
+    });
+    return;
+  }
 
   if (tabToRoute[name]) {
     // 如果当前路径与目标路径不同，则跳转
