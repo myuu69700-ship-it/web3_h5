@@ -1263,7 +1263,7 @@ onUnmounted(() => {
 
           .nav-link-icon {
             position: absolute;
-            right: 0;
+            right: 10px;
             top: 50%;
             transform: translateY(-50%);
             width: 14px;
