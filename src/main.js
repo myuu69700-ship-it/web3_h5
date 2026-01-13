@@ -2,14 +2,16 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import router from './router'
 import App from './App.vue'
+import 'amfe-flexible'
 
 // Vant 样式已通过 unplugin-vue-components 自动导入（按需加载）
 
 // 全局样式
 import './styles/index.scss'
 
-// 移动端适配：项目使用 vw 单位适配，不需要设置 rem
-// 如果使用 rem 适配，请取消下面的注释并启用 postcss-pxtorem
+// 移动端适配：使用 rem 适配（配合 postcss-pxtorem）
+// amfe-flexible 会自动设置根字体大小，基于 750 设计稿
+// 如果 amfe-flexible 不满足需求，可以使用下面的自定义函数
 // function setRemUnit() {
 //   const designWidth = 750 // 设计稿宽度
 //   const baseSize = 75 // 基准值：1rem = 75px (750 / 10)
@@ -17,7 +19,7 @@ import './styles/index.scss'
 //   document.documentElement.style.fontSize = baseSize * Math.min(scale, 2) + 'px'
 // }
 
-// 初始化
+// 初始化（amfe-flexible 已自动处理，如需自定义可取消注释）
 // setRemUnit()
 // 监听窗口变化
 // window.addEventListener('resize', setRemUnit)
