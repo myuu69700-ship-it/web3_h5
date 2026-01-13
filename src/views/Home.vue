@@ -130,7 +130,7 @@
           <div class="faq-list">
             <div v-for="(item, index) in faqItems" :key="index" class="faq-item" @click="toggleFaq(index)">
               <div class="faq-question">{{ item.question }}</div>
-              <div class="faq-icon" :class="{ 'expanded': item.expanded }">+</div>
+              <img :src="expandIcon" class="faq-icon" :class="{ 'expanded': item.expanded }" alt="expand" />
               <div v-if="item.expanded" class="faq-answer">{{ item.answer }}</div>
             </div>
           </div>
@@ -226,6 +226,7 @@ import xiaohuliIcon from "@/assets/image/xiaohuli.svg";
 // 其他图标
 import speakerIcon from "@/assets/image/laba.svg";
 import safeIcon from "@/assets/image/top-up.svg";
+import expandIcon from "@/assets/image/Expand.svg";
 
 const router = useRouter();
 const { t, currentLang, setLanguage } = useI18n();
@@ -1137,11 +1138,8 @@ onUnmounted(() => {
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 32px;
-          color: #ffffff;
-          font-weight: 300;
           transition: transform 0.3s ease;
-          line-height: 1;
+          object-fit: contain;
 
           &.expanded {
             transform: translateY(-50%) rotate(45deg);
