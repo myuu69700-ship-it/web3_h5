@@ -121,8 +121,49 @@
         </div>
       </div>
 
-      <!-- 菜单折叠面板 -->
-      <MenuSection />
+      <!-- 常见问题区域 -->
+      <div class="faq-section" ref="faqSectionRef">
+        <div class="faq-container">
+          <div class="faq-title">常见问题</div>
+
+          <!-- FAQ 列表 -->
+          <div class="faq-list">
+            <div v-for="(item, index) in faqItems" :key="index" class="faq-item" @click="toggleFaq(index)">
+              <div class="faq-question">{{ item.question }}</div>
+              <div class="faq-icon" :class="{ 'expanded': item.expanded }">+</div>
+              <div v-if="item.expanded" class="faq-answer">{{ item.answer }}</div>
+            </div>
+          </div>
+
+          <!-- 导航链接 -->
+          <div class="nav-links">
+            <div v-for="(link, index) in navLinks" :key="index" class="nav-link-item">
+              <div class="nav-link-header" @click="toggleNavLink(link)">
+                <div class="nav-link-text">{{ link.text }}</div>
+                <div class="nav-link-icon" :class="{ 'expanded': link.expanded }">▼</div>
+              </div>
+              <div v-if="link.expanded" class="nav-link-children">
+                <div v-for="(child, childIndex) in link.children" :key="childIndex" class="nav-link-child"
+                  @click.stop="handleNavLinkChild(link, child)">
+                  {{ child.text }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 底部信息 -->
+          <div class="faq-footer">
+            <div class="footer-top">
+              <div class="business-cooperation">商务合作</div>
+              <div class="contact-phone">1+(469)2078685</div>
+            </div>
+            <div class="footer-bottom">
+              <div class="copyright">版权所有 2024©Web3</div>
+              <div class="company-tagline">一家专职加密货币公司 致诚之职 服务至上</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- 浮动聊天按钮 -->
@@ -200,6 +241,7 @@ const tabSectionRef = ref(null);
 const announcementsRef = ref(null);
 const nftSectionRef = ref(null);
 const assistantSectionRef = ref(null);
+const faqSectionRef = ref(null);
 
 // 通知数据
 const notifications = ref([
@@ -281,6 +323,116 @@ const handleQuickBuy = () => {
   // TODO: 跳转到快捷买币页面
 };
 
+// FAQ 数据
+const faqItems = ref([
+  {
+    question: "法律说明",
+    answer: "这里是法律说明的详细内容...",
+    expanded: false,
+  },
+  {
+    question: "关于充值",
+    answer: "这里是关于充值的详细内容...",
+    expanded: false,
+  },
+  {
+    question: "关于账号安全",
+    answer: "这里是关于账号安全的详细内容...",
+    expanded: false,
+  },
+  {
+    question: "为什么要进行实名登记?",
+    answer: "实名登记是为了确保账户安全和符合监管要求...",
+    expanded: false,
+  },
+  {
+    question: "登录密码忘记如何解决?",
+    answer: "您可以通过注册邮箱或手机号找回密码...",
+    expanded: false,
+  },
+  {
+    question: "什么是冻结资产",
+    answer: "冻结资产是指因安全或合规原因暂时无法使用的资产...",
+    expanded: false,
+  },
+]);
+
+// 导航链接数据
+const navLinks = ref([
+  {
+    text: "交易市场",
+    key: "tradingMarket",
+    expanded: false,
+    children: [
+      { text: "现货", type: "spot" },
+      { text: "永续", type: "perpetual" },
+      { text: "期权", type: "options" },
+    ],
+  },
+  {
+    text: "资产管理",
+    key: "assetManagement",
+    expanded: false,
+    children: [
+      { text: "我的资产", path: "/my-assets" },
+      { text: "储值", path: "/deposit-detail" },
+      { text: "提现", path: "/withdraw-detail" },
+      { text: "划转", path: "/transfer-detail" },
+      { text: "订单中心", path: "/order-center" },
+    ],
+  },
+  {
+    text: "金融理财",
+    key: "financialManagement",
+    expanded: false,
+    children: [
+      { text: "产品", path: "/product-detail" },
+    ],
+  },
+  {
+    text: "支持",
+    key: "support",
+    expanded: false,
+    children: [
+      { text: "新手教程", path: "/tutorial-list" },
+    ],
+  },
+  {
+    text: "政策",
+    key: "policies",
+    expanded: false,
+    children: [
+      { text: "服务条款", path: "/terms-of-service" },
+      { text: "隐私协议", path: "/privacy-policy" },
+      { text: "反洗钱协议", path: "/anti-money-laundering" },
+    ],
+  },
+]);
+
+// 切换 FAQ 展开/收起
+const toggleFaq = (index) => {
+  faqItems.value[index].expanded = !faqItems.value[index].expanded;
+};
+
+// 切换导航链接展开/折叠
+const toggleNavLink = (link) => {
+  link.expanded = !link.expanded;
+};
+
+// 处理导航链接子项点击
+const handleNavLinkChild = (link, child) => {
+  if (link.key === "tradingMarket" && child.type) {
+    // 交易市场：跳转到图表详情页
+    router.push({
+      path: `/coin/${encodeURIComponent("BTC/USDT")}`,
+      query: { type: child.type },
+    });
+  } else if (child.path) {
+    // 其他链接：跳转到指定路径
+    router.push(child.path);
+  }
+};
+
 // Intersection Observer 用于滚动动画
 let observer = null;
 
@@ -310,6 +462,7 @@ onMounted(() => {
     announcementsRef.value,
     nftSectionRef.value,
     assistantSectionRef.value,
+    faqSectionRef.value,
   ];
 
   elementsToObserve.forEach((el) => {
@@ -329,7 +482,7 @@ onUnmounted(() => {
 <style lang="scss" scoped>
 .home {
   min-height: 100vh;
-  background: linear-gradient(180deg, #0a0b0d 0%, #1a1b2e 100%);
+  background: #070210;
   padding-bottom: 80px;
 }
 
@@ -902,11 +1055,253 @@ onUnmounted(() => {
     height: 140px;
     margin: 0 auto;
     margin-top: 65px;
+
     .assistant-image {
       width: 100%;
       max-width: 100%;
       height: auto;
       object-fit: contain;
+    }
+  }
+}
+
+// FAQ 区域
+.faq-section {
+  margin-top: 40px;
+  padding: 0;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+
+  &.animate-in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .faq-container {
+    background: #070210;
+    border-radius: 0;
+    padding: 40px 32px 60px;
+    margin: 0;
+    max-width: 100%;
+    width: 100%;
+
+    .faq-title {
+      font-family: PingFang SC;
+      font-weight: 600;
+      font-style: Semibold;
+      font-size: 46px;
+      line-height: 100%;
+      letter-spacing: 0%;
+      color: #ffffff;
+      text-align: center;
+      margin-bottom: 89px;
+    }
+
+    .faq-list {
+      margin-bottom: 40px;
+
+      .faq-item {
+        position: relative;
+        padding: 24px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        cursor: pointer;
+        transition: all 0.3s ease;
+
+        &:last-child {
+          border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        &:active {
+          opacity: 0.8;
+        }
+
+        .faq-question {
+          font-family: PingFang SC;
+          font-weight: 500;
+          font-style: Medium;
+          font-size: 30px;
+          line-height: 100%;
+          letter-spacing: 0%;
+          color: #ffffff;
+          padding-right: 50px;
+        }
+
+        .faq-icon {
+          position: absolute;
+          right: 0;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 36px;
+          height: 36px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 32px;
+          color: #ffffff;
+          font-weight: 300;
+          transition: transform 0.3s ease;
+          line-height: 1;
+
+          &.expanded {
+            transform: translateY(-50%) rotate(45deg);
+          }
+        }
+
+        .faq-answer {
+          margin-top: 16px;
+          font-family: PingFang SC;
+          font-weight: 400;
+          font-size: 24px;
+          line-height: 1.6em;
+          color: #bcbcbc;
+          padding-right: 50px;
+        }
+      }
+    }
+
+    .nav-links {
+      margin-bottom: 40px;
+      padding-top: 20px;
+      // border-top: 1px solid rgba(255, 255, 255, 0.2);
+
+      .nav-link-item {
+        // border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        transition: all 0.3s ease;
+
+        &:last-child {
+          border-bottom: none;
+        }
+
+        .nav-link-header {
+          position: relative;
+          padding: 24px 0;
+          cursor: pointer;
+          transition: all 0.3s ease;
+
+          &:active {
+            opacity: 0.8;
+          }
+
+          .nav-link-text {
+            font-family: PingFang SC;
+            font-weight: 400;
+            font-size: 28px;
+            line-height: 1.5em;
+            color: #ffffff;
+            padding-right: 50px;
+          }
+
+          .nav-link-icon {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: #ffffff;
+            transition: transform 0.3s ease;
+
+            &.expanded {
+              transform: translateY(-50%) rotate(180deg);
+            }
+          }
+        }
+
+        .nav-link-children {
+          padding: 0 0 16px 0;
+          animation: slideDown 0.3s ease-out;
+
+          .nav-link-child {
+            padding: 16px 0 16px 24px;
+            font-family: PingFang SC;
+            font-weight: 400;
+            font-size: 24px;
+            line-height: 1.5em;
+            color: #bcbcbc;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+            &:last-child {
+              border-bottom: none;
+            }
+
+            &:active {
+              opacity: 0.8;
+              color: #ffffff;
+            }
+
+            &:hover {
+              color: #ffffff;
+            }
+          }
+        }
+      }
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        max-height: 0;
+        transform: translateY(-10px);
+      }
+
+      to {
+        opacity: 1;
+        max-height: 500px;
+        transform: translateY(0);
+      }
+    }
+
+    .faq-footer {
+      padding-top: 60px;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+
+      .footer-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 73px;
+
+        .business-cooperation {
+          font-family: PingFang SC;
+          font-weight: 500;
+          font-style: Medium;
+          font-size: 24px;
+          line-height: 100%;
+          letter-spacing: 0%;
+          color: #F4F5F7;
+        }
+
+        .contact-phone {
+          font-family: Inter;
+          font-weight: 500;
+          font-style: Medium;
+          font-size: 26px;
+          line-height: 100%;
+          letter-spacing: 0%;
+          text-align: right;
+          color: #A1A1A1;
+        }
+      }
+
+      .footer-bottom {
+        text-align: center;
+        font-family: PingFang SC;
+        font-weight: 400;
+        font-style: Regular;
+        font-size: 20px;
+        line-height: 100%;
+        letter-spacing: 0%;
+        text-align: center;
+        color: #57585C;
+        line-height: 1.5em;
+      }
     }
   }
 }
