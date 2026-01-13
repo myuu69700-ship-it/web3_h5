@@ -104,7 +104,10 @@
         <div class="nft-image-wrapper">
           <img :src="nftIcon" alt="NFT" class="nft-image" />
         </div>
-        <div class="nft-cta" @click="goToNFTHall">{{ t("goToNFTHall") }} →</div>
+        <div class="nft-cta" @click="goToNFTHall">
+          <span>{{ t("goToNFTHall") }}</span>
+          <span class="arrow">→</span>
+        </div>
       </div>
 
       <!-- 加密货币之旅助手区域 -->
@@ -164,8 +167,8 @@ import { useRouter } from "vue-router";
 import { useI18n, languages } from "@/i18n";
 import homeIcon from "@/assets/image/Btc.png";
 import chartIcon from "@/assets/images/chart.png";
-import nftIcon from "@/assets/images/nft.png";
-import zhusImage from "@/assets/images/zhus.png";
+import nftIcon from "@/assets/image/hall.svg";
+import zhusImage from "@/assets/image/assistant.svg";
 import galleryViewIcon from "@/assets/images/gallery-view.svg";
 import searchIcon from "@/assets/image/search.png";
 import kefuIcon from "@/assets/image/kefu.png";
@@ -713,6 +716,7 @@ onUnmounted(() => {
   opacity: 0;
   transform: translateY(30px);
   transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+  padding: 0 16px;
 
   &.animate-in {
     opacity: 1;
@@ -720,55 +724,73 @@ onUnmounted(() => {
   }
 
   .section-title {
-    font-size: 5vw;
-    color: #ffffff;
+    font-family: PingFang SC;
+    font-size: 46px;
     font-weight: 900;
-    margin-bottom: 20px;
+    color: #ffffff;
+    margin-bottom: 24px;
     text-align: center;
   }
 
   .announcement-item {
-    padding: 16px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 21px 0;
 
+    // border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     &:last-of-type {
       border-bottom: none;
     }
 
     .announcement-text {
-      font-size: 4vw;
-      color: #ffffff;
-      font-weight: 500;
-      margin-bottom: 8px;
+      font-family: PingFang SC;
+      font-weight: 400;
+      font-style: Regular;
+      font-size: 26px;
+      line-height: 100%;
+      color: #BCBCBC;
+      flex: 1;
     }
 
     .announcement-time {
-      font-size: 3.2vw;
-      color: rgba(255, 255, 255, 0.6);
+      font-family: Inter;
+      font-weight: 400;
+      font-style: Regular;
+      font-size: 20px;
+      line-height: 100%;
+      letter-spacing: 0%;
+      text-align: right;
+      color: #919191;
     }
   }
 
   .view-more-link {
-    text-align: right;
-    font-size: 3.46667vw;
-    color: #ffffff;
-    margin-top: 16px;
-    cursor: pointer;
-    transition: color 0.3s ease;
+    text-align: center;
+    font-family: PingFang SC;
+    font-weight: 400;
+    font-style: Regular;
+    font-size: 20px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    color: #949494;
+    padding-top: 49px;
 
     &:active {
-      color: #a0de1f;
+      color: #1df388;
+      opacity: 0.8;
     }
   }
 }
 
 // NFT 市场区域
 .nft-section {
-  margin-top: 48px;
+  margin-top: 100px;
   text-align: center;
   opacity: 0;
   transform: translateY(30px);
   transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+  padding: 0 16px;
 
   &.animate-in {
     opacity: 1;
@@ -776,55 +798,73 @@ onUnmounted(() => {
   }
 
   .section-title {
-    font-size: 9.06667vw;
+    font-family: PingFang SC;
+    font-weight: 500;
+    font-style: Medium;
+    font-size: 46px;
+    line-height: 100%;
+    letter-spacing: 0%;
     color: #ffffff;
-    font-weight: 700;
-    margin-bottom: 16px;
-    text-align: center;
   }
 
   .nft-description {
-    font-size: 3.73333vw;
-    color: rgba(255, 255, 255, 0.8);
-    line-height: 1.6;
-    margin-bottom: 32px;
-    text-align: center;
+    font-family: PingFang SC;
+    font-weight: 500;
+    font-style: Medium;
+    font-size: 28px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    color: #8E8E92;
+    margin-top: 30px;
   }
 
   .nft-image-wrapper {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 32px 0;
+    margin: 32px 0 24px;
 
     .nft-image {
-      width: 100%;
-      max-width: 500px;
-      height: auto;
+      width: 284px;
+      height: 280px;
       object-fit: contain;
     }
   }
 
   .nft-cta {
-    font-size: 4.26667vw;
-    color: #a0de1f;
-    margin-top: 24px;
-    cursor: pointer;
-    transition: color 0.3s ease;
+    font-family: PingFang SC;
+    font-weight: 500;
+    font-style: Medium;
+    font-size: 28px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    color: #16CF72;
+
+    .arrow {
+      display: inline-block;
+      transition: transform 0.3s ease;
+    }
 
     &:active {
-      color: #7fb317;
+      color: #1df388;
+      opacity: 0.8;
+
+      .arrow {
+        transform: translateX(4px);
+      }
     }
   }
 }
 
 // 助手区域
 .assistant-section {
-  margin-top: 48px;
+  margin-top: 104px;
   text-align: center;
   opacity: 0;
   transform: translateY(30px);
   transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+  padding: 0 16px;
+  padding-bottom: 40px;
 
   &.animate-in {
     opacity: 1;
@@ -839,23 +879,29 @@ onUnmounted(() => {
     line-height: 100%;
     letter-spacing: 0%;
     color: #FFFFFF;
+    margin-bottom: 30px;
   }
 
   .assistant-description {
-    font-size: 3.73333vw;
-    color: rgba(255, 255, 255, 0.8);
-    line-height: 1.6;
-    margin-bottom: 32px;
+    width: 525px;
+    height: 70px;
+    font-family: PingFang SC;
+    font-weight: 400;
+    font-style: Regular;
+    font-size: 25px;
+    line-height: 100%;
+    letter-spacing: 0%;
     text-align: center;
-    padding: 0 16px;
+    color: #A7A7AC;
+    margin: 0 auto;
+    line-height: 1.5em;
   }
 
   .assistant-image-wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 32px 0;
-
+    width: 549px;
+    height: 140px;
+    margin: 0 auto;
+    margin-top: 65px;
     .assistant-image {
       width: 100%;
       max-width: 100%;
