@@ -96,7 +96,7 @@ import rightArrowIcon from "@/assets/image/arrow_right.svg";
 
 const router = useRouter();
 const { t } = useI18n();
-const activeTab = ref("favorites"); // 默认显示自選
+const activeTab = ref("hotList"); // 默认显示热门榜
 
 // 自選数据（空数组，显示暂无数据）
 const favoriteCoins = ref([]);
