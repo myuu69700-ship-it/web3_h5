@@ -1,16 +1,34 @@
 <template>
   <div class="home">
     <!-- 顶部导航栏 -->
-    <div class="top-bar" :class="{ 'animate-in': isInitialized }" ref="topBarRef">
-      <img :src="galleryViewIcon" class="menu-icon" @click="showMenu = true" alt="" />
+    <div
+      class="top-bar"
+      :class="{ 'animate-in': isInitialized }"
+      ref="topBarRef"
+    >
+      <img
+        :src="galleryViewIcon"
+        class="menu-icon"
+        @click="showMenu = true"
+        alt=""
+      />
       <div class="top-right-icons">
-        <img :src="searchIcon" class="search-icon" @click="showSearchModal = true" alt="" />
+        <img
+          :src="searchIcon"
+          class="search-icon"
+          @click="showSearchModal = true"
+          alt=""
+        />
         <img :src="kefuIcon" class="kefu-icon" @click="openChat" alt="" />
       </div>
     </div>
 
     <!-- Hero 区域 -->
-    <div class="hero-section" :class="{ 'animate-in': isInitialized }" ref="heroSectionRef">
+    <div
+      class="hero-section"
+      :class="{ 'animate-in': isInitialized }"
+      ref="heroSectionRef"
+    >
       <!-- 主标题 -->
       <div class="hero-title">
         {{ t("bannerTitle1") }} {{ t("bannerTitle2") }}
@@ -42,7 +60,12 @@
     <div class="wallet-login-section" :class="{ 'animate-in': isInitialized }">
       <div class="wallet-login-title">{{ t("walletLoginTitle") }}</div>
       <div class="wallet-icons">
-        <div v-for="wallet in wallets" :key="wallet.id" class="wallet-icon-item" @click="handleWalletLogin(wallet)">
+        <div
+          v-for="wallet in wallets"
+          :key="wallet.id"
+          class="wallet-icon-item"
+          @click="handleWalletLogin(wallet)"
+        >
           <img :src="wallet.icon" :alt="wallet.name" class="wallet-icon" />
         </div>
       </div>
@@ -88,7 +111,11 @@
       <!-- 公告区域 -->
       <div class="announcements-section" ref="announcementsRef">
         <div class="section-title">{{ t("announcements") }}</div>
-        <div v-for="notification in notifications" :key="notification.id" class="announcement-item">
+        <div
+          v-for="notification in notifications"
+          :key="notification.id"
+          class="announcement-item"
+        >
           <div class="announcement-text">{{ t(notification.key) }}</div>
           <div class="announcement-time">{{ notification.time }}</div>
         </div>
@@ -128,23 +155,48 @@
 
           <!-- FAQ 列表 -->
           <div class="faq-list">
-            <div v-for="(item, index) in faqItems" :key="index" class="faq-item" @click="toggleFaq(index)">
+            <div
+              v-for="(item, index) in faqItems"
+              :key="index"
+              class="faq-item"
+              @click="toggleFaq(index)"
+            >
               <div class="faq-question">{{ item.question }}</div>
-              <img :src="expandIcon" class="faq-icon" :class="{ 'expanded': item.expanded }" alt="expand" />
-              <div v-if="item.expanded" class="faq-answer">{{ item.answer }}</div>
+              <img
+                :src="expandIcon"
+                class="faq-icon"
+                :class="{ expanded: item.expanded }"
+                alt="expand"
+              />
+              <div v-if="item.expanded" class="faq-answer">
+                {{ item.answer }}
+              </div>
             </div>
           </div>
 
           <!-- 导航链接 -->
           <div class="nav-links">
-            <div v-for="(link, index) in navLinks" :key="index" class="nav-link-item">
+            <div
+              v-for="(link, index) in navLinks"
+              :key="index"
+              class="nav-link-item"
+            >
               <div class="nav-link-header" @click="toggleNavLink(link)">
                 <div class="nav-link-text">{{ link.text }}</div>
-                <div class="nav-link-icon" :class="{ 'expanded': link.expanded }">▼</div>
+                <img
+                  :src="allowDownIcon"
+                  class="nav-link-icon"
+                  :class="{ expanded: link.expanded }"
+                  alt=""
+                />
               </div>
               <div v-if="link.expanded" class="nav-link-children">
-                <div v-for="(child, childIndex) in link.children" :key="childIndex" class="nav-link-child"
-                  @click.stop="handleNavLinkChild(link, child)">
+                <div
+                  v-for="(child, childIndex) in link.children"
+                  :key="childIndex"
+                  class="nav-link-child"
+                  @click.stop="handleNavLinkChild(link, child)"
+                >
                   {{ child.text }}
                 </div>
               </div>
@@ -159,7 +211,9 @@
             </div>
             <div class="footer-bottom">
               <div class="copyright">版权所有 2024©Web3</div>
-              <div class="company-tagline">一家专职加密货币公司 致诚之职 服务至上</div>
+              <div class="company-tagline">
+                一家专职加密货币公司 致诚之职 服务至上
+              </div>
             </div>
           </div>
         </div>
@@ -175,24 +229,44 @@
     <MenuDrawer v-model="showMenu" />
 
     <!-- 币对搜索弹窗 -->
-    <CoinPairSearchModal v-model="showSearchModal" @select="handleSelectCoinPair" />
+    <CoinPairSearchModal
+      v-model="showSearchModal"
+      @select="handleSelectCoinPair"
+    />
 
     <!-- 语言选择对话框 -->
-    <van-popup v-model:show="showLanguageDialog" position="right"
-      :style="{ width: '100%', height: '100%', overflow: 'visible' }" class="language-popup">
+    <van-popup
+      v-model:show="showLanguageDialog"
+      position="right"
+      :style="{ width: '100%', height: '100%', overflow: 'visible' }"
+      class="language-popup"
+    >
       <div class="language-dialog">
         <div class="dialog-header">
-          <van-icon name="arrow-left" class="back-icon" @click="showLanguageDialog = false" />
+          <van-icon
+            name="arrow-left"
+            class="back-icon"
+            @click="showLanguageDialog = false"
+          />
           <div class="dialog-title">{{ currentLangName }}</div>
         </div>
         <div class="dialog-content">
           <van-cell-group inset>
-            <van-cell v-for="lang in languages" :key="lang.code" :title="lang.name" @click="selectLanguage(lang.code)">
+            <van-cell
+              v-for="lang in languages"
+              :key="lang.code"
+              :title="lang.name"
+              @click="selectLanguage(lang.code)"
+            >
               <template #icon>
                 <img :src="lang.flag" class="flag-icon" alt="" />
               </template>
               <template #right-icon>
-                <van-icon v-if="currentLang === lang.code" name="success" color="#1989fa" />
+                <van-icon
+                  v-if="currentLang === lang.code"
+                  name="success"
+                  color="#1989fa"
+                />
               </template>
             </van-cell>
           </van-cell-group>
@@ -227,6 +301,7 @@ import xiaohuliIcon from "@/assets/image/xiaohuli.svg";
 import speakerIcon from "@/assets/image/laba.svg";
 import safeIcon from "@/assets/image/top-up.svg";
 import expandIcon from "@/assets/image/Expand.svg";
+import allowDownIcon from "@/assets/image/allow_down.svg";
 
 const router = useRouter();
 const { t, currentLang, setLanguage } = useI18n();
@@ -386,17 +461,13 @@ const navLinks = ref([
     text: "金融理财",
     key: "financialManagement",
     expanded: false,
-    children: [
-      { text: "产品", path: "/product-detail" },
-    ],
+    children: [{ text: "产品", path: "/product-detail" }],
   },
   {
     text: "支持",
     key: "support",
     expanded: false,
-    children: [
-      { text: "新手教程", path: "/tutorial-list" },
-    ],
+    children: [{ text: "新手教程", path: "/tutorial-list" }],
   },
   {
     text: "政策",
@@ -646,7 +717,7 @@ onUnmounted(() => {
         opacity: 1;
         border-width: 1px;
         border-radius: 10px;
-        background: #1DF388;
+        background: #1df388;
         color: #070210;
       }
     }
@@ -673,7 +744,7 @@ onUnmounted(() => {
     font-size: 28px;
     line-height: 100%;
     letter-spacing: 0%;
-    color: #AEAEAE;
+    color: #aeaeae;
     padding-top: 48px;
   }
 
@@ -691,11 +762,11 @@ onUnmounted(() => {
       opacity: 1;
       border-radius: 10px;
       border-width: 1px;
-      border: 1px solid #2E2E2E;
+      border: 1px solid #2e2e2e;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: #0F1014;
+      background: #0f1014;
 
       &:active {
         transform: scale(0.95);
@@ -753,7 +824,7 @@ onUnmounted(() => {
     line-height: 100%;
     letter-spacing: 0%;
     white-space: nowrap;
-    color: #D3D3D3;
+    color: #d3d3d3;
     position: absolute;
     animation: scroll-text 15s linear infinite;
   }
@@ -790,7 +861,7 @@ onUnmounted(() => {
     opacity: 1;
     border-radius: 10px;
     border-width: 1px;
-    border: 1px solid #3D3D3D;
+    border: 1px solid #3d3d3d;
     background: #141517;
     display: flex;
     align-items: center;
@@ -818,7 +889,7 @@ onUnmounted(() => {
         font-size: 20px;
         line-height: 1.5em;
         letter-spacing: 0%;
-        color: #F0F0F0;
+        color: #f0f0f0;
       }
 
       .card-subtitle {
@@ -828,7 +899,7 @@ onUnmounted(() => {
         font-style: Regular;
         font-size: 10px;
         letter-spacing: 0%;
-        color: #B8B8B8;
+        color: #b8b8b8;
         line-height: 1.5em;
       }
     }
@@ -853,7 +924,7 @@ onUnmounted(() => {
   padding: 0 16px;
 }
 
-.content>div:first-child {
+.content > div:first-child {
   opacity: 0;
   transform: translateY(30px);
   transition: opacity 0.4s ease-out, transform 0.4s ease-out;
@@ -903,7 +974,7 @@ onUnmounted(() => {
       font-style: Regular;
       font-size: 26px;
       line-height: 100%;
-      color: #BCBCBC;
+      color: #bcbcbc;
       flex: 1;
     }
 
@@ -968,7 +1039,7 @@ onUnmounted(() => {
     font-size: 28px;
     line-height: 100%;
     letter-spacing: 0%;
-    color: #8E8E92;
+    color: #8e8e92;
     margin-top: 30px;
   }
 
@@ -992,7 +1063,7 @@ onUnmounted(() => {
     font-size: 28px;
     line-height: 100%;
     letter-spacing: 0%;
-    color: #16CF72;
+    color: #16cf72;
 
     .arrow {
       display: inline-block;
@@ -1032,7 +1103,7 @@ onUnmounted(() => {
     font-size: 46px;
     line-height: 100%;
     letter-spacing: 0%;
-    color: #FFFFFF;
+    color: #ffffff;
     margin-bottom: 30px;
   }
 
@@ -1046,7 +1117,7 @@ onUnmounted(() => {
     line-height: 100%;
     letter-spacing: 0%;
     text-align: center;
-    color: #A7A7AC;
+    color: #a7a7ac;
     margin: 0 auto;
     line-height: 1.5em;
   }
@@ -1195,13 +1266,12 @@ onUnmounted(() => {
             right: 0;
             top: 50%;
             transform: translateY(-50%);
-            width: 30px;
-            height: 30px;
+            width: 14px;
+            height: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
-            color: #ffffff;
+            object-fit: contain;
             transition: transform 0.3s ease;
 
             &.expanded {
@@ -1273,7 +1343,7 @@ onUnmounted(() => {
           font-size: 24px;
           line-height: 100%;
           letter-spacing: 0%;
-          color: #F4F5F7;
+          color: #f4f5f7;
         }
 
         .contact-phone {
@@ -1284,7 +1354,7 @@ onUnmounted(() => {
           line-height: 100%;
           letter-spacing: 0%;
           text-align: right;
-          color: #A1A1A1;
+          color: #a1a1a1;
         }
       }
 
@@ -1297,7 +1367,7 @@ onUnmounted(() => {
         line-height: 100%;
         letter-spacing: 0%;
         text-align: center;
-        color: #57585C;
+        color: #57585c;
         line-height: 1.5em;
       }
     }
