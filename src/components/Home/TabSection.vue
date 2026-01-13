@@ -1,25 +1,13 @@
 <template>
   <div class="tabs-section">
     <div class="tabs-header">
-      <div
-        class="tab-item"
-        :class="{ active: activeTab === 'favorites' }"
-        @click="activeTab = 'favorites'"
-      >
+      <div class="tab-item" :class="{ active: activeTab === 'favorites' }" @click="activeTab = 'favorites'">
         {{ t("favorites") }}
       </div>
-      <div
-        class="tab-item"
-        :class="{ active: activeTab === 'hotList' }"
-        @click="activeTab = 'hotList'"
-      >
+      <div class="tab-item" :class="{ active: activeTab === 'hotList' }" @click="activeTab = 'hotList'">
         {{ t("hotList") }}
       </div>
-      <div
-        class="tab-item"
-        :class="{ active: activeTab === 'forex' }"
-        @click="activeTab = 'forex'"
-      >
+      <div class="tab-item" :class="{ active: activeTab === 'forex' }" @click="activeTab = 'forex'">
         {{ t("forex") }}
       </div>
     </div>
@@ -31,22 +19,16 @@
         <div class="no-data-text">{{ t("noData") }}</div>
       </div>
       <div v-else>
-        <div
-          v-for="coin in favoriteCoins"
-          :key="coin.id"
-          class="coin-item"
-          @click="goToDetail(coin)"
-        >
+        <div v-for="coin in favoriteCoins" :key="coin.id" class="coin-item" @click="goToDetail(coin)">
           <div class="coin-icon" :style="{ backgroundColor: coin.color }">
-            <span class="coin-symbol">{{ coin.symbol }}</span>
+            <span class="coin-symbol">{{ coin.symbol.charAt(0) }}</span>
           </div>
           <div class="coin-info">
-            <div class="coin-name">{{ coin.name }}</div>
-            <div class="coin-pair">{{ coin.pair }}</div>
+            <span class="coin-symbol-text">{{ coin.symbol }}</span>
+            <span class="coin-name">{{ coin.name }}</span>
           </div>
           <div class="coin-price">
-            <div class="price-value">{{ coin.price }}</div>
-            <div class="price-usd">${{ coin.price }}</div>
+            ${{ coin.price }}
           </div>
           <div class="coin-change" :class="coin.change >= 0 ? 'up' : 'down'">
             {{ coin.change >= 0 ? "+" : "" }}{{ coin.change }}%
@@ -60,21 +42,16 @@
 
     <!-- 熱門榜 -->
     <div v-if="activeTab === 'hotList'" class="tab-content">
-      <div
-        v-for="coin in hotListCoins"
-        :key="coin.id"
-        class="coin-item"
-        @click="goToDetail(coin)"
-      >
+      <div v-for="coin in hotListCoins" :key="coin.id" class="coin-item" @click="goToDetail(coin)">
         <div class="coin-icon" :style="{ backgroundColor: coin.color }">
-          <span class="coin-symbol">{{ coin.symbol }}</span>
+          <span class="coin-symbol">{{ coin.symbol.charAt(0) }}</span>
         </div>
         <div class="coin-info">
-          <div class="coin-name">{{ coin.name }}</div>
-          <div class="coin-pair">{{ coin.pair }}</div>
+          <span class="coin-symbol-text">{{ coin.symbol }}</span>
+          <span class="coin-name">{{ coin.name }}</span>
         </div>
-        <div class="coin-price">
-          <div class="price-value">${{ coin.price }}</div>
+        <div class="coin-price2">
+          ${{ coin.price }}
         </div>
         <div class="coin-change" :class="coin.change >= 0 ? 'up' : 'down'">
           {{ coin.change >= 0 ? "+" : "" }}{{ coin.change }}%
@@ -87,22 +64,16 @@
 
     <!-- 外匯 -->
     <div v-if="activeTab === 'forex'" class="tab-content">
-      <div
-        v-for="pair in forexPairs"
-        :key="pair.id"
-        class="coin-item"
-        @click="goToDetail(pair)"
-      >
+      <div v-for="pair in forexPairs" :key="pair.id" class="coin-item" @click="goToDetail(pair)">
         <div class="coin-icon" :style="{ backgroundColor: pair.color }">
           <span class="coin-symbol">{{ pair.symbol }}</span>
         </div>
         <div class="coin-info">
-          <div class="coin-name">{{ pair.name }}</div>
-          <div class="coin-pair">{{ pair.pair }}</div>
+          <span class="coin-symbol-text">{{ pair.pair }}</span>
+          <span class="coin-name">{{ pair.name }}</span>
         </div>
         <div class="coin-price">
-          <div class="price-value">{{ pair.price }}</div>
-          <div class="price-usd">${{ pair.price }}</div>
+          {{ pair.price }}
         </div>
         <div class="coin-change" :class="pair.change >= 0 ? 'up' : 'down'">
           {{ pair.change >= 0 ? "+" : "" }}{{ pair.change }}%
@@ -133,7 +104,7 @@ const hotListCoins = ref([
   {
     id: 1,
     name: "Bitcoin",
-    symbol: "B",
+    symbol: "BTC",
     pair: "BTC/USDT",
     price: "91,017.00",
     change: 0.53,
@@ -142,7 +113,7 @@ const hotListCoins = ref([
   {
     id: 2,
     name: "Ethereum",
-    symbol: "E",
+    symbol: "ETH",
     pair: "ETH/USDT",
     price: "3,118.32",
     change: -0.42,
@@ -151,7 +122,7 @@ const hotListCoins = ref([
   {
     id: 3,
     name: "ATOM",
-    symbol: "A",
+    symbol: "ATOM",
     pair: "ATOM/USDT",
     price: "2.4374",
     change: 0.544,
@@ -160,7 +131,7 @@ const hotListCoins = ref([
   {
     id: 4,
     name: "Ripple",
-    symbol: "X",
+    symbol: "XRP",
     pair: "XRP/USDT",
     price: "2.1324",
     change: 0.013,
@@ -168,8 +139,8 @@ const hotListCoins = ref([
   },
   {
     id: 5,
-    name: "LTC",
-    symbol: "L",
+    name: "Ltc",
+    symbol: "LTC",
     pair: "LTC/USDT",
     price: "81.68",
     change: 0.393,
@@ -290,20 +261,21 @@ const goToMarket = () => {
   .tabs-header {
     display: flex;
     background-color: transparent;
-    margin-bottom: 16px;
+    justify-content: center;
+    // margin-bottom: 16px;
     gap: 0;
 
     .tab-item {
       // flex: 1;
       text-align: center;
-      padding: 1.06667vw 2.13333vw;
-      margin: 0 4px;
-      font-size: 14px;
-      color: rgba(255, 255, 255, 0.6);
-      cursor: pointer;
-      transition: all 0.3s;
-      position: relative;
-      font-size: 3.2vw;
+      font-family: PingFang SC;
+      font-weight: 500;
+      font-style: Medium;
+      font-size: 24px;
+      line-height: 100%;
+      letter-spacing: 0%;
+      color: #8E8E92;
+      padding: 68px 33px 59px;
 
       &.active {
         background-color: transparent;
@@ -320,12 +292,14 @@ const goToMarket = () => {
   }
 
   .tab-content {
+    padding: 0 32px;
+
     .no-data {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 20px;
+      // padding: 20px;
       text-align: center;
 
       .no-data-icon {
@@ -349,15 +323,15 @@ const goToMarket = () => {
   .coin-item {
     display: flex;
     align-items: center;
-    padding: 12px 0;
+    padding: 16px 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     cursor: pointer;
+    gap: 13px;
 
     .coin-icon {
       flex: none;
-      width: 6.66667vw;
-      height: 6.66667vw;
-      margin-right: 1.86667vw;
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -366,76 +340,76 @@ const goToMarket = () => {
       .coin-symbol {
         color: #fff;
         font-weight: bold;
-        font-size: 18px;
+        font-size: 20px;
       }
     }
 
     .coin-info {
       flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
 
-      .coin-name {
-        font-size: 3.73333vw;
-        font-weight: bolder;
-        color: #ffffff;
-        margin-bottom: 4px;
+      .coin-symbol-text {
+        font-family: Inter;
+        font-weight: 500;
+        font-style: Medium;
+        font-size: 26px;
+        line-height: 100%;
+        letter-spacing: 0%;
+        COLOR: #F5F5F5;
       }
 
-      .coin-pair {
-        font-size: 3.2vw;
-        color: rgba(255, 255, 255, 0.6);
+      .coin-name {
+        font-size: 16px;
+        font-weight: 400;
+        color: #ffffff;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
     }
 
     .coin-price {
-      text-align: right;
-      margin-right: 12px;
+      font-family: Inter;
+      font-weight: 400;
+      font-style: Regular;
+      font-size: 18px;
+      line-height: 100%;
+      letter-spacing: 0%;
+      color: #818181;
+    }
 
-      .price-value {
-        font-size: 3.73333vw;
-        font-weight: 500;
-        color: #ffffff;
-        margin-bottom: 4px;
-        font-weight: bolder;
-      }
+    .coin-price2 {
+      font-family: Inter;
+      font-weight: 500;
+      font-style: Medium;
+      font-size: 26px;
+      line-height: 100%;
+      letter-spacing: 0%;
+      color: #F5F5F5;
+      padding-right: 68px;
 
-      .price-usd {
-        font-size: 3.2vw;
-        color: rgba(255, 255, 255, 0.6);
-      }
     }
 
     .coin-change {
-      padding: 4px 8px;
-      border-radius: 4px;
-      font-size: 12px;
+      flex: none;
+      white-space: nowrap;
+      min-width: 80px;
+      font-family: Inter;
       font-weight: 500;
-      min-width: 60px;
-      text-align: center;
-
+      font-style: Medium;
+      font-size: 26px;
+      line-height: 100%;
+      letter-spacing: 0%;
+      text-align: right;
       &.up {
-        background-color: transparent;
-        font-size: 3.73333vw;
         color: #1df388;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 1.06667vw;
-        border-radius: 1.06667vw;
-        width: 21.33333vw;
-        height: 8vw;
       }
 
       &.down {
-        background-color: transparent;
-        font-size: 3.73333vw;
         color: #ff4d4f;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 1.06667vw;
-        border-radius: 1.06667vw;
-        width: 21.33333vw;
-        height: 8vw;
       }
     }
   }
