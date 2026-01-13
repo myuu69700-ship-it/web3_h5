@@ -1,21 +1,33 @@
 <template>
   <van-tabbar v-model="active" fixed placeholder @change="onChange">
-    <van-tabbar-item name="home" icon="home-o">
+    <van-tabbar-item name="home">
+      <template #icon="props">
+        <img :src="homeIcon" class="tab-icon" :class="{ active: props.active }" />
+      </template>
       {{ t("home") }}
     </van-tabbar-item>
-    <van-tabbar-item name="market" icon="chart-trending-o">
+    <van-tabbar-item name="market">
+      <template #icon="props">
+        <img :src="marketTrendsIcon" class="tab-icon" :class="{ active: props.active }" />
+      </template>
       {{ t("market") }}
     </van-tabbar-item>
     <van-tabbar-item name="trade">
       <template #icon="props">
-        <img :src="refreshIcon" class="trade-icon" :class="{ active: props.active }" />
+        <img :src="tradeIcon" class="tab-icon" :class="{ active: props.active }" />
       </template>
       {{ t("trade") }}
     </van-tabbar-item>
-    <van-tabbar-item name="explore" icon="browsing-history-o">
+    <van-tabbar-item name="explore">
+      <template #icon="props">
+        <img :src="exploreIcon" class="tab-icon" :class="{ active: props.active }" />
+      </template>
       {{ t("explore") }}
     </van-tabbar-item>
-    <van-tabbar-item name="asset" icon="balance-list-o">
+    <van-tabbar-item name="asset">
+      <template #icon="props">
+        <img :src="walletIcon" class="tab-icon" :class="{ active: props.active }" />
+      </template>
       {{ t("assets") }}
     </van-tabbar-item>
   </van-tabbar>
@@ -26,7 +38,11 @@
 import { ref, watch, nextTick } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useI18n } from "@/i18n";
-import refreshIcon from "@/assets/images/refresh.svg";
+import homeIcon from "@/assets/image/homeIcon.svg";
+import marketTrendsIcon from "@/assets/image/marketTrends.svg";
+import tradeIcon from "@/assets/image/trade.svg";
+import exploreIcon from "@/assets/image/explore.svg";
+import walletIcon from "@/assets/image/wallet.svg";
 import TradeModal from "./TradeModal.vue";
 
 const route = useRoute();
@@ -189,11 +205,20 @@ const onChange = (name) => {
   }
 }
 
-.trade-icon {
+.tab-icon {
   width: 32px;
   height: 32px;
-  color: #040303;
+  object-fit: contain;
   position: relative;
+  transition: opacity 0.3s ease;
+  
+  &:not(.active) {
+    opacity: 0.6;
+  }
+  
+  &.active {
+    opacity: 1;
+  }
 }
 
 :deep(.van-tabbar-item[name="trade"].van-tabbar-item--active) {
