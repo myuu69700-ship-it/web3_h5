@@ -72,7 +72,7 @@
           <span class="coin-symbol-text">{{ pair.pair }}</span>
           <span class="coin-name">{{ pair.name }}</span>
         </div>
-        <div class="coin-price">
+        <div class="coin-price2">
           {{ pair.price }}
         </div>
         <div class="coin-change" :class="pair.change >= 0 ? 'up' : 'down'">
