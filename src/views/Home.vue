@@ -483,7 +483,7 @@ onUnmounted(() => {
 .home {
   min-height: 100vh;
   background: #070210;
-  padding-bottom: 80px;
+  // padding-bottom: 80px;
 }
 
 // 动画定义
@@ -1309,8 +1309,8 @@ onUnmounted(() => {
 // 浮动聊天按钮
 .chat-fab {
   position: fixed;
-  right: 16px;
-  bottom: 90px;
+  right: 40px;
+  bottom: 190px;
   width: 48.67px;
   height: 48.67px;
   background-color: rgba(50, 50, 51, 0.9);
