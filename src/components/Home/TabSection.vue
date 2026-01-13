@@ -10,10 +10,10 @@
       </div>
       <div
         class="tab-item"
-        :class="{ active: activeTab === 'cryptocurrency' }"
-        @click="activeTab = 'cryptocurrency'"
+        :class="{ active: activeTab === 'hotList' }"
+        @click="activeTab = 'hotList'"
       >
-        {{ t("cryptocurrency") }}
+        {{ t("hotList") }}
       </div>
       <div
         class="tab-item"
@@ -54,14 +54,14 @@
         </div>
       </div>
       <div class="view-more-btn" @click="goToMarket">
-        {{ t("viewMore") }}
+        {{ t("viewMoreTokens") }} >
       </div>
     </div>
 
-    <!-- 加密貨幣 -->
-    <div v-if="activeTab === 'cryptocurrency'" class="tab-content">
+    <!-- 熱門榜 -->
+    <div v-if="activeTab === 'hotList'" class="tab-content">
       <div
-        v-for="coin in cryptocurrencyCoins"
+        v-for="coin in hotListCoins"
         :key="coin.id"
         class="coin-item"
         @click="goToDetail(coin)"
@@ -74,15 +74,14 @@
           <div class="coin-pair">{{ coin.pair }}</div>
         </div>
         <div class="coin-price">
-          <div class="price-value">{{ coin.price }}</div>
-          <div class="price-usd">${{ coin.price }}</div>
+          <div class="price-value">${{ coin.price }}</div>
         </div>
         <div class="coin-change" :class="coin.change >= 0 ? 'up' : 'down'">
           {{ coin.change >= 0 ? "+" : "" }}{{ coin.change }}%
         </div>
       </div>
       <div class="view-more-btn" @click="goToMarket">
-        {{ t("viewMore") }}
+        {{ t("viewMoreTokens") }} >
       </div>
     </div>
 
@@ -110,7 +109,7 @@
         </div>
       </div>
       <div class="view-more-btn" @click="goToMarket">
-        {{ t("viewMore") }}
+        {{ t("viewMoreTokens") }} >
       </div>
     </div>
   </div>
@@ -124,20 +123,20 @@ import nomoreIcon from "@/assets/images/nomore.png";
 
 const router = useRouter();
 const { t } = useI18n();
-const activeTab = ref("cryptocurrency"); // 默认显示自選
+const activeTab = ref("favorites"); // 默认显示自選
 
 // 自選数据（空数组，显示暂无数据）
 const favoriteCoins = ref([]);
 
-// 加密货币数据
-const cryptocurrencyCoins = ref([
+// 热门榜数据（根据图片中的币种）
+const hotListCoins = ref([
   {
     id: 1,
     name: "Bitcoin",
     symbol: "B",
     pair: "BTC/USDT",
-    price: "92,905.73",
-    change: 1.9878,
+    price: "91,017.00",
+    change: 0.53,
     color: "#F7931A",
   },
   {
@@ -145,8 +144,8 @@ const cryptocurrencyCoins = ref([
     name: "Ethereum",
     symbol: "E",
     pair: "ETH/USDT",
-    price: "3,182.61",
-    change: 1.1287,
+    price: "3,118.32",
+    change: -0.42,
     color: "#627EEA",
   },
   {
@@ -154,72 +153,27 @@ const cryptocurrencyCoins = ref([
     name: "ATOM",
     symbol: "A",
     pair: "ATOM/USDT",
-    price: "2.351",
-    change: 5.2844,
+    price: "2.4374",
+    change: 0.544,
     color: "#2E3148",
   },
   {
     id: 4,
-    name: "Bitcoin Cash",
-    symbol: "B",
-    pair: "BCH/USDT",
-    price: "653.56",
-    change: 1.5097,
-    color: "#0AC18E",
-  },
-  {
-    id: 5,
     name: "Ripple",
     symbol: "X",
     pair: "XRP/USDT",
-    price: "2.13104",
-    change: 4.6212,
+    price: "2.1324",
+    change: 0.013,
     color: "#000000",
   },
   {
-    id: 6,
+    id: 5,
     name: "LTC",
-    symbol: "Ł",
+    symbol: "L",
     pair: "LTC/USDT",
-    price: "83.12",
-    change: 1.1315,
+    price: "81.68",
+    change: 0.393,
     color: "#BFBBBB",
-  },
-  {
-    id: 7,
-    name: "USDCoin",
-    symbol: "C",
-    pair: "USDC/USDT",
-    price: "1.0002",
-    change: -0.01,
-    color: "#2775CA",
-  },
-  {
-    id: 8,
-    name: "Dogecoin",
-    symbol: "D",
-    pair: "DOGE/USDT",
-    price: "0.151344",
-    change: 3.8495,
-    color: "#CBA134",
-  },
-  {
-    id: 9,
-    name: "Filecoin",
-    symbol: "f",
-    pair: "FIL/USDT",
-    price: "1.5136",
-    change: 0.6919,
-    color: "#0090FF",
-  },
-  {
-    id: 10,
-    name: "MakerDAO",
-    symbol: "D",
-    pair: "DAI/USDT",
-    price: "1.0002",
-    change: 0,
-    color: "#F4B731",
   },
 ]);
 
@@ -335,7 +289,7 @@ const goToMarket = () => {
 
   .tabs-header {
     display: flex;
-    background-color: #fff;
+    background-color: transparent;
     margin-bottom: 16px;
     gap: 0;
 
@@ -345,22 +299,22 @@ const goToMarket = () => {
       padding: 1.06667vw 2.13333vw;
       margin: 0 4px;
       font-size: 14px;
-      color: #5b616e;
+      color: rgba(255, 255, 255, 0.6);
       cursor: pointer;
       transition: all 0.3s;
       position: relative;
       font-size: 3.2vw;
 
       &.active {
-        background-color: #f3f3f3;
-        color: #040303;
+        background-color: transparent;
+        color: #ffffff;
         font-size: 3.2vw;
-        // font-weight: 500;
+        font-weight: 600;
         border-radius: 26.4vw;
       }
 
       &:not(.active) {
-        color: #5b616e;
+        color: rgba(255, 255, 255, 0.6);
       }
     }
   }
@@ -382,7 +336,7 @@ const goToMarket = () => {
 
       .no-data-text {
         font-weight: 700;
-        color: #040303;
+        color: #ffffff;
         font-size: 3.73333vw;
         height: 8vw;
         line-height: 8vw;
@@ -396,7 +350,7 @@ const goToMarket = () => {
     display: flex;
     align-items: center;
     padding: 12px 0;
-    border-bottom: 1px solid #ebedf0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     cursor: pointer;
 
     .coin-icon {
@@ -422,13 +376,13 @@ const goToMarket = () => {
       .coin-name {
         font-size: 3.73333vw;
         font-weight: bolder;
-        color: #040303;
+        color: #ffffff;
         margin-bottom: 4px;
       }
 
       .coin-pair {
         font-size: 3.2vw;
-        color: #5b616e;
+        color: rgba(255, 255, 255, 0.6);
       }
     }
 
@@ -439,14 +393,14 @@ const goToMarket = () => {
       .price-value {
         font-size: 3.73333vw;
         font-weight: 500;
-        color: #040303;
+        color: #ffffff;
         margin-bottom: 4px;
         font-weight: bolder;
       }
 
       .price-usd {
         font-size: 3.2vw;
-        color: #5b616e;
+        color: rgba(255, 255, 255, 0.6);
       }
     }
 
@@ -459,9 +413,9 @@ const goToMarket = () => {
       text-align: center;
 
       &.up {
-        background-color: #ec4b6d;
+        background-color: transparent;
         font-size: 3.73333vw;
-        color: #fff;
+        color: #1df388;
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -472,9 +426,9 @@ const goToMarket = () => {
       }
 
       &.down {
-        background-color: #07c160;
+        background-color: transparent;
         font-size: 3.73333vw;
-        color: #fff;
+        color: #ff4d4f;
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -491,14 +445,15 @@ const goToMarket = () => {
     justify-content: center;
     align-items: center;
     gap: 0.53333vw;
-    background-color: #f3f3f3;
+    background-color: transparent;
     width: 100%;
     height: 9.6vw;
     margin: 4vw auto;
     border-radius: 6.4vw;
-    color: #040303;
+    color: #ffffff;
     font-size: 3.46667vw;
     cursor: pointer;
+    text-align: center;
   }
 }
 </style>

@@ -1,34 +1,16 @@
 <template>
   <div class="home">
     <!-- 顶部导航栏 -->
-    <div
-      class="top-bar"
-      :class="{ 'animate-in': isInitialized }"
-      ref="topBarRef"
-    >
-      <img
-        :src="galleryViewIcon"
-        class="menu-icon"
-        @click="showMenu = true"
-        alt=""
-      />
+    <div class="top-bar" :class="{ 'animate-in': isInitialized }" ref="topBarRef">
+      <img :src="galleryViewIcon" class="menu-icon" @click="showMenu = true" alt="" />
       <div class="top-right-icons">
-        <img
-          :src="searchIcon"
-          class="search-icon"
-          @click="showSearchModal = true"
-          alt=""
-        />
+        <img :src="searchIcon" class="search-icon" @click="showSearchModal = true" alt="" />
         <img :src="kefuIcon" class="kefu-icon" @click="openChat" alt="" />
       </div>
     </div>
 
     <!-- Hero 区域 -->
-    <div
-      class="hero-section"
-      :class="{ 'animate-in': isInitialized }"
-      ref="heroSectionRef"
-    >
+    <div class="hero-section" :class="{ 'animate-in': isInitialized }" ref="heroSectionRef">
       <!-- 主标题 -->
       <div class="hero-title">
         {{ t("bannerTitle1") }} {{ t("bannerTitle2") }}
@@ -56,6 +38,46 @@
       </div>
     </div>
 
+    <!-- 钱包登录区域 -->
+    <div class="wallet-login-section" :class="{ 'animate-in': isInitialized }">
+      <div class="wallet-login-title">{{ t("walletLoginTitle") }}</div>
+      <div class="wallet-icons">
+        <div v-for="wallet in wallets" :key="wallet.id" class="wallet-icon-item" @click="handleWalletLogin(wallet)">
+          <img :src="wallet.icon" :alt="wallet.name" class="wallet-icon" />
+        </div>
+      </div>
+    </div>
+
+    <!-- 活动公告横幅 -->
+    <div class="activity-banner" :class="{ 'animate-in': isInitialized }">
+      <img :src="speakerIcon" alt="speaker" class="speaker-icon" />
+      <div class="activity-text-wrapper">
+        <div class="activity-text">{{ t("web3UserReturnActivity") }}</div>
+      </div>
+    </div>
+
+    <!-- 操作卡片区域 -->
+    <div class="action-cards" :class="{ 'animate-in': isInitialized }">
+      <div class="action-card" @click="handleOnChainDeposit">
+        <div class="card-content">
+          <div class="card-title">{{ t("onChainDeposit") }}</div>
+          <div class="card-subtitle">{{ t("onChainDepositSubtitle") }}</div>
+        </div>
+        <div class="card-illustration">
+          <img :src="safeIcon" alt="safe" class="safe-image" />
+        </div>
+      </div>
+      <div class="action-card" @click="handleQuickBuy">
+        <div class="card-content">
+          <div class="card-title">{{ t("quickBuy") }}</div>
+          <div class="card-subtitle">{{ t("quickBuySubtitle") }}</div>
+        </div>
+        <div class="card-illustration">
+          <img :src="safeIcon" alt="safe" class="safe-image" />
+        </div>
+      </div>
+    </div>
+
     <!-- 内容区域 -->
     <div class="content">
       <!-- 标签栏 -->
@@ -66,11 +88,7 @@
       <!-- 公告区域 -->
       <div class="announcements-section" ref="announcementsRef">
         <div class="section-title">{{ t("announcements") }}</div>
-        <div
-          v-for="notification in notifications"
-          :key="notification.id"
-          class="announcement-item"
-        >
+        <div v-for="notification in notifications" :key="notification.id" class="announcement-item">
           <div class="announcement-text">{{ t(notification.key) }}</div>
           <div class="announcement-time">{{ notification.time }}</div>
         </div>
@@ -113,44 +131,24 @@
     <MenuDrawer v-model="showMenu" />
 
     <!-- 币对搜索弹窗 -->
-    <CoinPairSearchModal
-      v-model="showSearchModal"
-      @select="handleSelectCoinPair"
-    />
+    <CoinPairSearchModal v-model="showSearchModal" @select="handleSelectCoinPair" />
 
     <!-- 语言选择对话框 -->
-    <van-popup
-      v-model:show="showLanguageDialog"
-      position="right"
-      :style="{ width: '100%', height: '100%', overflow: 'visible' }"
-      class="language-popup"
-    >
+    <van-popup v-model:show="showLanguageDialog" position="right"
+      :style="{ width: '100%', height: '100%', overflow: 'visible' }" class="language-popup">
       <div class="language-dialog">
         <div class="dialog-header">
-          <van-icon
-            name="arrow-left"
-            class="back-icon"
-            @click="showLanguageDialog = false"
-          />
+          <van-icon name="arrow-left" class="back-icon" @click="showLanguageDialog = false" />
           <div class="dialog-title">{{ currentLangName }}</div>
         </div>
         <div class="dialog-content">
           <van-cell-group inset>
-            <van-cell
-              v-for="lang in languages"
-              :key="lang.code"
-              :title="lang.name"
-              @click="selectLanguage(lang.code)"
-            >
+            <van-cell v-for="lang in languages" :key="lang.code" :title="lang.name" @click="selectLanguage(lang.code)">
               <template #icon>
                 <img :src="lang.flag" class="flag-icon" alt="" />
               </template>
               <template #right-icon>
-                <van-icon
-                  v-if="currentLang === lang.code"
-                  name="success"
-                  color="#1989fa"
-                />
+                <van-icon v-if="currentLang === lang.code" name="success" color="#1989fa" />
               </template>
             </van-cell>
           </van-cell-group>
@@ -175,6 +173,15 @@ import MenuSection from "@/components/Home/MenuSection.vue";
 import MenuDrawer from "@/components/Home/MenuDrawer.vue";
 import TabSection from "@/components/Home/TabSection.vue";
 import CoinPairSearchModal from "@/components/Home/CoinPairSearchModal.vue";
+// 钱包图标
+import okxIcon from "@/assets/image/okx.svg";
+import qianbIcon from "@/assets/image/qianb.svg";
+import qianbaoIcon from "@/assets/image/qianbao.svg";
+import qqianbaoIcon from "@/assets/image/qqianbao.svg";
+import xiaohuliIcon from "@/assets/image/xiaohuli.svg";
+// 其他图标
+import speakerIcon from "@/assets/image/laba.svg";
+import safeIcon from "@/assets/image/top-up.svg";
 
 const router = useRouter();
 const { t, currentLang, setLanguage } = useI18n();
@@ -247,6 +254,30 @@ const handleSelectCoinPair = (coin) => {
   router.push(`/coin/${encodeURIComponent(pair)}`);
 };
 
+// 钱包数据
+const wallets = ref([
+  { id: 1, name: "Coinbase", icon: okxIcon },
+  { id: 2, name: "MetaMask", icon: xiaohuliIcon },
+  { id: 3, name: "Wallet3", icon: qianbIcon },
+  { id: 4, name: "Wallet4", icon: qianbaoIcon },
+  { id: 5, name: "Wallet5", icon: qqianbaoIcon },
+]);
+
+const handleWalletLogin = (wallet) => {
+  console.log("连接钱包:", wallet.name);
+  // TODO: 实现钱包连接逻辑
+};
+
+const handleOnChainDeposit = () => {
+  console.log("链上充值");
+  // TODO: 跳转到链上充值页面
+};
+
+const handleQuickBuy = () => {
+  console.log("快捷买币");
+  // TODO: 跳转到快捷买币页面
+};
+
 // Intersection Observer 用于滚动动画
 let observer = null;
 
@@ -305,6 +336,7 @@ onUnmounted(() => {
     opacity: 0;
     transform: translateY(30px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -315,6 +347,7 @@ onUnmounted(() => {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -365,7 +398,7 @@ onUnmounted(() => {
 
 // Hero 区域
 .hero-section {
-  padding: 0px 22px 40px;
+  padding: 0px 22px;
   text-align: center;
   opacity: 0;
   transform: translateY(30px);
@@ -457,7 +490,201 @@ onUnmounted(() => {
         border-width: 1px;
         border-radius: 10px;
         background: #1DF388;
-        color:#070210;
+        color: #070210;
+      }
+    }
+  }
+}
+
+// 钱包登录区域
+.wallet-login-section {
+  // padding: 40px 22px 32px;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+
+  &.animate-in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .wallet-login-title {
+    font-family: PingFang SC;
+    font-weight: 300;
+    font-style: Light;
+    font-size: 28px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    color: #AEAEAE;
+    padding-top: 48px;
+  }
+
+  .wallet-icons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin: 48px 32px;
+
+    .wallet-icon-item {
+      width: 90px;
+      height: 90px;
+      opacity: 1;
+      border-radius: 10px;
+      border-width: 1px;
+      border: 1px solid #2E2E2E;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #0F1014;
+
+      &:active {
+        transform: scale(0.95);
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      .wallet-icon {
+        width: 60px;
+        height: 60px;
+        object-fit: contain;
+      }
+    }
+  }
+}
+
+// 活动公告横幅
+.activity-banner {
+  margin: 0 32px 68px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  opacity: 0;
+  // transform: translateY(30px);
+  transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+
+  &.animate-in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .speaker-icon {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+    flex-shrink: 0;
+  }
+
+  .activity-text-wrapper {
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .activity-text {
+    font-family: PingFang SC;
+    font-weight: 400;
+    font-style: Regular;
+    font-size: 20px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    white-space: nowrap;
+    color: #D3D3D3;
+    position: absolute;
+    animation: scroll-text 15s linear infinite;
+  }
+
+  @keyframes scroll-text {
+    0% {
+      transform: translateX(100%);
+    }
+
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+}
+
+// 操作卡片区域
+.action-cards {
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  margin: 0 32px;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+
+  &.animate-in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .action-card {
+    width: 328px;
+    height: 120px;
+    opacity: 1;
+    border-radius: 10px;
+    border-width: 1px;
+    border: 1px solid #3D3D3D;
+    background: #141517;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+    box-sizing: border-box;
+
+    &:active {
+      transform: scale(0.98);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .card-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-right: 12px;
+      width: 115px;
+      .card-title {
+        font-family: PingFang SC;
+        font-weight: 500;
+        font-style: Medium;
+        font-size: 20px;
+        line-height: 1.5em;
+        letter-spacing: 0%;
+        color: #F0F0F0;
+      }
+
+      .card-subtitle {
+        width: 115px;
+        font-family: PingFang SC;
+        font-weight: 400;
+        font-style: Regular;
+        font-size: 10px;
+        letter-spacing: 0%;
+        color: #B8B8B8;
+        line-height: 1.5em;
+      }
+    }
+
+    .card-illustration {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      flex-shrink: 0;
+
+      .safe-image {
+        width: 110px;
+        height: 98px;
+        object-fit: contain;
       }
     }
   }
@@ -468,7 +695,7 @@ onUnmounted(() => {
   padding: 0 16px;
 }
 
-.content > div:first-child {
+.content>div:first-child {
   opacity: 0;
   transform: translateY(30px);
   transition: opacity 0.4s ease-out, transform 0.4s ease-out;
@@ -683,6 +910,7 @@ onUnmounted(() => {
   from {
     transform: translateX(100%);
   }
+
   to {
     transform: translateX(0);
   }
