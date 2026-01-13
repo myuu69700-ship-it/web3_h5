@@ -36,7 +36,8 @@
         </div>
       </div>
       <div class="view-more-btn" @click="goToMarket">
-        {{ t("viewMoreTokens") }} >
+        {{ t("viewMoreTokens") }}
+        <img :src="rightArrowIcon" alt="right arrow" class="right-arrow-icon" />
       </div>
     </div>
 
@@ -91,6 +92,7 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useI18n } from "@/i18n";
 import nomoreIcon from "@/assets/images/nomore.png";
+import rightArrowIcon from "@/assets/image/arrow_right.svg";
 
 const router = useRouter();
 const { t } = useI18n();
@@ -404,6 +406,7 @@ const goToMarket = () => {
       line-height: 100%;
       letter-spacing: 0%;
       text-align: right;
+
       &.up {
         color: #1df388;
       }
@@ -421,13 +424,24 @@ const goToMarket = () => {
     gap: 0.53333vw;
     background-color: transparent;
     width: 100%;
-    height: 9.6vw;
-    margin: 4vw auto;
+    // height: 9.6vw;
+    margin: 0 auto;
     border-radius: 6.4vw;
-    color: #ffffff;
-    font-size: 3.46667vw;
     cursor: pointer;
     text-align: center;
+    font-family: PingFang SC;
+    font-weight: 400;
+    font-style: Regular;
+    font-size: 20px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    color: #949494;
+    margin-top: 50px;
+
+    .right-arrow-icon {
+      width: 14px;
+      height: 14px;
+    }
   }
 }
 </style>

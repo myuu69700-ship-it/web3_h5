@@ -653,6 +653,7 @@ onUnmounted(() => {
       justify-content: center;
       padding-right: 12px;
       width: 115px;
+
       .card-title {
         font-family: PingFang SC;
         font-weight: 500;
@@ -708,7 +709,7 @@ onUnmounted(() => {
 
 // 公告区域
 .announcements-section {
-  margin-top: 32px;
+  margin-top: 68px;
   opacity: 0;
   transform: translateY(30px);
   transition: opacity 0.4s ease-out, transform 0.4s ease-out;
@@ -831,11 +832,13 @@ onUnmounted(() => {
   }
 
   .section-title {
-    font-size: 9.06667vw;
-    color: #ffffff;
-    font-weight: 700;
-    margin-bottom: 16px;
-    text-align: center;
+    font-family: PingFang SC;
+    font-weight: 500;
+    font-style: Medium;
+    font-size: 46px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    color: #FFFFFF;
   }
 
   .assistant-description {
