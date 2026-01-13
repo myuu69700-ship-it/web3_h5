@@ -13,7 +13,7 @@ import TabBar from '@/components/TabBar.vue'
 #app {
   width: 100%;
   min-height: 100vh;
-  background-color: #f7f8fa;
+  background-color: #070210;
 }
 </style>
 
