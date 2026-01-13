@@ -12,115 +12,96 @@
         @click="showMenu = true"
         alt=""
       />
-      <img
-        :src="diqiuIcon"
-        class="setting-icon"
-        @click="showLanguageDialog = true"
-        alt=""
-      />
+      <div class="top-right-icons">
+        <img
+          :src="searchIcon"
+          class="search-icon"
+          @click="showSearchModal = true"
+          alt=""
+        />
+        <img :src="kefuIcon" class="kefu-icon" @click="openChat" alt="" />
+      </div>
     </div>
 
-    <!-- 首页搜索区域 -->
+    <!-- Hero 区域 -->
     <div
-      class="search-section"
+      class="hero-section"
       :class="{ 'animate-in': isInitialized }"
-      ref="searchSectionRef"
+      ref="heroSectionRef"
     >
-      <van-search
-        class="search-input"
-        :placeholder="t('searchCoinPair')"
-        @click="showSearchModal = true"
-      />
-
-      <!--  banner 区域 -->
-      <div class="banner">
-        <div class="banner-text">
-          <p>{{ t("bannerTitle1") }}</p>
-          <p>{{ t("bannerTitle2") }}</p>
-        </div>
-        <div class="banner-text-2">{{ t("bannerSubtitle") }}</div>
-        <van-image :src="homeIcon" />
+      <!-- 主标题 -->
+      <div class="hero-title">
+        {{ t("bannerTitle1") }} {{ t("bannerTitle2") }}
       </div>
 
-      <!-- 登录 注册  鏈上充幣  快捷買幣-->
-      <div class="action-buttons">
-        <div class="button-row">
-          <button class="action-btn login-btn" @click="handleLogin">
-            {{ t("login") }}
-          </button>
-          <button class="action-btn register-btn" @click="handleRegister">
-            {{ t("register") }}
-          </button>
-        </div>
-        <div class="button-row margin-top-32">
-          <button class="action-btn deposit-btn" @click="handleDeposit">
-            {{ t("onChainDeposit") }}
-          </button>
-          <button class="action-btn buy-btn" @click="handleQuickBuy">
-            {{ t("quickBuy") }}
-          </button>
-        </div>
+      <!-- 中央插图 -->
+      <div class="hero-image-wrapper">
+        <img :src="homeIcon" alt="Web3" class="hero-image" />
+      </div>
+
+      <!-- 副标题 -->
+      <div class="hero-subtitle">
+        {{ t("bannerSubtitle") }}
+        <span class="usdt-highlight">{{ t("getUSDTGift") }}</span>
+      </div>
+
+      <!-- 登录注册按钮 -->
+      <div class="auth-buttons">
+        <button class="auth-btn login-btn" @click="handleLogin">
+          {{ t("login") }}
+        </button>
+        <button class="auth-btn register-btn" @click="handleRegister">
+          {{ t("register") }}
+        </button>
       </div>
     </div>
+
+    <!-- 内容区域 -->
     <div class="content">
       <!-- 标签栏 -->
       <div ref="tabSectionRef">
         <TabSection />
       </div>
-      <!-- 平台通知 -->
-      <div class="notifications-section" ref="notificationsRef">
-        <div class="section-title">{{ t("platformNotifications") }}</div>
+
+      <!-- 公告区域 -->
+      <div class="announcements-section" ref="announcementsRef">
+        <div class="section-title">{{ t("announcements") }}</div>
         <div
           v-for="notification in notifications"
           :key="notification.id"
-          class="notification-item"
+          class="announcement-item"
         >
-          <div class="notification-text">{{ t(notification.key) }}</div>
-          <div class="notification-time">{{ notification.time }}</div>
+          <div class="announcement-text">{{ t(notification.key) }}</div>
+          <div class="announcement-time">{{ notification.time }}</div>
         </div>
-        <div class="view-more-btn" @click="viewMoreNotifications">
-          {{ t("viewMore") }}
+        <div class="view-more-link" @click="viewMoreNotifications">
+          {{ t("viewMoreAnnouncements") }} >
         </div>
       </div>
 
-      <!-- 推广横幅 -->
-      <div class="promo-banner" ref="promoBannerRef">
-        <div class="promo-content">
-          <div class="promo-left">
-            <div class="promo-title">{{ t("promoText") }}</div>
-            <div class="promo-description">{{ t("promoDescription") }}</div>
-            <div class="promo-cta">{{ t("promoCta") }}</div>
-            <!-- <div class="promo-copyright">{{ t("copyright") }}</div> -->
-          </div>
-          <div class="promo-right">
-            <img :src="nftIcon" alt="NFT" class="nft-image" />
-          </div>
+      <!-- NFT 市场区域 -->
+      <div class="nft-section" ref="nftSectionRef">
+        <div class="section-title">{{ t("leadingNFTMarketplace") }}</div>
+        <div class="nft-description">{{ t("nftDescription") }}</div>
+        <div class="nft-image-wrapper">
+          <img :src="nftIcon" alt="NFT" class="nft-image" />
         </div>
+        <div class="nft-cta" @click="goToNFTHall">{{ t("goToNFTHall") }} →</div>
       </div>
-      <!-- 您加密貨幣之旅的得力助手 -->
-      <div class="s1" ref="s1Ref">
-        <p>{{ t("cryptoJourneyAssistant") }}</p>
-      </div>
-      <!-- 新增内容区域 -->
-      <div class="new-content-section" ref="newContentRef">
-        <!-- 描述文本 -->
-        <div class="description-text">
+
+      <!-- 加密货币之旅助手区域 -->
+      <div class="assistant-section" ref="assistantSectionRef">
+        <div class="section-title">{{ t("cryptoJourneyAssistant") }}</div>
+        <div class="assistant-description">
           {{ t("cryptoJourneyDescription") }}
         </div>
-
-        <!-- 图片 -->
-        <div class="zhus-image-wrapper">
-          <img :src="zhusImage" alt="zhus" class="zhus-image" />
+        <div class="assistant-image-wrapper">
+          <img :src="zhusImage" alt="Assistant" class="assistant-image" />
         </div>
-
-        <!-- 版权信息 -->
-        <div class="copyright-text">
-          {{ t("copyright") }}
-        </div>
-
-        <!-- 菜单折叠面板 -->
-        <MenuSection />
       </div>
+
+      <!-- 菜单折叠面板 -->
+      <MenuSection />
     </div>
 
     <!-- 浮动聊天按钮 -->
@@ -183,12 +164,13 @@
 import { ref, computed, onMounted, onUnmounted } from "vue";
 import { useRouter } from "vue-router";
 import { useI18n, languages } from "@/i18n";
-import homeIcon from "@/assets/images/homeIcon.gif";
+import homeIcon from "@/assets/image/Btc.png";
 import chartIcon from "@/assets/images/chart.png";
 import nftIcon from "@/assets/images/nft.png";
 import zhusImage from "@/assets/images/zhus.png";
 import galleryViewIcon from "@/assets/images/gallery-view.svg";
-import diqiuIcon from "@/assets/images/diqiu.svg";
+import searchIcon from "@/assets/image/search.png";
+import kefuIcon from "@/assets/image/kefu.png";
 import MenuSection from "@/components/Home/MenuSection.vue";
 import MenuDrawer from "@/components/Home/MenuDrawer.vue";
 import TabSection from "@/components/Home/TabSection.vue";
@@ -203,29 +185,28 @@ const isInitialized = ref(false);
 
 // 元素引用
 const topBarRef = ref(null);
-const searchSectionRef = ref(null);
+const heroSectionRef = ref(null);
 const tabSectionRef = ref(null);
-const notificationsRef = ref(null);
-const promoBannerRef = ref(null);
-const s1Ref = ref(null);
-const newContentRef = ref(null);
+const announcementsRef = ref(null);
+const nftSectionRef = ref(null);
+const assistantSectionRef = ref(null);
 
 // 通知数据
 const notifications = ref([
   {
     id: 1,
     key: "exchangeUpdateNotification",
-    time: "2025/05/15 15:12:07",
+    time: "15:13:17 2025-5-17",
   },
   {
     id: 2,
     key: "exchangeLendingUpdate",
-    time: "2024/10/13 00:00:00",
+    time: "15:13:17 2025-5-17",
   },
   {
     id: 3,
     key: "virtualReservationActivity",
-    time: "2024/08/31 10:00:00",
+    time: "15:13:17 2025-5-17",
   },
 ]);
 
@@ -242,18 +223,15 @@ const selectLanguage = (code) => {
 };
 
 const viewMoreNotifications = () => {
-  // 跳转到通知列表页
   router.push("/platform-notifications");
 };
 
-const openChat = () => {
-  // 打开聊天窗口
-  console.log("打开聊天");
+const goToNFTHall = () => {
+  router.push("/nft-hall");
 };
 
-const goToAbout = () => {
-  showMenu.value = false;
-  router.push("/about");
+const openChat = () => {
+  console.log("打开聊天");
 };
 
 const handleLogin = () => {
@@ -264,17 +242,7 @@ const handleRegister = () => {
   router.push("/register");
 };
 
-const handleDeposit = () => {
-  // 跳转到币种选择页面
-  router.push("/deposit-select");
-};
-
-const handleQuickBuy = () => {
-  router.push("/quick-buy");
-};
-
 const handleSelectCoinPair = (coin) => {
-  // 处理选择交易对 - 跳转到详情页
   const pair = coin.pair || `${coin.symbol}${coin.pair || "/USDT"}`;
   router.push(`/coin/${encodeURIComponent(pair)}`);
 };
@@ -283,35 +251,31 @@ const handleSelectCoinPair = (coin) => {
 let observer = null;
 
 onMounted(() => {
-  // 页面初始化动画
   setTimeout(() => {
     isInitialized.value = true;
   }, 50);
 
-  // 设置滚动动画观察器
   observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           entry.target.classList.add("animate-in");
-          // 动画完成后可以取消观察
           observer.unobserve(entry.target);
         }
       });
     },
     {
-      threshold: 0.1, // 当元素10%可见时触发
-      rootMargin: "0px 0px -50px 0px", // 提前50px触发
+      threshold: 0.1,
+      rootMargin: "0px 0px -50px 0px",
     }
   );
 
-  // 观察需要动画的元素
   const elementsToObserve = [
+    heroSectionRef.value,
     tabSectionRef.value,
-    notificationsRef.value,
-    promoBannerRef.value,
-    s1Ref.value,
-    newContentRef.value,
+    announcementsRef.value,
+    nftSectionRef.value,
+    assistantSectionRef.value,
   ];
 
   elementsToObserve.forEach((el) => {
@@ -331,7 +295,7 @@ onUnmounted(() => {
 <style lang="scss" scoped>
 .home {
   min-height: 100vh;
-  background-color: #fff;
+  background: linear-gradient(180deg, #0a0b0d 0%, #1a1b2e 100%);
   padding-bottom: 80px;
 }
 
@@ -339,13 +303,11 @@ onUnmounted(() => {
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(180px);
-    // transform: translateX(-120px);
+    transform: translateY(30px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
-    // transform: translateX(0);
   }
 }
 
@@ -358,7 +320,6 @@ onUnmounted(() => {
   }
 }
 
-// 动画类
 .animate-in {
   animation: fadeInUp 0.4s ease-out forwards;
 }
@@ -367,30 +328,146 @@ onUnmounted(() => {
   animation: fadeIn 0.4s ease-out forwards;
 }
 
+// 顶部导航栏
 .top-bar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 22px;
-  background-color: #fff;
+  padding: 32px;
+  background: #0a0b0d;
   position: sticky;
   top: 0;
   z-index: 100;
 
-  .menu-icon,
-  .setting-icon {
-    width: 24px;
-    height: 24px;
+  .menu-icon {
+    width: 28px;
+    height: 30px;
     cursor: pointer;
     object-fit: contain;
+    filter: brightness(0) invert(1);
+  }
+
+  .top-right-icons {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .search-icon,
+  .kefu-icon {
+    width: 30.09px;
+    height: 30px;
+    cursor: pointer;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
   }
 }
 
+// Hero 区域
+.hero-section {
+  padding: 0px 22px 40px;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+
+  &.animate-in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .hero-title {
+    font-family: PingFang SC;
+    font-weight: 600;
+    font-style: Semibold;
+    font-size: 50px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    color: #ffffff;
+    margin-top: 102px;
+  }
+
+  .hero-image-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 50px;
+    // margin: 32px 0;
+    // width: 100%;
+
+    .hero-image {
+      width: 399px;
+      height: 306px;
+      object-fit: contain;
+    }
+  }
+
+  .hero-subtitle {
+    font-family: PingFang SC;
+    font-weight: 500;
+    font-style: Medium;
+    font-size: 28px;
+    line-height: 100%;
+    color: #ffffff;
+    margin-bottom: 36px;
+
+    .usdt-highlight {
+      color: #1df388;
+      font-weight: 600;
+    }
+  }
+
+  .auth-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    align-items: center;
+    margin-top: 32px;
+
+    .auth-btn {
+      flex: 1;
+      font-family: PingFang SC;
+      font-weight: 500;
+      font-style: Medium;
+      font-size: 28px;
+      line-height: 100%;
+      letter-spacing: 0%;
+
+      cursor: pointer;
+      border: none;
+      transition: all 0.3s ease;
+
+      &:active {
+        opacity: 0.8;
+        transform: scale(0.98);
+      }
+
+      &.login-btn {
+        width: 328px;
+        height: 84px;
+        opacity: 1;
+        border-width: 1px;
+        border-radius: 10px;
+      }
+
+      &.register-btn {
+        width: 328px;
+        height: 84px;
+        opacity: 1;
+        border-width: 1px;
+        border-radius: 10px;
+        background: #1DF388;
+        color:#070210;
+      }
+    }
+  }
+}
+
+// 内容区域
 .content {
   padding: 0 16px;
 }
 
-// 滚动动画元素初始状态 - 为 TabSection 容器添加
 .content > div:first-child {
   opacity: 0;
   transform: translateY(30px);
@@ -402,158 +479,9 @@ onUnmounted(() => {
   }
 }
 
-.search-section {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.4s ease-out, transform 0.4s ease-out;
-
-  &.animate-in {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  .search-input {
-    :deep(.van-search__content) {
-      border-radius: 5.06667vw;
-      background: #f3f3f3;
-    }
-
-    :deep(.van-field__left-icon .van-icon, .van-field__right-icon .van-icon) {
-      color: #040303;
-    }
-    // :deep(.van-field__control::placeholder) {
-    //   color: #040303 !important;
-    // }
-  }
-
-  .banner {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-
-    .banner-text {
-      color: var(--primary-bg);
-      font-size: 9.06667vw;
-      line-height: 10.66667vw;
-      font-weight: 600;
-      text-align: center;
-      margin-top: 8vw;
-      font-weight: 700;
-    }
-    .banner-text-2 {
-      color: var(--primary-bg);
-      font-size: 3.2vw;
-      margin-top: 4.26667vw;
-      text-align: center;
-      margin: 16.64px 0;
-    }
-
-    :deep(.van-image) {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 100%;
-      max-width: 100%;
-      margin-top: 16px;
-
-      img {
-        width: 100%;
-        max-width: 100%;
-        height: auto;
-        object-fit: contain;
-      }
-    }
-  }
-
-  .action-buttons {
-    margin-top: 16px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-
-    .button-row {
-      display: flex;
-      gap: 12px;
-      justify-content: center;
-      align-items: center;
-      width: 100%;
-      max-width: 100%;
-      // margin-bottom: 12px;
-
-      &:last-child {
-        margin-bottom: 0;
-      }
-
-      &.margin-top-16 {
-        margin-top: 16px;
-      }
-    }
-
-    .action-btn {
-      height: 48px;
-      border-radius: 12px;
-      border: none;
-      font-size: 16px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: opacity 0.2s;
-
-      &:active {
-        opacity: 0.8;
-      }
-
-      &.login-btn {
-        background-color: #e7ffb1;
-        color: #2b6d16;
-        width: 176px;
-        height: 35px;
-        border-radius: 5.06667vw;
-        font-size: 3.2vw;
-        cursor: pointer;
-        border: none;
-      }
-
-      &.register-btn {
-        background-color: #2b6d16;
-        color: #fff;
-        width: 176px;
-        height: 35px;
-        border-radius: 5.06667vw;
-        font-size: 3.2vw;
-        cursor: pointer;
-        border: none;
-      }
-
-      &.deposit-btn {
-        background-color: #2b6d16;
-        color: #fff;
-        width: 176px;
-        height: 35px;
-        border-radius: 5.06667vw;
-        font-size: 3.2vw;
-        cursor: pointer;
-        border: none;
-      }
-
-      &.buy-btn {
-        background-color: #2b6d16;
-        color: #fff;
-        width: 176px;
-        height: 35px;
-        border-radius: 5.06667vw;
-        font-size: 3.2vw;
-        cursor: pointer;
-        border: none;
-      }
-    }
-  }
-}
-
-// 通知区域
-.notifications-section {
-  margin-top: 24px;
+// 公告区域
+.announcements-section {
+  margin-top: 32px;
   opacity: 0;
   transform: translateY(30px);
   transition: opacity 0.4s ease-out, transform 0.4s ease-out;
@@ -565,60 +493,50 @@ onUnmounted(() => {
 
   .section-title {
     font-size: 5vw;
-    color: #040303;
+    color: #ffffff;
     font-weight: 900;
-    margin-bottom: 16px;
+    margin-bottom: 20px;
+    text-align: center;
   }
 
-  .notification-item {
-    padding: 12px 0;
-    // border-bottom: 1px solid #ebedf0;
-    .notification-text {
-      width: 100%;
+  .announcement-item {
+    padding: 16px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+    &:last-of-type {
+      border-bottom: none;
+    }
+
+    .announcement-text {
       font-size: 4vw;
-      color: #040303;
+      color: #ffffff;
       font-weight: 500;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      margin-bottom: 1vw;
+      margin-bottom: 8px;
     }
 
-    .notification-time {
+    .announcement-time {
       font-size: 3.2vw;
-      color: #9a9a9a;
-      margin-top: 0.53333vw;
+      color: rgba(255, 255, 255, 0.6);
     }
   }
 
-  .view-more-btn {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 0.53333vw;
-    background-color: #f3f3f3;
-    width: 100%;
-    height: 9.6vw;
-    margin: 4vw auto;
-    border-radius: 6.4vw;
-    color: #040303;
+  .view-more-link {
+    text-align: right;
     font-size: 3.46667vw;
+    color: #ffffff;
+    margin-top: 16px;
     cursor: pointer;
-    margin-top: 6vw;
+    transition: color 0.3s ease;
+
+    &:active {
+      color: #a0de1f;
+    }
   }
 }
 
-// 推广横幅
-.s1 {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
-  font-size: 9.06667vw;
-  font-weight: 800;
-  line-height: 1.3;
-  padding: 10px;
-  color: #040303;
+// NFT 市场区域
+.nft-section {
+  margin-top: 48px;
   text-align: center;
   opacity: 0;
   transform: translateY(30px);
@@ -629,91 +547,53 @@ onUnmounted(() => {
     transform: translateY(0);
   }
 
-  p {
-    text-align: center;
-    width: 100%;
-    margin: 0;
-  }
-}
-.promo-banner {
-  margin-top: 24px;
-  background-color: #fff;
-  border-radius: 12px;
-  position: relative;
-  overflow: hidden;
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.4s ease-out, transform 0.4s ease-out;
-
-  &.animate-in {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  .promo-content {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    align-items: center;
-    gap: 16px;
-    position: relative;
-  }
-
-  .promo-left {
-    // flex: 1;
-    width: 151.27px;
-    height: 149px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .promo-title {
+  .section-title {
     font-size: 9.06667vw;
+    color: #ffffff;
     font-weight: 700;
-    color: #a0de1f;
-    line-height: 1.2;
+    margin-bottom: 16px;
+    text-align: center;
   }
 
-  .promo-description {
-    color: #040303;
+  .nft-description {
     font-size: 3.73333vw;
+    color: rgba(255, 255, 255, 0.8);
     line-height: 1.6;
+    margin-bottom: 32px;
+    text-align: center;
   }
 
-  .promo-cta {
-    background: none;
-    border: none;
-    padding: 0;
+  .nft-image-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 32px 0;
+
+    .nft-image {
+      width: 100%;
+      max-width: 500px;
+      height: auto;
+      object-fit: contain;
+    }
+  }
+
+  .nft-cta {
     font-size: 4.26667vw;
     color: #a0de1f;
-    text-align: left;
-  }
+    margin-top: 24px;
+    cursor: pointer;
+    transition: color 0.3s ease;
 
-  .promo-copyright {
-    font-size: 12px;
-    color: #969799;
-    margin-top: 8px;
-  }
-
-  .promo-right {
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .nft-image {
-    width: 50.13333vw;
-    height: auto;
-    object-fit: contain;
+    &:active {
+      color: #7fb317;
+    }
   }
 }
 
-// 新增内容区域
-.new-content-section {
-  margin-top: 24px;
-  background-color: #fff;
+// 助手区域
+.assistant-section {
+  margin-top: 48px;
+  text-align: center;
   opacity: 0;
   transform: translateY(30px);
   transition: opacity 0.4s ease-out, transform 0.4s ease-out;
@@ -723,35 +603,35 @@ onUnmounted(() => {
     transform: translateY(0);
   }
 
-  .description-text {
-    margin-top: 3.73333vw;
+  .section-title {
+    font-size: 9.06667vw;
+    color: #ffffff;
+    font-weight: 700;
+    margin-bottom: 16px;
     text-align: center;
-    color: #acacac;
+  }
+
+  .assistant-description {
     font-size: 3.73333vw;
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.6;
+    margin-bottom: 32px;
+    text-align: center;
     padding: 0 16px;
   }
 
-  .zhus-image-wrapper {
+  .assistant-image-wrapper {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 24px;
-    width: 100%;
+    margin: 32px 0;
 
-    .zhus-image {
+    .assistant-image {
       width: 100%;
       max-width: 100%;
       height: auto;
       object-fit: contain;
-      display: block;
-      margin-top: 5.33333vw;
-      margin-bottom: 10vw;
     }
-  }
-
-  .copyright-text {
-    color: #0a0b0d;
-    font-size: 3.2vw;
   }
 }
 
@@ -762,20 +642,25 @@ onUnmounted(() => {
   bottom: 90px;
   width: 48.67px;
   height: 48.67px;
-  background-color: #323233;
+  background-color: rgba(50, 50, 51, 0.9);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   cursor: pointer;
   z-index: 99;
+  transition: transform 0.3s ease;
+
+  &:active {
+    transform: scale(0.95);
+  }
 
   img {
-    width: 48.67px;
-    height: 48.67px;
+    width: 24px;
+    height: 24px;
     object-fit: contain;
-    border-radius: 50%;
+    filter: brightness(0) invert(1);
   }
 }
 
@@ -808,7 +693,7 @@ onUnmounted(() => {
   min-height: 100%;
   display: flex;
   flex-direction: column;
-  background-color: #f7f8fa;
+  background-color: #0a0b0d;
   position: relative;
   overflow: visible;
 
@@ -816,15 +701,15 @@ onUnmounted(() => {
     display: flex;
     align-items: center;
     padding: 16px;
-    background-color: #fff;
-    border-bottom: 1px solid #ebedf0;
+    background-color: rgba(26, 27, 46, 0.9);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     position: relative;
     z-index: 1;
     flex-shrink: 0;
 
     .back-icon {
       font-size: 20px;
-      color: #323233;
+      color: #ffffff;
       cursor: pointer;
       margin-right: 12px;
     }
@@ -832,7 +717,7 @@ onUnmounted(() => {
     .dialog-title {
       font-size: 18px;
       font-weight: bold;
-      color: #323233;
+      color: #ffffff;
       display: inline-block;
       width: 100%;
       text-align: center;
@@ -845,7 +730,7 @@ onUnmounted(() => {
     padding: 0;
     position: relative;
     z-index: 1;
-    background-color: #fff;
+    background-color: #0a0b0d;
 
     :deep(.van-cell-group) {
       margin: 0;
@@ -853,7 +738,9 @@ onUnmounted(() => {
 
     :deep(.van-cell) {
       padding: 12px 16px;
-      border-bottom: 1px solid #ebedf0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      background-color: #0a0b0d;
+      color: #ffffff;
     }
 
     :deep(.van-cell:last-child) {
