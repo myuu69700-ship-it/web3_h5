@@ -51,7 +51,7 @@
           <div v-if="expandedSections.common" class="section-content">
             <div class="menu-item" @click="handleTutorial">
               <div class="menu-icon">
-                <van-icon name="question-o" size="24" />
+                <img :src="xinshouIcon" alt="" />
               </div>
               <span class="menu-label">{{ t("newbieTutorial") }}</span>
             </div>
@@ -72,19 +72,19 @@
           <div v-if="expandedSections.assets" class="section-content">
             <div class="menu-item" @click="handleDeposit">
               <div class="menu-icon">
-                <van-icon name="balance-o" size="24" />
+                <img :src="chuxuIcon" alt="" />
               </div>
               <span class="menu-label">{{ t("deposit") }}</span>
             </div>
             <div class="menu-item" @click="handleWithdraw">
               <div class="menu-icon">
-                <van-icon name="arrow-up" size="24" />
+                <img :src="tibiIcon" alt="" />
               </div>
               <span class="menu-label">{{ t("withdraw") }}</span>
             </div>
             <div class="menu-item" @click="handleQuickBuy">
               <div class="menu-icon">
-                <van-icon name="flash-o" size="24" />
+                <img :src="kuaijmbIcon" alt="" />
               </div>
               <span class="menu-label">{{ t("quickBuy") }}</span>
             </div>
@@ -105,31 +105,31 @@
           <div v-if="expandedSections.trading" class="section-content">
             <div class="menu-item" @click="handleOptions">
               <div class="menu-icon">
-                <van-icon name="description" size="24" />
+                <img :src="qiquanIcon" alt="" />
               </div>
               <span class="menu-label">{{ t("options") }}</span>
             </div>
             <div class="menu-item" @click="handleSpot">
               <div class="menu-icon">
-                <van-icon name="aim" size="24" />
+                <img :src="xianhuoIcon" alt="" />
               </div>
               <span class="menu-label">{{ t("spot") }}</span>
             </div>
             <div class="menu-item" @click="handleContract">
               <div class="menu-icon">
-                <van-icon name="description" size="24" />
+                <img :src="heyueIcon" alt="" />
               </div>
               <span class="menu-label">{{ t("contract") }}</span>
             </div>
             <div class="menu-item" @click="handleNFT">
               <div class="menu-icon">
-                <span class="nft-icon">NFT</span>
+                <img :src="nftIcon" alt="" />
               </div>
               <span class="menu-label">{{ t("nft") }}</span>
             </div>
             <div class="menu-item" @click="handleAIStrategy">
               <div class="menu-icon">
-                <van-icon name="setting-o" size="24" />
+                <img :src="aiCelIcon" alt="" />
               </div>
               <span class="menu-label">{{ t("aiStrategyTrading") }}</span>
             </div>
@@ -150,19 +150,19 @@
           <div v-if="expandedSections.earn" class="section-content">
             <div class="menu-item" @click="handleDeFiLending">
               <div class="menu-icon">
-                <van-icon name="exchange" size="24" />
+                <img :src="difiIcon" alt="" />
               </div>
               <span class="menu-label">{{ t("defiLending") }}</span>
             </div>
             <div class="menu-item" @click="handlePortfolio">
               <div class="menu-icon">
-                <van-icon name="cluster-o" size="24" />
+                <img :src="touzIcon" alt="" />
               </div>
               <span class="menu-label">{{ t("investmentPortfolio") }}</span>
             </div>
             <div class="menu-item" @click="handleLockedStaking">
               <div class="menu-icon">
-                <van-icon name="lock" size="24" />
+                <img :src="suochangIcon" alt="" />
               </div>
               <span class="menu-label">{{ t("lockedStaking") }}</span>
             </div>
@@ -183,25 +183,25 @@
           <div v-if="expandedSections.more" class="section-content">
             <div class="menu-item" @click="handleAssetCenter">
               <div class="menu-icon">
-                <van-icon name="notes-o" size="24" />
+                <img :src="zhiczxIcon" alt="" />
               </div>
               <span class="menu-label">{{ t("assetCenter") }}</span>
             </div>
             <div class="menu-item" @click="handleAddressBook">
               <div class="menu-icon">
-                <van-icon name="notes-o" size="24" />
+                <img :src="dizhiIcon" alt="" />
               </div>
               <span class="menu-label">{{ t("addressBook") }}</span>
             </div>
             <div class="menu-item" @click="handleCharity">
               <div class="menu-icon">
-                <van-icon name="like-o" size="24" />
+                <img :src="cisanIcon" alt="" />
               </div>
               <span class="menu-label">{{ t("charity") }}</span>
             </div>
             <div class="menu-item" @click="handleSecurityCenter">
               <div class="menu-icon">
-                <van-icon name="shield-o" size="24" />
+                <img :src="sleftzxIcon" alt="" />
               </div>
               <span class="menu-label">{{ t("securityCenter") }}</span>
             </div>
@@ -215,7 +215,7 @@
         <div class="menu-section">
           <div class="menu-item clear-cache" @click="handleClearCache">
             <div class="menu-icon">
-              <van-icon name="delete-o" size="20" />
+              <img :src="deleIcon" alt="" />
             </div>
             <span class="menu-label">{{ t("clearCache") }}</span>
           </div>
@@ -303,6 +303,24 @@ import { useI18n, languages } from "@/i18n";
 import kfuIcon from "@/assets/images/kfu.svg";
 import diqiuIcon from "@/assets/images/diqiu.svg";
 import allowTopIcon from "@/assets/image/aeeoeTop.svg";
+// personalCenter 图标
+import xinshouIcon from "@/assets/personalCenter/xinshou.svg";
+import chuxuIcon from "@/assets/personalCenter/chuxu.svg";
+import tibiIcon from "@/assets/personalCenter/tibi.svg";
+import kuaijmbIcon from "@/assets/personalCenter/kuaijmb.svg";
+import qiquanIcon from "@/assets/personalCenter/qiquan.svg";
+import xianhuoIcon from "@/assets/personalCenter/xianhuo.svg";
+import heyueIcon from "@/assets/personalCenter/heyue.svg";
+import nftIcon from "@/assets/personalCenter/Nft.svg";
+import aiCelIcon from "@/assets/personalCenter/ai_cel.svg";
+import difiIcon from "@/assets/personalCenter/difi.svg";
+import touzIcon from "@/assets/personalCenter/touz.svg";
+import suochangIcon from "@/assets/personalCenter/suochang.svg";
+import zhiczxIcon from "@/assets/personalCenter/zhiczx.svg";
+import dizhiIcon from "@/assets/personalCenter/dizhi.svg";
+import cisanIcon from "@/assets/personalCenter/cisan.svg";
+import sleftzxIcon from "@/assets/personalCenter/sleftzx.svg";
+import deleIcon from "@/assets/personalCenter/dele.svg";
 
 const props = defineProps({
   modelValue: {
@@ -641,6 +659,12 @@ const handleRisk = () => {
       border-radius: 50%;
       background: rgba(255, 255, 255, 0.1);
       color: #1df388;
+
+      img {
+        width: 24px;
+        height: 24px;
+        object-fit: contain;
+      }
 
       .nft-icon {
         font-size: 16px;
