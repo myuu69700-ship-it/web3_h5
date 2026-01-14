@@ -1303,7 +1303,7 @@ onUnmounted(() => {
   .dialog-content {
     flex: 1;
     overflow-y: auto;
-    padding: 0;
+    padding: 52px 32px 0 32px;
     position: relative;
     z-index: 1;
     background: #17181a;
@@ -1314,8 +1314,8 @@ onUnmounted(() => {
       .language-item {
         display: flex;
         align-items: center;
-        padding: 12px 16px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        padding: 26px 16px;
+        // border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         cursor: pointer;
         transition: background-color 0.2s;
         background-color: transparent;
@@ -1325,27 +1325,33 @@ onUnmounted(() => {
         }
 
         &.active {
-          background-color: rgba(255, 255, 255, 0.08);
+          width: 686px;
+          height: 90px;
+          border-radius: 6px;
+          background: #212327;
         }
 
         .flag-icon {
-          width: 24px;
-          height: 18px;
-          margin-right: 12px;
+          width: 34px;
+          height: 26px;
+          flex-shrink: 0;
+          margin-right: 13px;
           display: block;
           object-fit: cover;
-          border-radius: 2px;
-          flex-shrink: 0;
         }
 
         .language-name {
           flex: 1;
-          font-size: 16px;
-          color: #ffffff;
+          color: #fff;
+          font-family: "PingFang SC";
+          font-size: 28px;
+          font-style: normal;
+          font-weight: 500;
+          line-height: normal;
         }
 
         .check-icon {
-          font-size: 20px;
+          font-size: 40px;
           color: #00ff88;
           flex-shrink: 0;
         }
