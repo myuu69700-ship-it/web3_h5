@@ -1142,14 +1142,17 @@ onUnmounted(() => {
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 
     .picker-title {
-      font-size: 16px;
-      font-weight: 500;
       color: #fff;
+      font-family: "PingFang SC";
+      font-size: 38px;
+      font-style: normal;
+      font-weight: 500;
     }
 
     .close-icon {
-      font-size: 18px;
-      color: rgba(255, 255, 255, 0.6);
+      width: 30px;
+      height: 30px;
+      object-fit: contain;
       cursor: pointer;
     }
   }

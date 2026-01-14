@@ -163,28 +163,41 @@
     <!-- 国家选择器 -->
     <van-popup
       v-model:show="showCountryPicker"
-      position="bottom"
-      :style="{ height: '60%' }"
+      position="center"
+      :style="{ width: '90%', maxWidth: '589px', borderRadius: '10px', backgroundColor: '#181a1e' }"
+      round
     >
       <div class="country-picker">
         <div class="picker-header">
-          <div class="picker-title">{{ t("selectCountry") }}</div>
-          <van-icon
-            name="cross"
+          <div class="picker-title">选择区号</div>
+          <img
+            :src="closeIcon"
             class="close-icon"
+            alt="关闭"
             @click="showCountryPicker = false"
           />
         </div>
+        <div class="search-box">
+          <div class="search-input-wrapper">
+            <img :src="searchIcon" class="search-icon" alt="搜索" />
+            <input
+              v-model="countrySearchText"
+              type="text"
+              placeholder="搜索"
+              class="search-input"
+            />
+          </div>
+        </div>
         <div class="country-list">
           <div
-            v-for="country in countries"
+            v-for="country in filteredCountries"
             :key="country.code"
             class="country-item"
             :class="{ active: selectedCountry.code === country.code }"
             @click="selectCountry(country)"
           >
             <span class="country-name">{{ country.name }}</span>
-            <span class="country-code-text">({{ country.code }})</span>
+            <span class="country-code-text">+{{ country.code }}</span>
           </div>
         </div>
       </div>
@@ -206,7 +219,10 @@
               @click="languageTab = 'language'"
             >
               <span class="tab-text">语言和地区</span>
-              <div class="tab-indicator" v-if="languageTab === 'language'"></div>
+              <div
+                class="tab-indicator"
+                v-if="languageTab === 'language'"
+              ></div>
             </div>
             <div
               class="tab-item"
@@ -214,7 +230,10 @@
               @click="languageTab = 'exchange'"
             >
               <span class="tab-text">汇率</span>
-              <div class="tab-indicator" v-if="languageTab === 'exchange'"></div>
+              <div
+                class="tab-indicator"
+                v-if="languageTab === 'exchange'"
+              ></div>
             </div>
           </div>
           <div class="close-btn" @click="showLanguageDialog = false">
@@ -249,7 +268,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 import { useRouter } from "vue-router";
 import { useI18n, languages } from "@/i18n";
 import kfuIcon from "@/assets/images/kfu.svg";
@@ -257,6 +276,8 @@ import globeIcon from "@/assets/images/diqiu.svg";
 // 钱包图标 - 使用占位符或实际图标
 import okxIcon from "@/assets/image/okx.svg";
 import passwordIcon from "@/assets/image/password.svg";
+import closeIcon from "@/assets/image/close.svg";
+import searchIcon from "@/assets/image/search.png";
 
 const router = useRouter();
 const { t, currentLang, setLanguage } = useI18n();
@@ -269,7 +290,8 @@ const showPassword = ref(false);
 const agreed = ref(false);
 const showCountryPicker = ref(false);
 const showLanguageDialog = ref(false);
-const languageTab = ref('language');
+const languageTab = ref("language");
+const countrySearchText = ref("");
 
 // 国家列表
 const countries = ref([
@@ -425,10 +447,31 @@ const selectedCountry = ref(
   countries.value.find((c) => c.code === "852") || countries.value[0]
 );
 
+// 过滤后的国家列表
+const filteredCountries = computed(() => {
+  if (!countrySearchText.value) {
+    return countries.value;
+  }
+  const searchText = countrySearchText.value.toLowerCase();
+  return countries.value.filter(
+    (country) =>
+      country.name.toLowerCase().includes(searchText) ||
+      country.code.includes(searchText)
+  );
+});
+
 const selectCountry = (country) => {
   selectedCountry.value = country;
   showCountryPicker.value = false;
+  countrySearchText.value = "";
 };
+
+// 监听弹窗关闭，清空搜索文本
+watch(showCountryPicker, (newVal) => {
+  if (!newVal) {
+    countrySearchText.value = "";
+  }
+});
 
 // 钱包列表
 const wallets = ref([
@@ -958,51 +1001,112 @@ const selectLanguage = (code) => {
 }
 
 .country-picker {
-  height: 100%;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(180deg, #1a0d2e 0%, #0d0519 100%);
+  background: #181a1e;
+  border-radius: 10px;
+  max-height: 80vh;
+  overflow: hidden;
 
   .picker-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 16px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 36px;
+    // border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    flex-shrink: 0;
 
     .picker-title {
-      font-size: 16px;
-      font-weight: 500;
       color: #fff;
+      font-family: "PingFang SC";
+      font-size: 38px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: normal;
     }
 
     .close-icon {
-      font-size: 18px;
-      color: rgba(255, 255, 255, 0.6);
+      width: 24px;
+      height: 24px;
       cursor: pointer;
+    }
+  }
+
+  .search-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+    flex-shrink: 0;
+
+    .search-input-wrapper {
+      display: flex;
+      align-items: center;
+      width: 560px;
+      height: 90px;
+      border-radius: 10px;
+      border: 1px solid #22262f;
+      background: #0f1014;
+      padding: 0 20px;
+      box-sizing: border-box;
+      margin-bottom: 33px;
+      .search-icon {
+        width: 30.092px;
+        height: 30px;
+        margin-right: 24px;
+        flex-shrink: 0;
+      }
+
+      .search-input {
+        flex: 1;
+        height: 100%;
+        border: none;
+        background: transparent;
+        color: #6c6c6c;
+        font-family: "PingFang SC";
+        font-size: 28px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+
+        &::placeholder {
+          color: #6c6c6c;
+          font-family: "PingFang SC";
+          font-size: 28px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: normal;
+        }
+      }
     }
   }
 
   .country-list {
     flex: 1;
     overflow-y: auto;
+    max-height: 50vh;
+    padding: 0;
 
     .country-item {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 16px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 20px;
       cursor: pointer;
       transition: background-color 0.2s;
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.05);
+      }
 
       &:active {
         background-color: rgba(255, 255, 255, 0.1);
       }
 
       &.active {
-        background-color: rgba(0, 255, 136, 0.2);
-        color: #fff;
+        background-color: rgba(0, 255, 136, 0.1);
 
         .country-code-text {
           color: #00ff88;
@@ -1013,13 +1117,17 @@ const selectLanguage = (code) => {
       }
 
       .country-name {
-        font-size: 14px;
+        font-size: 28px;
         color: #fff;
+        font-family: "PingFang SC";
+        font-weight: 400;
       }
 
       .country-code-text {
-        font-size: 14px;
-        color: rgba(255, 255, 255, 0.6);
+        font-size: 28px;
+        color: #fff;
+        font-family: "PingFang SC";
+        font-weight: 400;
       }
     }
   }
@@ -1055,7 +1163,7 @@ const selectLanguage = (code) => {
   min-height: 100%;
   display: flex;
   flex-direction: column;
-  background: #17181A;
+  background: #17181a;
   position: relative;
   overflow: visible;
 
@@ -1064,7 +1172,7 @@ const selectLanguage = (code) => {
     align-items: center;
     justify-content: space-between;
     padding: 16px;
-    background: #17181A;
+    background: #17181a;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     position: relative;
     z-index: 1;
@@ -1112,6 +1220,8 @@ const selectLanguage = (code) => {
       height: 24px;
 
       .close-icon {
+        width: 30px;
+        height: 30px;
         font-size: 20px;
         color: #ffffff;
       }
@@ -1124,11 +1234,11 @@ const selectLanguage = (code) => {
     padding: 0;
     position: relative;
     z-index: 1;
-    background: #17181A;
+    background: #17181a;
 
     .language-list {
       padding: 0;
-      
+
       .language-item {
         display: flex;
         align-items: center;
