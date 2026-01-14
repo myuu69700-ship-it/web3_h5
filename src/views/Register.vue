@@ -363,33 +363,49 @@
     >
       <div class="language-dialog">
         <div class="dialog-header">
-          <van-icon
-            name="arrow-left"
-            class="back-icon"
-            @click="showLanguageDialog = false"
-          />
-          <div class="dialog-title">{{ currentLangName }}</div>
+          <div class="tabs-container">
+            <div
+              class="tab-item"
+              :class="{ active: languageTab === 'language' }"
+              @click="languageTab = 'language'"
+            >
+              <span class="tab-text">语言和地区</span>
+              <div class="tab-indicator" v-if="languageTab === 'language'"></div>
+            </div>
+            <div
+              class="tab-item"
+              :class="{ active: languageTab === 'exchange' }"
+              @click="languageTab = 'exchange'"
+            >
+              <span class="tab-text">汇率</span>
+              <div class="tab-indicator" v-if="languageTab === 'exchange'"></div>
+            </div>
+          </div>
+          <div class="close-btn" @click="showLanguageDialog = false">
+            <van-icon name="cross" class="close-icon" />
+          </div>
         </div>
         <div class="dialog-content">
-          <van-cell-group inset>
-            <van-cell
+          <div v-if="languageTab === 'language'" class="language-list">
+            <div
               v-for="lang in languages"
               :key="lang.code"
-              :title="lang.name"
+              class="language-item"
+              :class="{ active: currentLang === lang.code }"
               @click="selectLanguage(lang.code)"
             >
-              <template #icon>
-                <img :src="lang.flag" class="flag-icon" alt="" />
-              </template>
-              <template #right-icon>
-                <van-icon
-                  v-if="currentLang === lang.code"
-                  name="success"
-                  color="#1989fa"
-                />
-              </template>
-            </van-cell>
-          </van-cell-group>
+              <img :src="lang.flag" class="flag-icon" alt="" />
+              <span class="language-name">{{ lang.name }}</span>
+              <van-icon
+                v-if="currentLang === lang.code"
+                name="success"
+                class="check-icon"
+              />
+            </div>
+          </div>
+          <div v-else class="exchange-content">
+            <div class="exchange-placeholder">汇率内容</div>
+          </div>
         </div>
       </div>
     </van-popup>
@@ -421,6 +437,7 @@ const showConfirmPassword = ref(false);
 const agreed = ref(false);
 const showCountryPicker = ref(false);
 const showLanguageDialog = ref(false);
+const languageTab = ref('language');
 const verificationError = ref(false);
 const emailError = ref(false);
 const accountError = ref(false);
@@ -1202,34 +1219,66 @@ onUnmounted(() => {
   min-height: 100%;
   display: flex;
   flex-direction: column;
-  background-color: #0a0b0d;
+  background: #17181A;
   position: relative;
   overflow: visible;
 
   .dialog-header {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     padding: 16px;
-    background-color: rgba(26, 27, 46, 0.9);
+    background: #17181A;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     position: relative;
     z-index: 1;
     flex-shrink: 0;
 
-    .back-icon {
-      font-size: 20px;
-      color: #ffffff;
-      cursor: pointer;
-      margin-right: 12px;
+    .tabs-container {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      flex: 1;
+
+      .tab-item {
+        position: relative;
+        cursor: pointer;
+        padding-bottom: 8px;
+
+        .tab-text {
+          font-size: 16px;
+          color: #888888;
+          transition: color 0.3s;
+        }
+
+        &.active .tab-text {
+          color: #ffffff;
+        }
+
+        .tab-indicator {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          height: 2px;
+          background-color: #00ff88;
+          border-radius: 1px;
+        }
+      }
     }
 
-    .dialog-title {
-      font-size: 18px;
-      font-weight: bold;
-      color: #ffffff;
-      display: inline-block;
-      width: 100%;
-      text-align: center;
+    .close-btn {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+
+      .close-icon {
+        font-size: 20px;
+        color: #ffffff;
+      }
     }
   }
 
@@ -1239,31 +1288,61 @@ onUnmounted(() => {
     padding: 0;
     position: relative;
     z-index: 1;
-    background-color: #0a0b0d;
+    background: #17181A;
 
-    :deep(.van-cell-group) {
-      margin: 0;
+    .language-list {
+      padding: 0;
+      
+      .language-item {
+        display: flex;
+        align-items: center;
+        padding: 12px 16px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        cursor: pointer;
+        transition: background-color 0.2s;
+        background-color: transparent;
+
+        &:hover {
+          background-color: rgba(255, 255, 255, 0.02);
+        }
+
+        &.active {
+          background-color: rgba(255, 255, 255, 0.08);
+        }
+
+        .flag-icon {
+          width: 24px;
+          height: 18px;
+          margin-right: 12px;
+          display: block;
+          object-fit: cover;
+          border-radius: 2px;
+          flex-shrink: 0;
+        }
+
+        .language-name {
+          flex: 1;
+          font-size: 16px;
+          color: #ffffff;
+        }
+
+        .check-icon {
+          font-size: 20px;
+          color: #00ff88;
+          flex-shrink: 0;
+        }
+      }
     }
 
-    :deep(.van-cell) {
-      padding: 12px 16px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      background-color: #0a0b0d;
+    .exchange-content {
+      padding: 24px 16px;
       color: #ffffff;
-    }
+      text-align: center;
 
-    :deep(.van-cell:last-child) {
-      border-bottom: none;
-    }
-
-    .flag-icon {
-      width: 24px;
-      height: 18px;
-      margin-right: 12px;
-      display: inline-block;
-      object-fit: cover;
-      border-radius: 2px;
-      flex-shrink: 0;
+      .exchange-placeholder {
+        color: #888888;
+        font-size: 16px;
+      }
     }
   }
 }
