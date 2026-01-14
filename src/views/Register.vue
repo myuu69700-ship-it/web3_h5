@@ -63,7 +63,10 @@
       </div>
 
       <div class="verification-wrapper">
-        <div class="input-group verification-group" :class="{ 'error-state': verificationError }">
+        <div
+          class="input-group verification-group"
+          :class="{ 'error-state': verificationError }"
+        >
           <van-field
             v-model="verificationCode"
             placeholder=""
@@ -124,7 +127,7 @@
       <div class="input-group invitation-group">
         <label class="invitation-label">
           <span>邀请码</span>
-          <van-icon name="arrow-up" class="arrow-up-icon" />
+          <img :src="allowTopIcon" class="arrow-up-icon" alt="arrow-up" />
         </label>
         <van-field
           v-model="invitationCode"
@@ -152,9 +155,7 @@
             />
           </template>
         </van-field>
-        <div v-if="emailError" class="error-message">
-          *请输入有效的邮箱号
-        </div>
+        <div v-if="emailError" class="error-message">*请输入有效的邮箱号</div>
       </div>
 
       <div class="verification-wrapper">
@@ -210,7 +211,7 @@
       <div class="input-group invitation-group">
         <label class="invitation-label">
           <span>邀请码</span>
-          <van-icon name="arrow-up" class="arrow-up-icon" />
+          <img :src="allowTopIcon" class="arrow-up-icon" alt="arrow-up" />
         </label>
         <van-field
           v-model="invitationCode"
@@ -287,7 +288,7 @@
       <div class="input-group invitation-group">
         <label class="invitation-label">
           <span>邀请码</span>
-          <van-icon name="arrow-up" class="arrow-up-icon" />
+          <img :src="allowTopIcon" class="arrow-up-icon" alt="arrow-up" />
         </label>
         <van-field
           v-model="invitationCode"
@@ -305,13 +306,20 @@
         <span class="link" @click="openTerms">《服务条款》</span>
         <span class="link" @click="openPrivacy">《隐私协议》</span>
         和
-        <span class="link" @click="openAntiMoneyLaundering">《反洗钱协议》</span>
+        <span class="link" @click="openAntiMoneyLaundering"
+          >《反洗钱协议》</span
+        >
       </div>
     </div>
 
     <!-- 注册按钮 -->
     <div class="button-group">
-      <van-button type="primary" block class="register-btn" @click="handleRegister">
+      <van-button
+        type="primary"
+        block
+        class="register-btn"
+        @click="handleRegister"
+      >
         立即注册
       </van-button>
     </div>
@@ -395,6 +403,7 @@ import { useI18n, languages } from "@/i18n";
 import kfuIcon from "@/assets/images/kfu.svg";
 import globeIcon from "@/assets/images/diqiu.svg";
 import passwordIcon from "@/assets/image/password.svg";
+import allowTopIcon from "@/assets/image/allow_top.svg";
 
 const router = useRouter();
 const { t, currentLang, setLanguage } = useI18n();
@@ -419,7 +428,9 @@ const countdown = ref(0);
 let countdownTimer = null;
 
 // 验证码图片URL（这里使用模拟数据，实际应该从API获取）
-const captchaImageUrl = ref("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='40'%3E%3Crect width='120' height='40' fill='%233c404b'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-size='20' fill='%23fff'%3E5131%3C/text%3E%3C/svg%3E");
+const captchaImageUrl = ref(
+  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='40'%3E%3Crect width='120' height='40' fill='%233c404b'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-size='20' fill='%23fff'%3E5131%3C/text%3E%3C/svg%3E"
+);
 
 const refreshCaptcha = () => {
   // TODO: 刷新验证码图片
@@ -587,7 +598,7 @@ const selectCountry = (country) => {
 
 const handleSendCode = () => {
   if (countdown.value > 0) return;
-  
+
   // 验证手机号或邮箱
   if (activeTab.value === "phone" && !phoneNumber.value) {
     return;
@@ -832,8 +843,8 @@ onUnmounted(() => {
 .input-group {
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
-  margin-top: 60px;
+  // margin-bottom: 20px;
+  margin-top: 98px;
   overflow: hidden;
   width: 686px;
   height: 90px;
@@ -912,12 +923,13 @@ onUnmounted(() => {
   }
 
   &.invitation-group {
-    margin-top: 80px;
+    margin-top: 130px;
+    overflow: visible;
   }
 
   .invitation-label {
     position: absolute;
-    top: -40px;
+    top: -75px;
     left: 0;
     color: #fff;
     font-family: "PingFang SC";
@@ -926,10 +938,12 @@ onUnmounted(() => {
     display: flex;
     align-items: center;
     gap: 4px;
+    z-index: 1;
 
     .arrow-up-icon {
-      font-size: 16px;
-      color: #fff;
+      width: 14px;
+      height: 8px;
+      display: inline-block;
     }
   }
 
@@ -985,17 +999,16 @@ onUnmounted(() => {
   }
 
   .send-btn-separate {
-    width: 120px;
+    width: 222px;
     height: 90px;
-    background: #3c404b;
-    border: 1px solid #3c404b;
+    background: #181a1e;
     border-radius: 10px;
-    color: #fff;
+    border: 1px solid #5c5c5c;
+    color: #eee;
     font-family: "PingFang SC";
-    font-size: 24px;
+    font-size: 28px;
+    font-style: normal;
     font-weight: 500;
-    cursor: pointer;
-    flex-shrink: 0;
 
     &.disabled {
       color: #6c6c6c;
@@ -1027,15 +1040,19 @@ onUnmounted(() => {
 .agreement {
   display: flex;
   align-items: flex-start;
-  margin-top: 40px;
-  margin-bottom: 24px;
+  margin-top: 57px;
+  margin-bottom: 60px;
   gap: 8px;
 
   :deep(.van-checkbox) {
     margin-top: 2px;
+    width: 40px;
+    height: 40px;
   }
 
   :deep(.van-checkbox__icon) {
+    width: 40px;
+    height: 40px;
     border-color: #00ff88;
     background-color: transparent;
   }
@@ -1047,15 +1064,16 @@ onUnmounted(() => {
 
   .agreement-text {
     flex: 1;
-    font-size: 24px;
-    color: #fff;
-    line-height: 1.5;
+    color: #919191;
     font-family: "PingFang SC";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
 
     .link {
-      color: #4a9eff;
+      color: #e8e8e8;
       cursor: pointer;
-      text-decoration: underline;
     }
   }
 }
