@@ -8,12 +8,7 @@
     <div class="menu-drawer">
       <!-- 顶部导航栏 -->
       <div class="drawer-header">
-        <img
-          :src="leftArrowIcon"
-          class="back-icon"
-          @click="handleClose"
-          alt="返回"
-        />
+        <van-icon name="cross" class="close-icon" @click="handleClose" />
         <div class="header-right">
           <img
             :src="kfuIcon"
@@ -21,175 +16,226 @@
             @click="handleService"
             alt="客服"
           />
-          <van-icon name="chat-o" class="header-icon" @click="handleMessage" />
+          <img
+            :src="diqiuIcon"
+            class="header-icon"
+            @click="handleLanguageSelect"
+            alt="语言"
+          />
         </div>
       </div>
 
-      <!-- 用户登录/个人资料部分 -->
-      <div class="user-section" @click="handleUserProfile">
-        <div class="user-avatar">
-          <van-icon name="user-circle-o" size="62.39" />
-        </div>
-        <div class="user-info">
-          <div class="user-title">{{ t("loginImmediately") }}</div>
-          <div class="user-subtitle">{{ t("personalDataAndSettings") }}</div>
-        </div>
-        <van-icon name="arrow" class="arrow-icon" />
+      <!-- 登录注册按钮 -->
+      <div class="auth-section">
+        <button class="auth-btn login-btn" @click="handleLogin">
+          {{ t("login") }}
+        </button>
+        <button class="auth-btn register-btn" @click="handleRegister">
+          {{ t("register") }}
+        </button>
       </div>
 
       <!-- 常用功能 -->
-      <div class="menu-group tutorial-group">
-        <div class="group-title">{{ t("commonFunctions") }}</div>
-        <div class="function-item tutorial-item" @click="handleTutorial">
-          <div class="function-icon-wrapper">
-            <van-icon name="info-o" size="27.03" />
+      <div class="menu-section">
+        <div class="section-header" @click="toggleSection('common')">
+          <span class="section-title">{{ t("commonFunctions") }}</span>
+          <van-icon
+            name="arrow-up"
+            class="chevron-icon"
+            :class="{ expanded: expandedSections.common }"
+          />
+        </div>
+        <div
+          v-if="expandedSections.common"
+          class="section-content"
+        >
+          <div class="menu-item" @click="handleTutorial">
+            <div class="menu-icon">
+              <van-icon name="question-o" size="24" />
+            </div>
+            <span class="menu-label">{{ t("newbieTutorial") }}</span>
           </div>
-          <span class="function-label">{{ t("newbieTutorial") }}</span>
         </div>
       </div>
 
       <!-- 资产管理 -->
-      <div class="menu-group">
-        <div class="group-title">{{ t("assetManagement") }}</div>
-        <div class="function-row">
-          <div class="function-item" @click="handleDeposit">
-            <div class="function-icon-wrapper">
-              <van-icon name="balance-o" size="27.03" />
+      <div class="menu-section">
+        <div class="section-header" @click="toggleSection('assets')">
+          <span class="section-title">{{ t("assetManagement") }}</span>
+          <van-icon
+            name="arrow-up"
+            class="chevron-icon"
+            :class="{ expanded: expandedSections.assets }"
+          />
+        </div>
+        <div
+          v-if="expandedSections.assets"
+          class="section-content"
+        >
+          <div class="menu-item" @click="handleDeposit">
+            <div class="menu-icon">
+              <van-icon name="balance-o" size="24" />
             </div>
-            <span class="function-label">{{ t("deposit") }}</span>
+            <span class="menu-label">{{ t("deposit") }}</span>
           </div>
-          <div class="function-item" @click="handleWithdraw">
-            <div class="function-icon-wrapper">
-              <van-icon name="friends-o" size="27.03" />
+          <div class="menu-item" @click="handleWithdraw">
+            <div class="menu-icon">
+              <van-icon name="arrow-up" size="24" />
             </div>
-            <span class="function-label">{{ t("withdraw") }}</span>
+            <span class="menu-label">{{ t("withdraw") }}</span>
           </div>
-          <div class="function-item" @click="handleQuickBuy">
-            <div class="function-icon-wrapper">
-              <van-icon name="gold-coin-o" size="27.03" />
+          <div class="menu-item" @click="handleQuickBuy">
+            <div class="menu-icon">
+              <van-icon name="flash-o" size="24" />
             </div>
-            <span class="function-label">{{ t("quickBuy") }}</span>
+            <span class="menu-label">{{ t("quickBuy") }}</span>
           </div>
         </div>
       </div>
 
       <!-- 交易 -->
-      <div class="menu-group">
-        <div class="group-title">{{ t("trading") }}</div>
-        <div class="function-row">
-          <div class="function-item" @click="handleOptions">
-            <div class="function-icon-wrapper">
-              <van-icon name="chart-trending-o" size="27.03" />
-            </div>
-            <span class="function-label">{{ t("options") }}</span>
-          </div>
-          <div class="function-item" @click="handleSpot">
-            <div class="function-icon-wrapper">
-              <van-icon name="share-o" size="27.03" />
-            </div>
-            <span class="function-label">{{ t("spot") }}</span>
-          </div>
-          <div class="function-item" @click="handleContract">
-            <div class="function-icon-wrapper">
-              <van-icon name="apps-o" size="27.03" />
-            </div>
-            <span class="function-label">{{ t("contract") }}</span>
-          </div>
-          <div class="function-item" @click="handleNFT">
-            <div class="function-icon-wrapper">
-              <van-icon name="photo-o" size="27.03" />
-            </div>
-            <span class="function-label">{{ t("nft") }}</span>
-          </div>
+      <div class="menu-section">
+        <div class="section-header" @click="toggleSection('trading')">
+          <span class="section-title">{{ t("trading") }}</span>
+          <van-icon
+            name="arrow-up"
+            class="chevron-icon"
+            :class="{ expanded: expandedSections.trading }"
+          />
         </div>
-        <div class="function-row">
-          <div class="function-item" @click="handleAIStrategy">
-            <div class="function-icon-wrapper">
-              <van-icon name="setting-o" size="27.03" />
+        <div
+          v-if="expandedSections.trading"
+          class="section-content"
+        >
+          <div class="menu-item" @click="handleOptions">
+            <div class="menu-icon">
+              <van-icon name="description" size="24" />
             </div>
-            <span class="function-label">{{ t("aiStrategyTrading") }}</span>
+            <span class="menu-label">{{ t("options") }}</span>
+          </div>
+          <div class="menu-item" @click="handleSpot">
+            <div class="menu-icon">
+              <van-icon name="aim" size="24" />
+            </div>
+            <span class="menu-label">{{ t("spot") }}</span>
+          </div>
+          <div class="menu-item" @click="handleContract">
+            <div class="menu-icon">
+              <van-icon name="description" size="24" />
+            </div>
+            <span class="menu-label">{{ t("contract") }}</span>
+          </div>
+          <div class="menu-item" @click="handleNFT">
+            <div class="menu-icon">
+              <span class="nft-icon">NFT</span>
+            </div>
+            <span class="menu-label">{{ t("nft") }}</span>
+          </div>
+          <div class="menu-item" @click="handleAIStrategy">
+            <div class="menu-icon">
+              <van-icon name="setting-o" size="24" />
+            </div>
+            <span class="menu-label">{{ t("aiStrategyTrading") }}</span>
           </div>
         </div>
       </div>
 
       <!-- 赚币与奖励 -->
-      <div class="menu-group">
-        <div class="group-title">{{ t("earnCoinsAndRewards") }}</div>
-        <div class="function-row">
-          <div class="function-item" @click="handleDeFiLending">
-            <div class="function-icon-wrapper">
-              <van-icon name="like-o" size="27.03" />
+      <div class="menu-section">
+        <div class="section-header" @click="toggleSection('earn')">
+          <span class="section-title">{{ t("earnCoinsAndRewards") }}</span>
+          <van-icon
+            name="arrow-up"
+            class="chevron-icon"
+            :class="{ expanded: expandedSections.earn }"
+          />
+        </div>
+        <div
+          v-if="expandedSections.earn"
+          class="section-content"
+        >
+          <div class="menu-item" @click="handleDeFiLending">
+            <div class="menu-icon">
+              <van-icon name="exchange" size="24" />
             </div>
-            <span class="function-label">{{ t("defiLending") }}</span>
+            <span class="menu-label">{{ t("defiLending") }}</span>
           </div>
-          <div class="function-item" @click="handlePortfolio">
-            <div class="function-icon-wrapper">
-              <van-icon name="cluster-o" size="27.03" />
+          <div class="menu-item" @click="handlePortfolio">
+            <div class="menu-icon">
+              <van-icon name="cluster-o" size="24" />
             </div>
-            <span class="function-label">{{ t("investmentPortfolio") }}</span>
+            <span class="menu-label">{{ t("investmentPortfolio") }}</span>
           </div>
-          <div class="function-item" @click="handleLockedStaking">
-            <div class="function-icon-wrapper">
-              <van-icon name="lock" size="27.03" />
+          <div class="menu-item" @click="handleLockedStaking">
+            <div class="menu-icon">
+              <van-icon name="lock" size="24" />
             </div>
-            <span class="function-label">{{ t("lockedStaking") }}</span>
+            <span class="menu-label">{{ t("lockedStaking") }}</span>
           </div>
         </div>
       </div>
 
-      <!-- 平台功能 -->
-      <div class="menu-group">
-        <div class="group-title">{{ t("platformFunctions") }}</div>
-        <div class="function-row">
-          <div class="function-item" @click="handleAssetCenter">
-            <div class="function-icon-wrapper">
-              <van-icon name="shield-o" size="27.03" />
-            </div>
-            <span class="function-label">{{ t("assetCenter") }}</span>
-          </div>
-          <div class="function-item" @click="handleAddressBook">
-            <div class="function-icon-wrapper">
-              <van-icon name="notes-o" size="27.03" />
-            </div>
-            <span class="function-label">{{ t("addressBook") }}</span>
-          </div>
-          <div class="function-item" @click="handleCharity">
-            <div class="function-icon-wrapper">
-              <van-icon name="like-o" size="27.03" />
-            </div>
-            <span class="function-label">{{ t("charity") }}</span>
-          </div>
-          <div class="function-item" @click="handlePlatformNotifications">
-            <div class="function-icon-wrapper">
-              <van-icon name="bell-o" size="27.03" />
-            </div>
-            <span class="function-label">{{ t("platformNotifications") }}</span>
-          </div>
+      <!-- 更多功能 -->
+      <div class="menu-section">
+        <div class="section-header" @click="toggleSection('more')">
+          <span class="section-title">{{ t("moreFunctions") }}</span>
+          <van-icon
+            name="arrow-up"
+            class="chevron-icon"
+            :class="{ expanded: expandedSections.more }"
+          />
         </div>
-        <div class="function-row">
-          <div class="function-item" @click="handleSecurityCenter">
-            <div class="function-icon-wrapper">
-              <van-icon name="shield-o" size="27.03" />
+        <div
+          v-if="expandedSections.more"
+          class="section-content"
+        >
+          <div class="menu-item" @click="handleAssetCenter">
+            <div class="menu-icon">
+              <van-icon name="notes-o" size="24" />
             </div>
-            <span class="function-label">{{ t("securityCenter") }}</span>
+            <span class="menu-label">{{ t("assetCenter") }}</span>
           </div>
-          <div class="function-item" @click="handleLanguageSelect">
-            <div class="function-icon-wrapper">
-              <img :src="diqiuIcon" class="language-icon" alt="" />
+          <div class="menu-item" @click="handleAddressBook">
+            <div class="menu-icon">
+              <van-icon name="notes-o" size="24" />
             </div>
-            <span class="function-label">{{ t("traditionalChinese") }}</span>
+            <span class="menu-label">{{ t("addressBook") }}</span>
+          </div>
+          <div class="menu-item" @click="handleCharity">
+            <div class="menu-icon">
+              <van-icon name="like-o" size="24" />
+            </div>
+            <span class="menu-label">{{ t("charity") }}</span>
+          </div>
+          <div class="menu-item" @click="handleSecurityCenter">
+            <div class="menu-icon">
+              <van-icon name="shield-o" size="24" />
+            </div>
+            <span class="menu-label">{{ t("securityCenter") }}</span>
           </div>
         </div>
       </div>
+
+      <!-- 分隔线 -->
+      <div class="divider"></div>
 
       <!-- 清除缓存 -->
-      <div class="menu-group">
-        <div class="function-item clear-cache" @click="handleClearCache">
-          <div class="function-icon-wrapper">
+      <div class="menu-section">
+        <div class="menu-item clear-cache" @click="handleClearCache">
+          <div class="menu-icon">
             <van-icon name="delete-o" size="20" />
           </div>
-          <span class="function-label">{{ t("clearCache") }}</span>
+          <span class="menu-label">{{ t("clearCache") }}</span>
         </div>
+      </div>
+
+      <!-- 底部链接 -->
+      <div class="footer-links">
+        <span class="footer-link" @click="handlePrivacy">隐私</span>
+        <span class="footer-divider">|</span>
+        <span class="footer-link" @click="handleTerms">条款</span>
+        <span class="footer-divider">|</span>
+        <span class="footer-link" @click="handleRisk">风险</span>
       </div>
     </div>
 
@@ -255,7 +301,6 @@
 import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useI18n, languages } from "@/i18n";
-import leftArrowIcon from "@/assets/images/left_arrow.svg";
 import kfuIcon from "@/assets/images/kfu.svg";
 import diqiuIcon from "@/assets/images/diqiu.svg";
 
@@ -273,6 +318,15 @@ const { t, currentLang, setLanguage } = useI18n();
 const showLanguageDialog = ref(false);
 const languageTab = ref('language');
 
+// 可折叠部分的状态
+const expandedSections = ref({
+  common: false,
+  assets: false,
+  trading: false,
+  earn: false,
+  more: false,
+});
+
 const visible = computed({
   get: () => props.modelValue,
   set: (val) => emit("update:modelValue", val),
@@ -286,9 +340,19 @@ const handleClose = () => {
   visible.value = false;
 };
 
-// 用户相关
-const handleUserProfile = () => {
+// 切换折叠部分
+const toggleSection = (section) => {
+  expandedSections.value[section] = !expandedSections.value[section];
+};
+
+// 登录注册
+const handleLogin = () => {
   router.push("/login");
+  handleClose();
+};
+
+const handleRegister = () => {
+  router.push("/register");
   handleClose();
 };
 
@@ -365,7 +429,7 @@ const handleLockedStaking = () => {
   handleClose();
 };
 
-// 平台功能
+// 更多功能
 const handleAssetCenter = () => {
   router.push("/my-assets");
   handleClose();
@@ -381,51 +445,43 @@ const handleCharity = () => {
   handleClose();
 };
 
-const handlePlatformNotifications = () => {
-  router.push("/platform-notifications");
-  handleClose();
-};
-
 const handleSecurityCenter = () => {
   router.push("/security-center");
   handleClose();
 };
 
-const currentLangName = computed(() => {
-  const lang = languages.find((l) => l.code === currentLang.value);
-  return (
-    lang?.name || languages.find((l) => l.code === "zh-TW")?.name || "繁體中文"
-  );
-});
-
+// 语言选择
 const selectLanguage = (code) => {
   setLanguage(code);
   showLanguageDialog.value = false;
-  // 选择语言后，重新打开侧边栏以便用户继续操作
   visible.value = true;
 };
 
 const handleLanguageSelect = () => {
-  // 打开语言选择弹窗，不关闭侧边栏（让语言弹出窗覆盖侧边栏）
   showLanguageDialog.value = true;
 };
 
 // 顶部操作
 const handleService = () => {
-  // 客服逻辑
   console.log("客服");
-};
-
-const handleMessage = () => {
-  // 消息逻辑
-  console.log("消息");
 };
 
 // 清除缓存
 const handleClearCache = () => {
-  // 清除缓存逻辑
   console.log("清除缓存");
-  // 可以显示确认对话框
+};
+
+// 底部链接
+const handlePrivacy = () => {
+  console.log("隐私");
+};
+
+const handleTerms = () => {
+  console.log("条款");
+};
+
+const handleRisk = () => {
+  console.log("风险");
 };
 </script>
 
@@ -433,23 +489,27 @@ const handleClearCache = () => {
 .menu-drawer {
   width: 100%;
   height: 100%;
-  background-color: #fff;
+  background-color: #1a1a1a;
   overflow-y: auto;
   padding-bottom: 20px;
+  color: #ffffff;
 }
 
 .drawer-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 20px;
-  // border-bottom: 1px solid #ebedf0;
+  padding: 32px 32px 24px;
 
-  .back-icon {
-    width: 26px;
-    height: 26px;
+  .close-icon {
+    font-size: 28px;
+    color: #ffffff;
     cursor: pointer;
-    display: block;
+    transition: opacity 0.3s;
+
+    &:active {
+      opacity: 0.7;
+    }
   }
 
   .header-right {
@@ -458,178 +518,187 @@ const handleClearCache = () => {
     align-items: center;
 
     .header-icon {
-      width: 24.95px;
-      height: 24.95px;
+      width: 30px;
+      height: 30px;
       cursor: pointer;
       display: block;
+      filter: brightness(0) invert(1);
+      transition: opacity 0.3s;
 
-      &.van-icon {
-        font-size: 24.95px;
-        color: #040303;
+      &:active {
+        opacity: 0.7;
       }
     }
   }
 }
 
-.user-section {
+.auth-section {
+  padding: 0 32px 24px;
   display: flex;
-  align-items: center;
-  padding: 15px;
-  cursor: pointer;
-  // border-bottom: 1px solid #ebedf0;
+  flex-direction: column;
+  gap: 12px;
 
-  .user-avatar {
-    width: 62.39px;
-    height: 62.39px;
-    margin-right: 12px;
-    color: #040303;
-  }
+  .auth-btn {
+    width: 100%;
+    height: 84px;
+    border-radius: 10px;
+    font-family: PingFang SC;
+    font-weight: 500;
+    font-size: 28px;
+    line-height: 100%;
+    cursor: pointer;
+    border: none;
+    transition: all 0.3s ease;
 
-  .user-info {
-    flex: 1;
-
-    .user-title {
-      font-size: 14px;
-      color: #040303;
-      margin-bottom: 4px;
+    &:active {
+      opacity: 0.8;
+      transform: scale(0.98);
     }
 
-    .user-subtitle {
-      font-size: 14px;
-      color: #040303;
+    &.login-btn {
+      background: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.2);
     }
-  }
 
-  .arrow-icon {
-    font-size: 16px;
-    color: #040303;
-    font-weight: 600;
+    &.register-btn {
+      background: #1df388;
+      color: #070210;
+      border: 1px solid #1df388;
+    }
   }
 }
 
-.menu-group {
-  padding: 16px 20px 0;
-  border-bottom: 1px solid #ebedf0;
-  width: 95%;
-  margin: 0 auto;
+.menu-section {
+  padding: 0 32px;
 
-  .group-title {
-    font-size: 3.73333vw;
-    font-weight: 600;
-    color: #040303;
-    margin-bottom: 12px;
-    margin-left: -15px;
-  }
-
-  .function-row {
+  .section-header {
     display: flex;
-    gap: 20px;
-    margin-bottom: 16px;
-    flex-wrap: wrap;
-  }
-
-  .function-item {
-    display: flex;
-    flex-direction: column;
+    justify-content: space-between;
     align-items: center;
-    justify-content: flex-start;
+    padding: 24px 0;
     cursor: pointer;
-    min-width: 60px;
-    padding: 8px 0;
-    // flex: 0 0 auto;
+    transition: opacity 0.3s;
 
-    .function-icon-wrapper {
+    &:active {
+      opacity: 0.7;
+    }
+
+    .section-title {
+      font-family: PingFang SC;
+      font-weight: 500;
+      font-size: 28px;
+      color: #ffffff;
+    }
+
+    .chevron-icon {
+      font-size: 20px;
+      color: #ffffff;
+      transition: transform 0.3s ease;
+
+      &.expanded {
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+  .section-content {
+    padding-bottom: 16px;
+    animation: slideDown 0.3s ease-out;
+  }
+
+  .menu-item {
+    display: flex;
+    align-items: center;
+    padding: 16px 0;
+    cursor: pointer;
+    transition: opacity 0.3s;
+
+    &:active {
+      opacity: 0.7;
+    }
+
+    .menu-icon {
       width: 40px;
       height: 40px;
       display: flex;
       align-items: center;
       justify-content: center;
+      margin-right: 16px;
       border-radius: 50%;
-      background-color: transparent;
-      margin-bottom: 8px;
-      color: #040303;
+      background: rgba(255, 255, 255, 0.1);
+      color: #1df388;
 
-      .language-icon {
-        width: 27.03px;
-        height: 27.03px;
-        object-fit: contain;
+      .nft-icon {
+        font-size: 16px;
+        font-weight: 600;
+        color: #1df388;
       }
     }
 
-    .function-label {
-      font-size: 12px;
-      color: #040303;
-      // text-align: center;
-      line-height: 1.4;
+    .menu-label {
+      font-family: PingFang SC;
+      font-weight: 400;
+      font-size: 26px;
+      color: #ffffff;
     }
 
-    &:active {
-      opacity: 0.7;
-    }
-  }
-
-  // 新手教程样式 - 最左侧
-  &.tutorial-group {
-    padding: 16px 20px 0;
-    // padding-left: 30px;
-    
-    .tutorial-item {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      justify-content: flex-start;
-      width: auto;
-      padding: 12px 0;
-      margin-left: 10px;
-
-      .function-icon-wrapper {
-        width: 40px;
-        height: 40px;
-        margin-right: 0;
-        margin-bottom: 8px;
-        background-color: transparent;
-        border-radius: 0;
-        flex-shrink: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #040303;
+    &.clear-cache {
+      .menu-icon {
+        background: transparent;
+        margin-right: 12px;
       }
 
-      .function-label {
-        font-size: 12px;
-        color: #040303;
-        text-align: left;
-        line-height: 1.4;
+      .menu-label {
+        font-size: 26px;
       }
-    }
-  }
-
-  .clear-cache {
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: center;
-    padding: 12px 0;
-    width: 100%;
-
-    .function-icon-wrapper {
-      width: 20px;
-      height: 20px;
-      margin-right: 12px;
-      margin-bottom: 0;
-      background-color: transparent;
-      border-radius: 0;
-    }
-
-    .function-label {
-      font-size: 4vw;
-      color: #040303;
-      // font-weight: 600;
     }
   }
 }
-.menu-group:last-child {
-  border-bottom: none;
+
+.divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 24px 32px;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  padding: 24px 32px;
+  font-family: PingFang SC;
+  font-weight: 400;
+  font-size: 24px;
+
+  .footer-link {
+    color: #949494;
+    cursor: pointer;
+    transition: color 0.3s;
+
+    &:active {
+      color: #1df388;
+    }
+  }
+
+  .footer-divider {
+    color: #949494;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    max-height: 500px;
+    transform: translateY(0);
+  }
 }
 
 // 语言选择对话框
@@ -651,6 +720,7 @@ const handleClearCache = () => {
   from {
     transform: translateX(100%);
   }
+
   to {
     transform: translateX(0);
   }
@@ -789,3 +859,4 @@ const handleClearCache = () => {
   }
 }
 </style>
+
