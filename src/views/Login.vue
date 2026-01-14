@@ -8,7 +8,12 @@
       </div>
       <div class="header-icons">
         <img :src="kfuIcon" class="service-icon" alt="客服" />
-        <img :src="globeIcon" class="globe-icon" alt="语言" @click="showLanguageDialog = true" />
+        <img
+          :src="globeIcon"
+          class="globe-icon"
+          alt="语言"
+          @click="showLanguageDialog = true"
+        />
       </div>
     </div>
 
@@ -54,7 +59,7 @@
     <div v-if="activeTab === 'phone'" class="form-container">
       <div class="input-group">
         <div class="country-selector" @click="showCountryPicker = true">
-          <span class="country-code">+{{ selectedCountry.code }}-</span>
+          <span class="country-code">+{{ selectedCountry.code }}</span>
           <van-icon name="arrow-down" class="arrow-icon" />
         </div>
         <van-field
@@ -72,10 +77,11 @@
           class="password-input"
         >
           <template #right-icon>
-            <van-icon
-              :name="showPassword ? 'eye-o' : 'closed-eye'"
+            <img
+              :src="passwordIcon"
               @click="showPassword = !showPassword"
               class="eye-icon"
+              alt="password"
             />
           </template>
         </van-field>
@@ -104,10 +110,11 @@
           class="password-input"
         >
           <template #right-icon>
-            <van-icon
-              :name="showPassword ? 'eye-o' : 'closed-eye'"
+            <img
+              :src="passwordIcon"
               @click="showPassword = !showPassword"
               class="eye-icon"
+              alt="password"
             />
           </template>
         </van-field>
@@ -233,6 +240,7 @@ import kfuIcon from "@/assets/images/kfu.svg";
 import globeIcon from "@/assets/images/diqiu.svg";
 // 钱包图标 - 使用占位符或实际图标
 import okxIcon from "@/assets/image/okx.svg";
+import passwordIcon from "@/assets/image/password.svg";
 
 const router = useRouter();
 const { t, currentLang, setLanguage } = useI18n();
@@ -615,18 +623,20 @@ const selectLanguage = (code) => {
   display: flex;
   gap: 32px;
   margin-top: 24px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-
+  margin-bottom: 73px;
   .tab {
-    padding-bottom: 12px;
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 16px;
     cursor: pointer;
     position: relative;
     transition: color 0.3s;
     padding: 0 16px;
     height: 46.8px;
     line-height: 46.8px;
+    color: #6a6a6a;
+    font-family: "PingFang SC";
+    font-size: 28px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
 
     &.active {
       color: #fff;
@@ -635,10 +645,11 @@ const selectLanguage = (code) => {
       &::after {
         content: "";
         position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 2px;
+        bottom: -13px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 50px;
+        height: 6px;
         background-color: #00ff88;
       }
     }
@@ -652,12 +663,14 @@ const selectLanguage = (code) => {
 .input-group {
   display: flex;
   align-items: center;
-  margin-bottom: 24px;
-  margin-top: 24px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
+  margin-bottom: 20px;
+  margin-top: 60px;
   overflow: hidden;
-  background-color: rgba(255, 255, 255, 0.05);
+  width: 686px;
+  height: 90px;
+  border-radius: 10px;
+  border: 1px solid #3c404b;
+  background: #181a1e;
 
   .country-selector {
     display: flex;
@@ -669,8 +682,13 @@ const selectLanguage = (code) => {
     background-color: transparent;
 
     .country-code {
-      font-size: 14px;
-      color: #fff;
+      color: #f3f4f6;
+      text-align: right;
+      font-family: "PingFang SC";
+      font-size: 24px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: normal;
       margin-right: 4px;
     }
 
@@ -685,33 +703,57 @@ const selectLanguage = (code) => {
     background-color: transparent;
 
     .van-field__control {
-      font-size: 14px;
-      color: #fff;
+      color: #6c6c6c;
+      font-family: "PingFang SC";
+      font-size: 28px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
 
       &::placeholder {
-        font-size: 14px;
-        color: rgba(255, 255, 255, 0.5);
+        color: #6c6c6c;
+        font-family: "PingFang SC";
+        font-size: 28px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
       }
 
       &::-webkit-input-placeholder {
-        font-size: 14px;
-        color: rgba(255, 255, 255, 0.5);
+        color: #6c6c6c;
+        font-family: "PingFang SC";
+        font-size: 28px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
       }
 
       &::-moz-placeholder {
-        font-size: 14px;
-        color: rgba(255, 255, 255, 0.5);
+        color: #6c6c6c;
+        font-family: "PingFang SC";
+        font-size: 28px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
       }
 
       &:-ms-input-placeholder {
-        font-size: 14px;
-        color: rgba(255, 255, 255, 0.5);
+        color: #6c6c6c;
+        font-family: "PingFang SC";
+        font-size: 28px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
       }
     }
 
     .van-field__placeholder {
-      font-size: 14px;
-      color: rgba(255, 255, 255, 0.5);
+      color: #6c6c6c;
+      font-family: "PingFang SC";
+      font-size: 28px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
     }
   }
 
@@ -727,9 +769,9 @@ const selectLanguage = (code) => {
     flex: 1;
 
     .eye-icon {
-      font-size: 18px;
-      color: rgba(255, 255, 255, 0.6);
       cursor: pointer;
+      width: 36px;
+      height: 22px;
     }
   }
 }
@@ -737,13 +779,12 @@ const selectLanguage = (code) => {
 .forgot-password {
   text-align: right;
   margin-bottom: 24px;
-
-  span {
-    font-size: 14px;
-    color: #fff;
-    font-weight: 500;
-    cursor: pointer;
-  }
+  font-family: "PingFang SC";
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  color: #6c6c6c;
 }
 
 .agreement {
@@ -785,20 +826,17 @@ const selectLanguage = (code) => {
     align-items: center;
     justify-content: center;
     margin: 0 auto;
-    width: 100%;
-    height: 48px;
-    background: linear-gradient(135deg, #00ff88 0%, #00cc6a 100%);
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 600;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    transition: opacity 0.3s;
-
-    &:hover {
-      opacity: 0.9;
-    }
+    width: 686px;
+    height: 90px;
+    border-radius: 10px;
+    background: #1df388;
+    color: #121212;
+    font-family: "PingFang SC";
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    // margin-bottom: 60px;
 
     &:disabled {
       opacity: 0.5;
@@ -811,8 +849,14 @@ const selectLanguage = (code) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 32px 0 24px;
+  margin: 60px 0;
   position: relative;
+  color: #a0a0a0;
+  font-family: "PingFang SC";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 
   &::before {
     content: "";
@@ -836,17 +880,17 @@ const selectLanguage = (code) => {
 .wallet-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 40px;
 
   .wallet-item {
     display: flex;
     align-items: center;
-    padding: 16px;
-    background-color: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s;
+    justify-content: flex-start;
+    width: 686px;
+    height: 90px;
+    border-radius: 10px;
+    border: 1px solid #3a404e;
+    background: #0f1014;
 
     &:hover {
       background-color: rgba(255, 255, 255, 0.08);
@@ -859,16 +903,19 @@ const selectLanguage = (code) => {
     }
 
     .wallet-icon {
-      width: 32px;
-      height: 32px;
-      margin-right: 12px;
+      width: 50px;
+      height: 50px;
+      margin-right: 13px;
+      margin-left: 233px;
     }
 
     .wallet-name {
-      flex: 1;
-      font-size: 16px;
-      color: #fff;
+      color: #e3e3e3;
+      font-family: Inter;
+      font-size: 30px;
+      font-style: normal;
       font-weight: 500;
+      line-height: normal;
     }
 
     .wallet-link-icon {
@@ -877,6 +924,15 @@ const selectLanguage = (code) => {
     }
 
     &.more-wallets {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ededed;
+      font-family: "PingFang SC";
+      font-size: 24px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: normal;
       .wallet-link-icon {
         margin-right: 12px;
       }
