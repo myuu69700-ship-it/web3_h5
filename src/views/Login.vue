@@ -164,7 +164,12 @@
     <van-popup
       v-model:show="showCountryPicker"
       position="center"
-      :style="{ width: '90%', maxWidth: '589px', borderRadius: '10px', backgroundColor: '#181a1e' }"
+      :style="{
+        width: '90%',
+        maxWidth: '589px',
+        borderRadius: '10px',
+        backgroundColor: '#181a1e',
+      }"
       round
     >
       <div class="country-picker">
@@ -264,6 +269,54 @@
         </div>
       </div>
     </van-popup>
+
+    <!-- 更多钱包弹窗 -->
+    <van-popup
+      v-model:show="showMoreWalletsDialog"
+      position="center"
+      :style="{
+        width: '90%',
+        maxWidth: '589px',
+        borderRadius: '10px',
+        backgroundColor: '#181a1e',
+      }"
+      round
+    >
+      <div class="more-wallets-dialog">
+        <div class="dialog-header">
+          <div class="dialog-title">{{ t("moreWallets") }}</div>
+          <img
+            :src="closeIcon"
+            class="close-icon"
+            alt="关闭"
+            @click="showMoreWalletsDialog = false"
+          />
+        </div>
+        <div class="dialog-description">
+          {{ t("moreWalletsInstruction") }}
+        </div>
+        <div class="more-wallets-grid">
+          <div
+            v-for="wallet in moreWallets"
+            :key="wallet.id"
+            class="more-wallet-item"
+            @click="handleMoreWalletSelect(wallet.id)"
+          >
+            <img
+              :src="wallet.icon"
+              :alt="wallet.name"
+              class="more-wallet-icon"
+            />
+            <span class="more-wallet-name">{{ wallet.name }}</span>
+          </div>
+        </div>
+        <div class="more-wallets-footer">
+          <span class="more-wallets-footer-text">{{
+            t("moreWalletsJoining")
+          }}</span>
+        </div>
+      </div>
+    </van-popup>
   </div>
 </template>
 
@@ -278,6 +331,13 @@ import okxIcon from "@/assets/image/okx.svg";
 import passwordIcon from "@/assets/image/password.svg";
 import closeIcon from "@/assets/image/close.svg";
 import searchIcon from "@/assets/image/search.png";
+// 更多钱包图标
+import imtokenIcon from "@/assets/image/imtoken.svg";
+import pocketIcon from "@/assets/image/pocket.svg";
+import bitwalletIcon from "@/assets/image/bitwallet.svg";
+import web3walletIcon from "@/assets/image/web3wallet.svg";
+import rainbowIcon from "@/assets/image/rainbow.svg";
+import safeIcon from "@/assets/image/safe.svg";
 
 const router = useRouter();
 const { t, currentLang, setLanguage } = useI18n();
@@ -290,6 +350,7 @@ const showPassword = ref(false);
 const agreed = ref(false);
 const showCountryPicker = ref(false);
 const showLanguageDialog = ref(false);
+const showMoreWalletsDialog = ref(false);
 const languageTab = ref("language");
 const countrySearchText = ref("");
 
@@ -510,8 +571,47 @@ const handleWalletSelect = (walletId) => {
 };
 
 const handleMoreWallets = () => {
-  // TODO: 实现更多钱包逻辑
-  console.log("连接更多钱包");
+  showMoreWalletsDialog.value = true;
+};
+
+// 更多钱包列表
+const moreWallets = ref([
+  {
+    id: "imtoken",
+    name: "ImToken",
+    icon: imtokenIcon,
+  },
+  {
+    id: "tokenpocket",
+    name: "TokenPocket",
+    icon: pocketIcon,
+  },
+  {
+    id: "bitget",
+    name: "Bitget Wallet",
+    icon: bitwalletIcon,
+  },
+  {
+    id: "binance",
+    name: "Binance Web3 Wallet",
+    icon: web3walletIcon,
+  },
+  {
+    id: "rainbow",
+    name: "Rainbow",
+    icon: rainbowIcon,
+  },
+  {
+    id: "safe",
+    name: "Safe",
+    icon: safeIcon,
+  },
+]);
+
+const handleMoreWalletSelect = (walletId) => {
+  console.log("选择钱包", walletId);
+  // TODO: 实现钱包连接逻辑
+  showMoreWalletsDialog.value = false;
 };
 
 const canLogin = computed(() => {
@@ -1128,6 +1228,137 @@ const selectLanguage = (code) => {
         color: #fff;
         font-family: "PingFang SC";
         font-weight: 400;
+      }
+    }
+  }
+}
+
+// 更多钱包弹窗
+.more-wallets-dialog {
+  display: flex;
+  flex-direction: column;
+  background: #181a1e;
+  border-radius: 10px;
+  padding: 35px 31.57px 43px;
+  max-height: 80vh;
+  overflow: hidden;
+
+  .dialog-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 32px;
+
+    .dialog-title {
+      color: #fff;
+      font-family: "PingFang SC";
+      font-size: 38px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: normal;
+      padding-left: 233px;
+    }
+
+    .close-icon {
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+    }
+  }
+
+  .dialog-description {
+    color: #929292;
+    font-family: "PingFang SC";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin-bottom: 43px;
+    padding-left: 10px;
+  }
+
+  .more-wallets-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-bottom: 32px;
+    margin: 0 auto;
+
+    .more-wallet-item {
+      width: 274px;
+      height: 120px;
+      border-radius: 10px;
+      border: 1px solid #22262f;
+      background: #0f1014;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      padding-left: 35px;
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.08);
+        // border-color: rgba(255, 255, 255, 0.2);
+      }
+
+      &:active {
+        background-color: rgba(255, 255, 255, 0.12);
+      }
+
+      .more-wallet-icon {
+        width: 50px;
+        height: 50px;
+        margin-right: 16px;
+        flex-shrink: 0;
+      }
+
+      .more-wallet-name {
+        color: #ececec;
+        font-family: "PingFang SC";
+        font-size: 20px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+        max-width: 124px;
+      }
+    }
+  }
+
+  .more-wallets-footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding-top: 20px;
+    text-align: left;
+    // border-top: 1px solid rgba(255, 255, 255, 0.1);
+
+    .more-wallets-footer-text {
+      color: #929292;
+      font-family: "PingFang SC";
+      font-size: 20px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
+    }
+
+    .more-wallets-footer-button {
+      width: 100%;
+      height: 90px;
+      border-radius: 10px;
+      background: #1df388;
+      color: #121212;
+      font-family: "PingFang SC";
+      font-size: 30px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: normal;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .wallet-link-icon {
+        margin-right: 12px;
+        font-size: 30px;
       }
     }
   }
