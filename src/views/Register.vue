@@ -370,7 +370,10 @@
               @click="languageTab = 'language'"
             >
               <span class="tab-text">语言和地区</span>
-              <div class="tab-indicator" v-if="languageTab === 'language'"></div>
+              <div
+                class="tab-indicator"
+                v-if="languageTab === 'language'"
+              ></div>
             </div>
             <div
               class="tab-item"
@@ -378,11 +381,14 @@
               @click="languageTab = 'exchange'"
             >
               <span class="tab-text">汇率</span>
-              <div class="tab-indicator" v-if="languageTab === 'exchange'"></div>
+              <div
+                class="tab-indicator"
+                v-if="languageTab === 'exchange'"
+              ></div>
             </div>
           </div>
           <div class="close-btn" @click="showLanguageDialog = false">
-            <van-icon name="cross" class="close-icon" />
+            <img :src="closeIcon" class="close-icon" alt="close" />
           </div>
         </div>
         <div class="dialog-content">
@@ -420,6 +426,7 @@ import kfuIcon from "@/assets/images/kfu.svg";
 import globeIcon from "@/assets/images/diqiu.svg";
 import passwordIcon from "@/assets/image/password.svg";
 import allowTopIcon from "@/assets/image/allow_top.svg";
+import closeIcon from "@/assets/image/close.svg";
 
 const router = useRouter();
 const { t, currentLang, setLanguage } = useI18n();
@@ -437,7 +444,7 @@ const showConfirmPassword = ref(false);
 const agreed = ref(false);
 const showCountryPicker = ref(false);
 const showLanguageDialog = ref(false);
-const languageTab = ref('language');
+const languageTab = ref("language");
 const verificationError = ref(false);
 const emailError = ref(false);
 const accountError = ref(false);
@@ -1219,7 +1226,7 @@ onUnmounted(() => {
   min-height: 100%;
   display: flex;
   flex-direction: column;
-  background: #17181A;
+  background: #17181a;
   position: relative;
   overflow: visible;
 
@@ -1227,28 +1234,38 @@ onUnmounted(() => {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 16px;
-    background: #17181A;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background: #17181a;
+    border-bottom: 1px solid #3b414e;
     position: relative;
     z-index: 1;
     flex-shrink: 0;
-
+    padding: 70px 32px 0 32px;
+    width: 686px;
+    margin: 0 auto;
     .tabs-container {
+      height: 100%;
       display: flex;
       align-items: center;
-      gap: 24px;
+      gap: 60px;
       flex: 1;
 
       .tab-item {
         position: relative;
         cursor: pointer;
-        padding-bottom: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 72px;
+        // padding-bottom: 8px;
 
         .tab-text {
-          font-size: 16px;
-          color: #888888;
           transition: color 0.3s;
+          color: #fff;
+          font-family: "PingFang SC";
+          font-size: 28px;
+          font-style: normal;
+          font-weight: 500;
+          line-height: 1;
         }
 
         &.active .tab-text {
@@ -1258,11 +1275,11 @@ onUnmounted(() => {
         .tab-indicator {
           position: absolute;
           bottom: 0;
-          left: 0;
-          right: 0;
-          height: 2px;
-          background-color: #00ff88;
-          border-radius: 1px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 50px;
+          height: 6px;
+          background-color: #1df388;
         }
       }
     }
@@ -1276,8 +1293,9 @@ onUnmounted(() => {
       height: 24px;
 
       .close-icon {
-        font-size: 20px;
-        color: #ffffff;
+        width: 30px;
+        height: 30px;
+        object-fit: contain;
       }
     }
   }
@@ -1288,11 +1306,11 @@ onUnmounted(() => {
     padding: 0;
     position: relative;
     z-index: 1;
-    background: #17181A;
+    background: #17181a;
 
     .language-list {
       padding: 0;
-      
+
       .language-item {
         display: flex;
         align-items: center;
