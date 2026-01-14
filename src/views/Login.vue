@@ -8,7 +8,7 @@
       </div>
       <div class="header-icons">
         <img :src="kfuIcon" class="service-icon" alt="客服" />
-        <img :src="globeIcon" class="globe-icon" alt="语言" />
+        <img :src="globeIcon" class="globe-icon" alt="语言" @click="showLanguageDialog = true" />
       </div>
     </div>
 
@@ -182,20 +182,60 @@
         </div>
       </div>
     </van-popup>
+
+    <!-- 语言选择对话框 -->
+    <van-popup
+      v-model:show="showLanguageDialog"
+      position="right"
+      :style="{ width: '100%', height: '100%', overflow: 'visible' }"
+      class="language-popup"
+    >
+      <div class="language-dialog">
+        <div class="dialog-header">
+          <van-icon
+            name="arrow-left"
+            class="back-icon"
+            @click="showLanguageDialog = false"
+          />
+          <div class="dialog-title">{{ currentLangName }}</div>
+        </div>
+        <div class="dialog-content">
+          <van-cell-group inset>
+            <van-cell
+              v-for="lang in languages"
+              :key="lang.code"
+              :title="lang.name"
+              @click="selectLanguage(lang.code)"
+            >
+              <template #icon>
+                <img :src="lang.flag" class="flag-icon" alt="" />
+              </template>
+              <template #right-icon>
+                <van-icon
+                  v-if="currentLang === lang.code"
+                  name="success"
+                  color="#1989fa"
+                />
+              </template>
+            </van-cell>
+          </van-cell-group>
+        </div>
+      </div>
+    </van-popup>
   </div>
 </template>
 
 <script setup>
 import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
-import { useI18n } from "@/i18n";
+import { useI18n, languages } from "@/i18n";
 import kfuIcon from "@/assets/images/kfu.svg";
 import globeIcon from "@/assets/images/diqiu.svg";
 // 钱包图标 - 使用占位符或实际图标
 import okxIcon from "@/assets/image/okx.svg";
 
 const router = useRouter();
-const { t } = useI18n();
+const { t, currentLang, setLanguage } = useI18n();
 
 const activeTab = ref("phone");
 const phoneNumber = ref("");
@@ -204,6 +244,7 @@ const password = ref("");
 const showPassword = ref(false);
 const agreed = ref(false);
 const showCountryPicker = ref(false);
+const showLanguageDialog = ref(false);
 
 // 国家列表
 const countries = ref([
@@ -453,6 +494,18 @@ const openPrivacy = () => {
 
 const openAntiMoneyLaundering = () => {
   router.push("/anti-money-laundering");
+};
+
+const currentLangName = computed(() => {
+  const lang = languages.find((l) => l.code === currentLang.value);
+  return (
+    lang?.name || languages.find((l) => l.code === "zh-TW")?.name || "繁體中文"
+  );
+});
+
+const selectLanguage = (code) => {
+  setLanguage(code);
+  showLanguageDialog.value = false;
 };
 </script>
 
@@ -895,6 +948,102 @@ const openAntiMoneyLaundering = () => {
         font-size: 14px;
         color: rgba(255, 255, 255, 0.6);
       }
+    }
+  }
+}
+
+// 语言选择对话框
+.language-popup {
+  overflow: visible !important;
+
+  :deep(.van-popup) {
+    overflow: visible !important;
+  }
+
+  :deep(.van-popup__content) {
+    overflow: visible !important;
+    animation: slideInFromRight 0.3s ease-out;
+    will-change: transform;
+  }
+}
+
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+.language-dialog {
+  height: 100%;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: #0a0b0d;
+  position: relative;
+  overflow: visible;
+
+  .dialog-header {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    background-color: rgba(26, 27, 46, 0.9);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+    z-index: 1;
+    flex-shrink: 0;
+
+    .back-icon {
+      font-size: 20px;
+      color: #ffffff;
+      cursor: pointer;
+      margin-right: 12px;
+    }
+
+    .dialog-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: #ffffff;
+      display: inline-block;
+      width: 100%;
+      text-align: center;
+    }
+  }
+
+  .dialog-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0;
+    position: relative;
+    z-index: 1;
+    background-color: #0a0b0d;
+
+    :deep(.van-cell-group) {
+      margin: 0;
+    }
+
+    :deep(.van-cell) {
+      padding: 12px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      background-color: #0a0b0d;
+      color: #ffffff;
+    }
+
+    :deep(.van-cell:last-child) {
+      border-bottom: none;
+    }
+
+    .flag-icon {
+      width: 24px;
+      height: 18px;
+      margin-right: 12px;
+      display: inline-block;
+      object-fit: cover;
+      border-radius: 2px;
+      flex-shrink: 0;
     }
   }
 }
