@@ -2,12 +2,35 @@
   <div class="login-page">
     <!-- 顶部导航栏 -->
     <div class="header">
-      <img :src="leftArrowIcon" class="back-icon" @click="goBack" alt="返回" />
-      <img :src="kfuIcon" class="service-icon" alt="客服" />
+      <div class="logo">
+        <span class="logo-web3">WEB3</span>
+        <span class="logo-text">LOGO</span>
+      </div>
+      <div class="header-icons">
+        <img :src="kfuIcon" class="service-icon" alt="客服" />
+        <img :src="globeIcon" class="globe-icon" alt="语言" />
+      </div>
     </div>
 
-    <!-- 标题 -->
-    <div class="title">{{ t("loginWeb3") }}</div>
+    <!-- 欢迎标题区域 -->
+    <div class="welcome-section">
+      <div class="welcome-title">
+        <div class="welcome-text">
+          <span class="welcome-text-title">
+            {{ t("welcomeToWeb3") }}
+          </span>
+          <span class="welcome-text-prompt">
+            {{ t("pleaseLogin") }}
+          </span>
+        </div>
+      </div>
+      <div class="register-link-top" @click="goToRegister">
+        {{ t("goToRegister") }}
+      </div>
+    </div>
+
+    <!-- 徽章 -->
+    <!-- <div class="badge">1749</div> -->
 
     <!-- 登录方式标签 -->
     <div class="tabs">
@@ -31,12 +54,12 @@
     <div v-if="activeTab === 'phone'" class="form-container">
       <div class="input-group">
         <div class="country-selector" @click="showCountryPicker = true">
-          <span class="country-code">{{ selectedCountry.code }}</span>
+          <span class="country-code">+{{ selectedCountry.code }}-</span>
           <van-icon name="arrow-down" class="arrow-icon" />
         </div>
         <van-field
           v-model="phoneNumber"
-          :placeholder="t('enterPhoneNumber')"
+          :placeholder="t('phone')"
           class="phone-input"
         />
       </div>
@@ -95,34 +118,39 @@
       </div>
     </div>
 
-    <!-- 协议同意 -->
-    <div class="agreement">
-      <van-checkbox v-model="agreed" shape="square" />
-      <div class="agreement-text">
-        {{ t("agreementText") }}
-        <span class="link" @click="openTerms">{{ t("termsOfService") }}</span>
-        <span class="link" @click="openPrivacy">{{ t("privacyPolicy") }}</span>
-        {{ t("and") }}
-        <span class="link" @click="openAntiMoneyLaundering">{{
-          t("antiMoneyLaundering")
-        }}</span>
-      </div>
-    </div>
-
     <!-- 登录按钮 -->
     <div class="button-group">
       <van-button type="primary" block class="login-btn" @click="handleLogin">
-        {{ t("login") }}
-      </van-button>
-      <van-button block class="wallet-login-btn" @click="handleWalletLogin">
-        {{ t("walletLogin") }}
+        {{ t("loginNow") }}
       </van-button>
     </div>
 
-    <!-- 注册链接 -->
-    <div class="register-link">
-      <span>{{ t("noAccount") }}</span>
-      <span class="link" @click="goToRegister">{{ t("registerNow") }}</span>
+    <!-- 钱包登录分隔线 -->
+    <div class="wallet-divider">
+      <span class="divider-text">{{ t("orConnectWallet") }}</span>
+    </div>
+
+    <!-- 钱包连接列表 -->
+    <div class="wallet-list">
+      <div
+        v-for="wallet in wallets"
+        :key="wallet.id"
+        class="wallet-item"
+        :class="{ active: selectedWallet === wallet.id }"
+        @click="handleWalletSelect(wallet.id)"
+      >
+        <img :src="wallet.icon" :alt="wallet.name" class="wallet-icon" />
+        <span class="wallet-name">{{ wallet.name }}</span>
+        <van-icon
+          name="link"
+          class="wallet-link-icon"
+          v-if="wallet.id === 'coinbase'"
+        />
+      </div>
+      <div class="wallet-item more-wallets" @click="handleMoreWallets">
+        <van-icon name="link" class="wallet-link-icon" />
+        <span class="wallet-name">{{ t("connectMoreWallets") }}</span>
+      </div>
     </div>
 
     <!-- 国家选择器 -->
@@ -161,8 +189,10 @@
 import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
 import { useI18n } from "@/i18n";
-import leftArrowIcon from "@/assets/images/left_arrow.svg";
 import kfuIcon from "@/assets/images/kfu.svg";
+import globeIcon from "@/assets/images/diqiu.svg";
+// 钱包图标 - 使用占位符或实际图标
+import okxIcon from "@/assets/image/okx.svg";
 
 const router = useRouter();
 const { t } = useI18n();
@@ -324,11 +354,55 @@ const countries = ref([
   { code: "972", name: "以色列" },
 ]);
 
-const selectedCountry = ref(countries.value[0]);
+// 默认选择香港
+const selectedCountry = ref(
+  countries.value.find((c) => c.code === "852") || countries.value[0]
+);
 
 const selectCountry = (country) => {
   selectedCountry.value = country;
   showCountryPicker.value = false;
+};
+
+// 钱包列表
+const wallets = ref([
+  {
+    id: "coinbase",
+    name: "Coinbase",
+    icon: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%230052FF' d='M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 20c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z'/%3E%3Cpath fill='%23fff' d='M8 8h8v8H8z'/%3E%3C/svg%3E",
+  },
+  {
+    id: "metamask",
+    name: "MetaMask",
+    icon: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23F6851B' d='M12 0L2.4 8.4l1.2 9.6L12 24l8.4-6 1.2-9.6L12 0z'/%3E%3Cpath fill='%23fff' d='M12 4.8l-6 4.8v9.6l6 3.6 6-3.6V9.6l-6-4.8z'/%3E%3C/svg%3E",
+  },
+  {
+    id: "okx",
+    name: "OKX Wallet",
+    icon: okxIcon,
+  },
+  {
+    id: "trust",
+    name: "Trust Wallet",
+    icon: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23337BD2' d='M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0z'/%3E%3Cpath fill='%23fff' d='M12 4l-2 2-2-2-2 2 2 2-2 2 2 2 2-2 2 2 2-2-2-2 2-2-2-2z'/%3E%3C/svg%3E",
+  },
+  {
+    id: "tronlink",
+    name: "Tronlink Wallet",
+    icon: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23FF0018' d='M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0z'/%3E%3Cpath fill='%23fff' d='M12 6l-3 3 3 3 3-3-3-3z'/%3E%3C/svg%3E",
+  },
+]);
+
+const selectedWallet = ref(null);
+
+const handleWalletSelect = (walletId) => {
+  selectedWallet.value = walletId;
+  handleWalletLogin(walletId);
+};
+
+const handleMoreWallets = () => {
+  // TODO: 实现更多钱包逻辑
+  console.log("连接更多钱包");
 };
 
 const canLogin = computed(() => {
@@ -356,9 +430,9 @@ const handleLogin = () => {
   });
 };
 
-const handleWalletLogin = () => {
+const handleWalletLogin = (walletId) => {
   // TODO: 实现钱包登录逻辑
-  console.log("钱包登录");
+  console.log("钱包登录", walletId);
 };
 
 const handleForgotPassword = () => {
@@ -385,59 +459,124 @@ const openAntiMoneyLaundering = () => {
 <style lang="scss" scoped>
 .login-page {
   min-height: 100vh;
-  background-color: #fff;
-  padding: 0 16px;
+  background: #070210;
+  padding: 0 32px;
   padding-bottom: 40px;
+  color: #f3f4f6;
+  font-family: "PT Sans Caption";
+  font-size: 40px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
 }
 
 .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 0;
+  padding-top: 26px;
 
-  .back-icon {
-    width: 20.8px;
-    height: 20.8px;
-    cursor: pointer;
-    display: block;
+  .logo {
+    display: flex;
+    align-items: center;
+
+    .logo-web3 {
+      color: #00ff88;
+    }
+
+    .logo-text {
+      color: #fff;
+    }
+  }
+
+  .header-icons {
+    display: flex;
+    align-items: center;
+    gap: 16px;
   }
 
   .service-icon {
-    width: 20.8px;
-    height: 20.8px;
-    font-size: 20px;
-    color: #323233;
+    width: 28px;
+    height: 32px;
     cursor: pointer;
+    filter: brightness(0) invert(1);
+  }
+
+  .globe-icon {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    filter: brightness(0) invert(1);
   }
 }
 
-.title {
-  font-size: 6.4vw;
-  font-weight: 700;
-  color: #000;
-  margin-top: 8px;
+.welcome-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 68px;
+  margin-bottom: 16px;
+
+  .welcome-title {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    .welcome-text {
+      color: #fff;
+      font-family: "PingFang SC";
+      font-size: 40px;
+      font-style: normal;
+      font-weight: 600;
+      line-height: normal;
+    }
+
+    .login-prompt {
+      font-size: 16px;
+      color: #fff;
+    }
+  }
+
+  .register-link-top {
+    color: #1df388;
+    font-family: "PingFang SC";
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+  }
+}
+
+.badge {
+  display: inline-block;
+  background-color: #ff6b35;
+  color: #fff;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 24px;
 }
 
 .tabs {
   display: flex;
   gap: 32px;
-  margin-top: 44px;
-  border-bottom: 1px solid #ebedf0;
+  margin-top: 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 
   .tab {
     padding-bottom: 12px;
-    color: #909090;
-    font-size: 4.26667vw;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 16px;
     cursor: pointer;
     position: relative;
     transition: color 0.3s;
-    padding: 0 5.33333vw;
+    padding: 0 16px;
     height: 46.8px;
     line-height: 46.8px;
 
     &.active {
-      color: #323233;
+      color: #fff;
       font-weight: 500;
 
       &::after {
@@ -447,7 +586,7 @@ const openAntiMoneyLaundering = () => {
         left: 0;
         right: 0;
         height: 2px;
-        background-color: #323233;
+        background-color: #00ff88;
       }
     }
   }
@@ -460,65 +599,66 @@ const openAntiMoneyLaundering = () => {
 .input-group {
   display: flex;
   align-items: center;
-  margin-bottom: 30px;
-  margin-top: 40px;
-  border: 1px solid #ebedf0;
+  margin-bottom: 24px;
+  margin-top: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
   overflow: hidden;
+  background-color: rgba(255, 255, 255, 0.05);
 
   .country-selector {
     display: flex;
     align-items: center;
     padding: 0 12px;
-    border-right: 1px solid #ebedf05d;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
     cursor: pointer;
-    min-width: 60px;
+    min-width: 80px;
+    background-color: transparent;
 
     .country-code {
-      font-size: 16px;
-      color: #040303;
+      font-size: 14px;
+      color: #fff;
       margin-right: 4px;
-      padding-left: 20px;
     }
 
     .arrow-icon {
-      font-size: 16px;
-      color: #040303;
+      font-size: 14px;
+      color: #fff;
     }
   }
 
   :deep(.van-field) {
     padding: 12px 16px;
-    background-color: #fff;
+    background-color: transparent;
 
     .van-field__control {
       font-size: 14px;
-      color: #323233;
+      color: #fff;
 
       &::placeholder {
-        font-size: 4vw;
-        color: #909090;
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.5);
       }
 
       &::-webkit-input-placeholder {
-        font-size: 4vw;
-        color: #909090;
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.5);
       }
 
       &::-moz-placeholder {
-        font-size: 4vw;
-        color: #909090;
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.5);
       }
 
       &:-ms-input-placeholder {
-        font-size: 4vw;
-        color: #909090;
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.5);
       }
     }
 
     .van-field__placeholder {
-      font-size: 4vw;
-      color: #909090;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.5);
     }
   }
 
@@ -535,7 +675,7 @@ const openAntiMoneyLaundering = () => {
 
     .eye-icon {
       font-size: 18px;
-      color: #969799;
+      color: rgba(255, 255, 255, 0.6);
       cursor: pointer;
     }
   }
@@ -547,8 +687,8 @@ const openAntiMoneyLaundering = () => {
 
   span {
     font-size: 14px;
-    color: #000;
-    font-weight: 700;
+    color: #fff;
+    font-weight: 500;
     cursor: pointer;
   }
 }
@@ -585,55 +725,109 @@ const openAntiMoneyLaundering = () => {
 
 .button-group {
   margin-bottom: 24px;
+  margin-top: 32px;
 
   .login-btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 1.33333vw;
     margin: 0 auto;
-    width: 91.46667vw;
-    height: 12.8vw;
-    background-color: #000;
-    border-radius: 266.4vw;
-    font-size: 4vw;
+    width: 100%;
+    height: 48px;
+    background: linear-gradient(135deg, #00ff88 0%, #00cc6a 100%);
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
     color: #fff;
     border: none;
+    cursor: pointer;
+    transition: opacity 0.3s;
+
+    &:hover {
+      opacity: 0.9;
+    }
 
     &:disabled {
-      // background-color: #c8c9cc;
-      color: #fff;
+      opacity: 0.5;
+      cursor: not-allowed;
     }
-  }
-
-  .wallet-login-btn {
-    width: 91.46667vw;
-    height: 12.8vw;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 5.33333vw auto 0;
-    border-radius: 6.4vw;
-    background: #fff;
-    color: #000;
-    border: 1px solid #000;
-    font-size: 4vw;
-    cursor: pointer;
-    font-weight: 400;
-    box-sizing: border-box;
   }
 }
 
-.register-link {
-  text-align: center;
-  font-size: 14px;
-  color: #040303;
+.wallet-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 32px 0 24px;
+  position: relative;
 
-  .link {
-    color: #000;
-    font-weight: 700;
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .divider-text {
+    position: relative;
+    background: linear-gradient(180deg, #1a0d2e 0%, #0d0519 100%);
+    padding: 0 16px;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.6);
+  }
+}
+
+.wallet-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  .wallet-item {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
     cursor: pointer;
-    margin-left: 4px;
+    transition: all 0.3s;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    &.active {
+      border-color: #00ff88;
+      background-color: rgba(0, 255, 136, 0.1);
+    }
+
+    .wallet-icon {
+      width: 32px;
+      height: 32px;
+      margin-right: 12px;
+    }
+
+    .wallet-name {
+      flex: 1;
+      font-size: 16px;
+      color: #fff;
+      font-weight: 500;
+    }
+
+    .wallet-link-icon {
+      font-size: 18px;
+      color: #00ff88;
+    }
+
+    &.more-wallets {
+      .wallet-link-icon {
+        margin-right: 12px;
+      }
+    }
   }
 }
 
@@ -641,24 +835,24 @@ const openAntiMoneyLaundering = () => {
   height: 100%;
   display: flex;
   flex-direction: column;
-  background-color: #fff;
+  background: linear-gradient(180deg, #1a0d2e 0%, #0d0519 100%);
 
   .picker-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 16px;
-    border-bottom: 1px solid #ebedf0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 
     .picker-title {
       font-size: 16px;
       font-weight: 500;
-      color: #323233;
+      color: #fff;
     }
 
     .close-icon {
       font-size: 18px;
-      color: #969799;
+      color: rgba(255, 255, 255, 0.6);
       cursor: pointer;
     }
   }
@@ -672,20 +866,20 @@ const openAntiMoneyLaundering = () => {
       align-items: center;
       justify-content: space-between;
       padding: 16px;
-      border-bottom: 1px solid #ebedf0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
       cursor: pointer;
       transition: background-color 0.2s;
 
       &:active {
-        background-color: #f7f8fa;
+        background-color: rgba(255, 255, 255, 0.1);
       }
 
       &.active {
-        background-color: #323233;
+        background-color: rgba(0, 255, 136, 0.2);
         color: #fff;
 
         .country-code-text {
-          color: #fff;
+          color: #00ff88;
         }
         .country-name {
           color: #fff;
@@ -694,12 +888,12 @@ const openAntiMoneyLaundering = () => {
 
       .country-name {
         font-size: 14px;
-        color: #323233;
+        color: #fff;
       }
 
       .country-code-text {
         font-size: 14px;
-        color: #969799;
+        color: rgba(255, 255, 255, 0.6);
       }
     }
   }
