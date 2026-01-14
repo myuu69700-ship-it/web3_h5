@@ -237,7 +237,7 @@
             </div>
           </div>
           <div class="close-btn" @click="showLanguageDialog = false">
-            <van-icon name="cross" class="close-icon" />
+            <img :src="closeIcon" class="close-icon" alt="close" />
           </div>
         </div>
         <div class="dialog-content">
@@ -1171,28 +1171,38 @@ const selectLanguage = (code) => {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 16px;
     background: #17181a;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid #3b414e;
     position: relative;
     z-index: 1;
     flex-shrink: 0;
+    padding: 70px 32px 0 32px;
+    width: 686px;
+    margin: 0 auto;
 
     .tabs-container {
+      height: 100%;
       display: flex;
       align-items: center;
-      gap: 24px;
+      gap: 60px;
       flex: 1;
 
       .tab-item {
         position: relative;
         cursor: pointer;
-        padding-bottom: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 72px;
 
         .tab-text {
-          font-size: 16px;
-          color: #888888;
           transition: color 0.3s;
+          color: #fff;
+          font-family: "PingFang SC";
+          font-size: 28px;
+          font-style: normal;
+          font-weight: 500;
+          line-height: 1;
         }
 
         &.active .tab-text {
@@ -1202,11 +1212,11 @@ const selectLanguage = (code) => {
         .tab-indicator {
           position: absolute;
           bottom: 0;
-          left: 0;
-          right: 0;
-          height: 2px;
-          background-color: #00ff88;
-          border-radius: 1px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 50px;
+          height: 6px;
+          background-color: #1df388;
         }
       }
     }
@@ -1222,8 +1232,7 @@ const selectLanguage = (code) => {
       .close-icon {
         width: 30px;
         height: 30px;
-        font-size: 20px;
-        color: #ffffff;
+        object-fit: contain;
       }
     }
   }
@@ -1231,7 +1240,7 @@ const selectLanguage = (code) => {
   .dialog-content {
     flex: 1;
     overflow-y: auto;
-    padding: 0;
+    padding: 52px 32px 0 32px;
     position: relative;
     z-index: 1;
     background: #17181a;
@@ -1242,8 +1251,7 @@ const selectLanguage = (code) => {
       .language-item {
         display: flex;
         align-items: center;
-        padding: 12px 16px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        padding: 26px 16px;
         cursor: pointer;
         transition: background-color 0.2s;
         background-color: transparent;
@@ -1253,27 +1261,33 @@ const selectLanguage = (code) => {
         }
 
         &.active {
-          background-color: rgba(255, 255, 255, 0.08);
+          width: 686px;
+          height: 90px;
+          border-radius: 6px;
+          background: #212327;
         }
 
         .flag-icon {
-          width: 24px;
-          height: 18px;
-          margin-right: 12px;
+          width: 34px;
+          height: 26px;
+          flex-shrink: 0;
+          margin-right: 13px;
           display: block;
           object-fit: cover;
-          border-radius: 2px;
-          flex-shrink: 0;
         }
 
         .language-name {
           flex: 1;
-          font-size: 16px;
-          color: #ffffff;
+          color: #fff;
+          font-family: "PingFang SC";
+          font-size: 28px;
+          font-style: normal;
+          font-weight: 500;
+          line-height: normal;
         }
 
         .check-icon {
-          font-size: 20px;
+          font-size: 40px;
           color: #00ff88;
           flex-shrink: 0;
         }
