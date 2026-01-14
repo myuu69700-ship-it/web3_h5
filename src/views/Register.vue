@@ -2,12 +2,26 @@
   <div class="register-page">
     <!-- 顶部导航栏 -->
     <div class="header">
-      <img :src="leftArrowIcon" class="back-icon" @click="goBack" alt="返回" />
-      <img :src="kfuIcon" class="service-icon" alt="客服" />
+      <div class="logo">
+        <span class="logo-web3">WEB3</span>
+        <span class="logo-text">LOGO</span>
+      </div>
+      <div class="header-right">
+        <img :src="kfuIcon" class="service-icon" alt="客服" />
+        <img
+          :src="globeIcon"
+          class="globe-icon"
+          alt="语言"
+          @click="showLanguageDialog = true"
+        />
+      </div>
     </div>
 
     <!-- 标题 -->
-    <div class="title">{{ t("welcomeWeb3") }}</div>
+    <div class="title">
+      <span>注册账户</span>
+      <div class="login-link-top" @click="goToLogin">去登录</div>
+    </div>
 
     <!-- 注册方式标签 -->
     <div class="tabs">
@@ -16,49 +30,105 @@
         :class="{ active: activeTab === 'phone' }"
         @click="activeTab = 'phone'"
       >
-        {{ t("phoneRegistration") }}
+        手机注册
       </div>
       <div
         class="tab"
         :class="{ active: activeTab === 'email' }"
         @click="activeTab = 'email'"
       >
-        {{ t("emailRegistration") }}
+        邮箱注册
       </div>
       <div
         class="tab"
         :class="{ active: activeTab === 'account' }"
         @click="activeTab = 'account'"
       >
-        {{ t("accountRegistration") }}
+        账号注册
       </div>
     </div>
 
     <!-- 手机注册表单 -->
     <div v-if="activeTab === 'phone'" class="form-container">
       <div class="input-group">
-        <label class="input-label">{{ t("mobileNumber") }}</label>
-        <div class="input-wrapper">
-          <div class="country-selector" @click="showCountryPicker = true">
-            <span class="country-code">{{ selectedCountry.code }}</span>
-            <van-icon name="arrow-down" class="arrow-icon" />
-          </div>
-          <van-field
-            v-model="phoneNumber"
-            :placeholder="t('enterPhoneNumber')"
-            class="phone-input"
-          />
+        <div class="country-selector" @click="showCountryPicker = true">
+          <span class="country-code">+{{ selectedCountry.code }}</span>
+          <van-icon name="arrow-down" class="arrow-icon" />
         </div>
+        <van-field
+          v-model="phoneNumber"
+          placeholder="手机"
+          class="phone-input"
+        />
+      </div>
+
+      <div class="verification-wrapper">
+        <div class="input-group verification-group" :class="{ 'error-state': verificationError }">
+          <van-field
+            v-model="verificationCode"
+            placeholder=""
+            class="verification-input"
+            :class="{ error: verificationError }"
+            @input="handleVerificationInput"
+          />
+          <div v-if="verificationError" class="error-message">
+            *您的验证码错误请重试
+          </div>
+        </div>
+        <button
+          class="send-btn-separate"
+          :class="{ disabled: countdown > 0 }"
+          @click="handleSendCode"
+          :disabled="countdown > 0"
+        >
+          {{ countdown > 0 ? `${countdown}S` : "发送" }}
+        </button>
       </div>
 
       <div class="input-group">
-        <label class="input-label" @click="showInvitationTip = !showInvitationTip">
-          {{ t("invitationCode") }} ({{ t("optional") }})
-          <span class="triangle-icon">▲</span>
+        <van-field
+          v-model="password"
+          :type="showPassword ? 'text' : 'password'"
+          placeholder="请输入密码"
+          class="password-input"
+        >
+          <template #right-icon>
+            <img
+              :src="passwordIcon"
+              @click="showPassword = !showPassword"
+              class="eye-icon"
+              alt="password"
+            />
+          </template>
+        </van-field>
+      </div>
+
+      <div class="input-group">
+        <van-field
+          v-model="confirmPassword"
+          :type="showConfirmPassword ? 'text' : 'password'"
+          placeholder="请再次输入密码"
+          class="password-input"
+        >
+          <template #right-icon>
+            <img
+              :src="passwordIcon"
+              @click="showConfirmPassword = !showConfirmPassword"
+              class="eye-icon"
+              alt="password"
+            />
+          </template>
+        </van-field>
+      </div>
+
+      <div class="input-group invitation-group">
+        <label class="invitation-label">
+          <span>邀请码</span>
+          <van-icon name="arrow-up" class="arrow-up-icon" />
         </label>
         <van-field
           v-model="invitationCode"
-          :placeholder="t('enterInvitationCode')"
+          placeholder="输入邀请码 (选填)"
           class="invitation-input"
         />
       </div>
@@ -66,23 +136,85 @@
 
     <!-- 邮箱注册表单 -->
     <div v-if="activeTab === 'email'" class="form-container">
-      <div class="input-group">
-        <label class="input-label">{{ t("emailAccount") }}</label>
+      <div class="input-group" :class="{ 'error-state': emailError }">
         <van-field
           v-model="email"
-          :placeholder="t('enterEmail')"
+          placeholder="请输入邮箱"
           class="email-input"
-        />
+          @input="handleEmailInput"
+        >
+          <template #right-icon>
+            <van-icon
+              v-if="email"
+              name="cross"
+              class="clear-icon"
+              @click="email = ''"
+            />
+          </template>
+        </van-field>
+        <div v-if="emailError" class="error-message">
+          *请输入有效的邮箱号
+        </div>
+      </div>
+
+      <div class="verification-wrapper">
+        <div class="input-group verification-group">
+          <van-field
+            v-model="verificationCode"
+            placeholder="请输入验证码"
+            class="verification-input"
+            @input="handleVerificationInput"
+          />
+        </div>
+        <div class="captcha-image" @click="refreshCaptcha">
+          <img :src="captchaImageUrl" alt="验证码" />
+        </div>
       </div>
 
       <div class="input-group">
-        <label class="input-label" @click="showInvitationTip = !showInvitationTip">
-          {{ t("invitationCode") }} ({{ t("optional") }})
-          <span class="triangle-icon">▲</span>
+        <van-field
+          v-model="password"
+          :type="showPassword ? 'text' : 'password'"
+          placeholder="请输入密码"
+          class="password-input"
+        >
+          <template #right-icon>
+            <img
+              :src="passwordIcon"
+              @click="showPassword = !showPassword"
+              class="eye-icon"
+              alt="password"
+            />
+          </template>
+        </van-field>
+      </div>
+
+      <div class="input-group">
+        <van-field
+          v-model="confirmPassword"
+          :type="showConfirmPassword ? 'text' : 'password'"
+          placeholder="请再次输入密码"
+          class="password-input"
+        >
+          <template #right-icon>
+            <img
+              :src="passwordIcon"
+              @click="showConfirmPassword = !showConfirmPassword"
+              class="eye-icon"
+              alt="password"
+            />
+          </template>
+        </van-field>
+      </div>
+
+      <div class="input-group invitation-group">
+        <label class="invitation-label">
+          <span>邀请码</span>
+          <van-icon name="arrow-up" class="arrow-up-icon" />
         </label>
         <van-field
           v-model="invitationCode"
-          :placeholder="t('enterInvitationCode')"
+          placeholder="输入邀请码 (选填)"
           class="invitation-input"
         />
       </div>
@@ -90,52 +222,98 @@
 
     <!-- 账号注册表单 -->
     <div v-if="activeTab === 'account'" class="form-container">
-      <div class="input-group">
-        <label class="input-label">{{ t("accountLabel") }}</label>
+      <div class="input-group" :class="{ 'error-state': accountError }">
         <van-field
           v-model="account"
-          :placeholder="t('enterAccount')"
+          placeholder="请输入账号"
           class="account-input"
+          @input="handleAccountInput"
         />
+        <div v-if="accountError" class="error-message">
+          *请输入不低于8位的数字加字母
+        </div>
+      </div>
+
+      <div class="verification-wrapper">
+        <div class="input-group verification-group">
+          <van-field
+            v-model="verificationCode"
+            placeholder="请输入验证码"
+            class="verification-input"
+            @input="handleVerificationInput"
+          />
+        </div>
+        <div class="captcha-image" @click="refreshCaptcha">
+          <img :src="captchaImageUrl" alt="验证码" />
+        </div>
       </div>
 
       <div class="input-group">
-        <label class="input-label" @click="showInvitationTip = !showInvitationTip">
-          {{ t("invitationCode") }} ({{ t("optional") }})
-          <span class="triangle-icon">▲</span>
+        <van-field
+          v-model="password"
+          :type="showPassword ? 'text' : 'password'"
+          placeholder="请输入密码"
+          class="password-input"
+        >
+          <template #right-icon>
+            <img
+              :src="passwordIcon"
+              @click="showPassword = !showPassword"
+              class="eye-icon"
+              alt="password"
+            />
+          </template>
+        </van-field>
+      </div>
+
+      <div class="input-group">
+        <van-field
+          v-model="confirmPassword"
+          :type="showConfirmPassword ? 'text' : 'password'"
+          placeholder="请再次输入密码"
+          class="password-input"
+        >
+          <template #right-icon>
+            <img
+              :src="passwordIcon"
+              @click="showConfirmPassword = !showConfirmPassword"
+              class="eye-icon"
+              alt="password"
+            />
+          </template>
+        </van-field>
+      </div>
+
+      <div class="input-group invitation-group">
+        <label class="invitation-label">
+          <span>邀请码</span>
+          <van-icon name="arrow-up" class="arrow-up-icon" />
         </label>
         <van-field
           v-model="invitationCode"
-          :placeholder="t('enterInvitationCode')"
+          placeholder="输入邀请码 (选填)"
           class="invitation-input"
         />
       </div>
-    </div>
-
-    <!-- 下一步按钮 -->
-    <div class="button-group">
-      <van-button type="primary" block class="next-btn" @click="handleNextStep">
-        {{ t("nextStep") }}
-      </van-button>
-    </div>
-
-    <!-- 已有账户登录链接 -->
-    <div class="login-link">
-      <span @click="goToLogin">{{ t("alreadyHaveAccount") }}</span>
     </div>
 
     <!-- 协议同意 -->
     <div class="agreement">
       <van-checkbox v-model="agreed" shape="square" />
       <div class="agreement-text">
-        {{ t("agreementText") }}
-        <span class="link" @click="openTerms">{{ t("termsOfService") }}</span>
-        <span class="link" @click="openPrivacy">{{ t("privacyPolicy") }}</span>
-        {{ t("and") }}
-        <span class="link" @click="openAntiMoneyLaundering">{{
-          t("antiMoneyLaundering")
-        }}</span>
+        请确保您的账户安全,当您确定注册并登录时,即表示您同意使用我们的
+        <span class="link" @click="openTerms">《服务条款》</span>
+        <span class="link" @click="openPrivacy">《隐私协议》</span>
+        和
+        <span class="link" @click="openAntiMoneyLaundering">《反洗钱协议》</span>
       </div>
+    </div>
+
+    <!-- 注册按钮 -->
+    <div class="button-group">
+      <van-button type="primary" block class="register-btn" @click="handleRegister">
+        立即注册
+      </van-button>
     </div>
 
     <!-- 国家选择器 -->
@@ -146,7 +324,7 @@
     >
       <div class="country-picker">
         <div class="picker-header">
-          <div class="picker-title">{{ t("selectCountry") }}</div>
+          <div class="picker-title">选择国家/地区</div>
           <van-icon
             name="cross"
             class="close-icon"
@@ -167,29 +345,88 @@
         </div>
       </div>
     </van-popup>
+
+    <!-- 语言选择对话框 -->
+    <van-popup
+      v-model:show="showLanguageDialog"
+      position="right"
+      :style="{ width: '100%', height: '100%', overflow: 'visible' }"
+      class="language-popup"
+    >
+      <div class="language-dialog">
+        <div class="dialog-header">
+          <van-icon
+            name="arrow-left"
+            class="back-icon"
+            @click="showLanguageDialog = false"
+          />
+          <div class="dialog-title">{{ currentLangName }}</div>
+        </div>
+        <div class="dialog-content">
+          <van-cell-group inset>
+            <van-cell
+              v-for="lang in languages"
+              :key="lang.code"
+              :title="lang.name"
+              @click="selectLanguage(lang.code)"
+            >
+              <template #icon>
+                <img :src="lang.flag" class="flag-icon" alt="" />
+              </template>
+              <template #right-icon>
+                <van-icon
+                  v-if="currentLang === lang.code"
+                  name="success"
+                  color="#1989fa"
+                />
+              </template>
+            </van-cell>
+          </van-cell-group>
+        </div>
+      </div>
+    </van-popup>
   </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed, onUnmounted } from "vue";
 import { useRouter } from "vue-router";
-import { useI18n } from "@/i18n";
-import leftArrowIcon from "@/assets/images/left_arrow.svg";
+import { useI18n, languages } from "@/i18n";
 import kfuIcon from "@/assets/images/kfu.svg";
+import globeIcon from "@/assets/images/diqiu.svg";
+import passwordIcon from "@/assets/image/password.svg";
 
 const router = useRouter();
-const { t } = useI18n();
+const { t, currentLang, setLanguage } = useI18n();
 
 const activeTab = ref("phone");
 const phoneNumber = ref("");
 const email = ref("");
 const account = ref("");
+const verificationCode = ref("");
+const password = ref("");
+const confirmPassword = ref("");
 const invitationCode = ref("");
-const agreed = ref(true);
+const showPassword = ref(false);
+const showConfirmPassword = ref(false);
+const agreed = ref(false);
 const showCountryPicker = ref(false);
-const showInvitationTip = ref(false);
+const showLanguageDialog = ref(false);
+const verificationError = ref(false);
+const emailError = ref(false);
+const accountError = ref(false);
+const countdown = ref(0);
+let countdownTimer = null;
 
-// 国家列表（从 Login.vue 复制）
+// 验证码图片URL（这里使用模拟数据，实际应该从API获取）
+const captchaImageUrl = ref("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='40'%3E%3Crect width='120' height='40' fill='%233c404b'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-size='20' fill='%23fff'%3E5131%3C/text%3E%3C/svg%3E");
+
+const refreshCaptcha = () => {
+  // TODO: 刷新验证码图片
+  console.log("刷新验证码");
+};
+
+// 国家列表
 const countries = ref([
   { code: "1", name: "美国" },
   { code: "7", name: "俄罗斯" },
@@ -338,32 +575,113 @@ const countries = ref([
   { code: "972", name: "以色列" },
 ]);
 
-const selectedCountry = ref(countries.value[0]);
+// 默认选择香港
+const selectedCountry = ref(
+  countries.value.find((c) => c.code === "852") || countries.value[0]
+);
 
 const selectCountry = (country) => {
   selectedCountry.value = country;
   showCountryPicker.value = false;
 };
 
-const goBack = () => {
-  router.back();
+const handleSendCode = () => {
+  if (countdown.value > 0) return;
+  
+  // 验证手机号或邮箱
+  if (activeTab.value === "phone" && !phoneNumber.value) {
+    return;
+  }
+  if (activeTab.value === "email" && !email.value) {
+    return;
+  }
+
+  // TODO: 发送验证码API调用
+  console.log("发送验证码", {
+    type: activeTab.value,
+    phone: phoneNumber.value,
+    email: email.value,
+  });
+
+  // 开始倒计时
+  countdown.value = 59;
+  countdownTimer = setInterval(() => {
+    countdown.value--;
+    if (countdown.value <= 0) {
+      clearInterval(countdownTimer);
+      countdownTimer = null;
+    }
+  }, 1000);
 };
 
-const handleNextStep = () => {
+const handleVerificationInput = () => {
+  // 清除错误状态
+  if (verificationError.value) {
+    verificationError.value = false;
+  }
+};
+
+const handleEmailInput = () => {
+  // 清除邮箱错误状态
+  if (emailError.value) {
+    emailError.value = false;
+  }
+  // 简单的邮箱验证
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (email.value && !emailRegex.test(email.value)) {
+    emailError.value = true;
+  }
+};
+
+const handleAccountInput = () => {
+  // 清除账号错误状态
+  if (accountError.value) {
+    accountError.value = false;
+  }
+  // 验证账号：不低于8位的数字加字母
+  const accountRegex = /^(?=.*[0-9])(?=.*[a-zA-Z])[0-9a-zA-Z]{8,}$/;
+  if (account.value && !accountRegex.test(account.value)) {
+    accountError.value = true;
+  }
+};
+
+const handleRegister = () => {
   if (!agreed.value) {
     // TODO: 显示提示
     return;
   }
 
+  // 验证表单
+  if (activeTab.value === "phone" && !phoneNumber.value) {
+    return;
+  }
+  if (activeTab.value === "email" && !email.value) {
+    return;
+  }
+  if (activeTab.value === "account" && !account.value) {
+    return;
+  }
+  if (!password.value || !confirmPassword.value) {
+    return;
+  }
+  if (password.value !== confirmPassword.value) {
+    return;
+  }
+
   // TODO: 实现注册逻辑
-  console.log("下一步", {
+  console.log("注册", {
     type: activeTab.value,
     phone: phoneNumber.value,
     email: email.value,
     account: account.value,
+    password: password.value,
     invitationCode: invitationCode.value,
     countryCode: selectedCountry.value.code,
   });
+};
+
+const goToLogin = () => {
+  router.push("/login");
 };
 
 const openTerms = () => {
@@ -378,81 +696,130 @@ const openAntiMoneyLaundering = () => {
   router.push("/anti-money-laundering");
 };
 
-const goToLogin = () => {
-  router.push("/login");
+const currentLangName = computed(() => {
+  const lang = languages.find((l) => l.code === currentLang.value);
+  return (
+    lang?.name || languages.find((l) => l.code === "zh-TW")?.name || "繁體中文"
+  );
+});
+
+const selectLanguage = (code) => {
+  setLanguage(code);
+  showLanguageDialog.value = false;
 };
+
+onUnmounted(() => {
+  if (countdownTimer) {
+    clearInterval(countdownTimer);
+  }
+});
 </script>
 
 <style lang="scss" scoped>
 .register-page {
   min-height: 100vh;
-  background-color: #fff;
-  padding: 0 16px;
+  background: #070210;
+  padding: 0 32px;
   padding-bottom: 40px;
+  color: #f3f4f6;
+  font-family: "PT Sans Caption";
 }
 
 .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 0;
+  padding-top: 26px;
 
-  .back-icon {
-    width: 20.8px;
-    height: 20.8px;
-    cursor: pointer;
-    display: block;
+  .logo {
+    display: flex;
+    align-items: center;
+
+    .logo-web3 {
+      color: #00ff88;
+      font-size: 40px;
+      font-weight: 700;
+    }
+
+    .logo-text {
+      color: #fff;
+      font-size: 40px;
+      font-weight: 700;
+    }
   }
 
-  .service-icon {
-    width: 20.8px;
-    height: 20.8px;
-    font-size: 20px;
-    color: #323233;
-    cursor: pointer;
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    .service-icon {
+      width: 28px;
+      height: 32px;
+      cursor: pointer;
+      filter: brightness(0) invert(1);
+    }
+
+    .globe-icon {
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      filter: brightness(0) invert(1);
+    }
   }
 }
 
 .title {
-  font-size: 6.4vw;
-  font-weight: 700;
-  color: #000;
-  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 68px;
+  margin-bottom: 24px;
+  color: #fff;
+  font-family: "PingFang SC";
+  font-size: 40px;
+  font-weight: 600;
+  line-height: normal;
+
+  .login-link-top {
+    color: #1df388;
+    font-family: "PingFang SC";
+    font-size: 24px;
+    font-weight: 500;
+    cursor: pointer;
+  }
 }
 
 .tabs {
   display: flex;
-  gap: 16px;
-  margin-top: 44px;
-  border-bottom: 1px solid #ebedf0;
-  flex-wrap: nowrap;
-  overflow-x: auto;
+  gap: 32px;
+  margin-bottom: 73px;
 
   .tab {
-    padding-bottom: 12px;
-    color: #909090;
-    font-size: 4.26667vw;
     cursor: pointer;
     position: relative;
     transition: color 0.3s;
-    padding: 0 2.66667vw;
+    padding: 0 16px;
     height: 46.8px;
     line-height: 46.8px;
-    white-space: nowrap;
-    flex-shrink: 0;
+    color: #6a6a6a;
+    font-family: "PingFang SC";
+    font-size: 28px;
+    font-weight: 500;
 
     &.active {
-      color: #323233;
+      color: #fff;
       font-weight: 500;
 
       &::after {
         content: "";
         position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 2px;
-        background-color: #323233;
+        bottom: -13px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 50px;
+        height: 6px;
+        background-color: #00ff88;
       }
     }
   }
@@ -463,174 +830,258 @@ const goToLogin = () => {
 }
 
 .input-group {
-  margin-bottom: 40px;
-  margin-top: 40px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  margin-top: 60px;
+  overflow: hidden;
+  width: 686px;
+  height: 90px;
+  border-radius: 10px;
+  border: 1px solid #3c404b;
+  background: #181a1e;
+  position: relative;
 
-  .input-label {
-    display: block;
-    font-size: 14px;
-    color: #000;
-    margin-bottom: 12px;
+  .country-selector {
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+    min-width: 80px;
+    background-color: transparent;
+
+    .country-code {
+      color: #f3f4f6;
+      text-align: right;
+      font-family: "PingFang SC";
+      font-size: 24px;
+      font-weight: 500;
+      margin-right: 4px;
+    }
+
+    .arrow-icon {
+      font-size: 14px;
+      color: #fff;
+    }
+  }
+
+  &.verification-group {
+    .verification-input {
+      flex: 1;
+    }
+
+    .error-message {
+      position: absolute;
+      bottom: -30px;
+      left: 0;
+      color: #ff4444;
+      font-size: 20px;
+      font-family: "PingFang SC";
+    }
+
+    &.error-state {
+      border-color: #ff4444;
+    }
+
+    .verification-input.error {
+      :deep(.van-field__control) {
+        color: #fff !important;
+      }
+    }
+  }
+
+  .error-message {
+    position: absolute;
+    bottom: -30px;
+    left: 0;
+    color: #ff4444;
+    font-size: 20px;
+    font-family: "PingFang SC";
+  }
+
+  &.error-state {
+    border-color: #ff4444;
+  }
+
+  .clear-icon {
+    font-size: 20px;
+    color: #6c6c6c;
+    cursor: pointer;
+    padding: 4px;
+  }
+
+  &.invitation-group {
+    margin-top: 80px;
+  }
+
+  .invitation-label {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    color: #fff;
+    font-family: "PingFang SC";
+    font-size: 24px;
     font-weight: 500;
     display: flex;
     align-items: center;
     gap: 4px;
-    cursor: pointer;
 
-    .triangle-icon {
-      font-size: 10px;
-      color: #000;
-      display: inline-block;
-      transform: rotate(0deg);
-      transition: transform 0.3s;
-    }
-  }
-
-  .input-wrapper {
-    display: flex;
-    align-items: center;
-    border: 1px solid #ebedf0;
-    border-radius: 8px;
-    overflow: hidden;
-
-    .country-selector {
-      display: flex;
-      align-items: center;
-      padding: 0 12px;
-      border-right: 1px solid #ebedf05d;
-      cursor: pointer;
-      min-width: 60px;
-
-      .country-code {
-        font-size: 16px;
-        color: #040303;
-        margin-right: 4px;
-      }
-
-      .arrow-icon {
-        font-size: 16px;
-        color: #040303;
-      }
+    .arrow-up-icon {
+      font-size: 16px;
+      color: #fff;
     }
   }
 
   :deep(.van-field) {
     padding: 12px 16px;
-    background-color: #fff;
-    border: 1px solid #ebedf0;
-    border-radius: 8px;
+    background-color: transparent;
+    flex: 1;
 
     .van-field__control {
-      font-size: 14px;
-      color: #323233;
+      color: #fff;
+      font-family: "PingFang SC";
+      font-size: 28px;
+      font-weight: 400;
 
       &::placeholder {
-        font-size: 4vw;
-        color: #909090;
-      }
-
-      &::-webkit-input-placeholder {
-        font-size: 4vw;
-        color: #909090;
-      }
-
-      &::-moz-placeholder {
-        font-size: 4vw;
-        color: #909090;
-      }
-
-      &:-ms-input-placeholder {
-        font-size: 4vw;
-        color: #909090;
+        color: #6c6c6c;
+        font-family: "PingFang SC";
+        font-size: 28px;
+        font-weight: 400;
       }
     }
-
-    .van-field__placeholder {
-      font-size: 4vw;
-      color: #909090;
-    }
-
   }
 
   .phone-input {
     flex: 1;
-    border: none !important;
-    border-radius: 0 !important;
-    border-left: none !important;
+  }
 
-    :deep(.van-field__control) {
-      padding-left: 0;
+  .password-input {
+    flex: 1;
+
+    .eye-icon {
+      cursor: pointer;
+      width: 36px;
+      height: 22px;
     }
   }
 
-  .email-input,
-  .account-input,
   .invitation-input {
-    width: 100%;
+    flex: 1;
   }
 }
 
-.button-group {
-  margin-top: 40px;
-  margin-bottom: 24px;
+.verification-wrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-top: 60px;
+  margin-bottom: 20px;
 
-  .next-btn {
+  .input-group {
+    margin-top: 0;
+    flex: 1;
+  }
+
+  .send-btn-separate {
+    width: 120px;
+    height: 90px;
+    background: #3c404b;
+    border: 1px solid #3c404b;
+    border-radius: 10px;
+    color: #fff;
+    font-family: "PingFang SC";
+    font-size: 24px;
+    font-weight: 500;
+    cursor: pointer;
+    flex-shrink: 0;
+
+    &.disabled {
+      color: #6c6c6c;
+      cursor: not-allowed;
+    }
+  }
+
+  .captcha-image {
+    width: 120px;
+    height: 90px;
+    border-radius: 10px;
+    border: 1px solid #3c404b;
+    background: #181a1e;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 1.33333vw;
-    margin: 0 auto;
-    width: 91.46667vw;
-    height: 12.8vw;
-    background-color: #000;
-    border-radius: 266.4vw;
-    font-size: 4vw;
-    color: #fff;
-    border: none;
-
-    &:disabled {
-      color: #fff;
-    }
-  }
-}
-
-.login-link {
-  text-align: center;
-  font-size: 14px;
-  color: #040303;
-  margin-bottom: 24px;
-
-  span {
-    color: #000;
     cursor: pointer;
+    flex-shrink: 0;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
   }
 }
 
 .agreement {
   display: flex;
   align-items: flex-start;
+  margin-top: 40px;
   margin-bottom: 24px;
   gap: 8px;
-  margin: 0 20px;
-  margin-bottom: 40px;
 
   :deep(.van-checkbox) {
     margin-top: 2px;
-    border: 1px solid #000;
-    border-radius: 1.06667vw;
+  }
+
+  :deep(.van-checkbox__icon) {
+    border-color: #00ff88;
+    background-color: transparent;
+  }
+
+  :deep(.van-checkbox__icon--checked) {
+    background-color: #00ff88;
+    border-color: #00ff88;
   }
 
   .agreement-text {
     flex: 1;
-    font-size: 12px;
-    color: #040303 !important;
+    font-size: 24px;
+    color: #fff;
     line-height: 1.5;
-    padding: 0 15px 0 0;
+    font-family: "PingFang SC";
 
     .link {
-      color: #000000 !important;
+      color: #4a9eff;
       cursor: pointer;
-      font-weight: 700;
+      text-decoration: underline;
+    }
+  }
+}
+
+.button-group {
+  margin-top: 32px;
+  margin-bottom: 24px;
+
+  .register-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    width: 686px;
+    height: 90px;
+    border-radius: 10px;
+    background: #1df388;
+    color: #121212;
+    font-family: "PingFang SC";
+    font-size: 30px;
+    font-weight: 500;
+    border: none;
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
     }
   }
 }
@@ -639,24 +1090,24 @@ const goToLogin = () => {
   height: 100%;
   display: flex;
   flex-direction: column;
-  background-color: #fff;
+  background: linear-gradient(180deg, #1a0d2e 0%, #0d0519 100%);
 
   .picker-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 16px;
-    border-bottom: 1px solid #ebedf0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 
     .picker-title {
       font-size: 16px;
       font-weight: 500;
-      color: #323233;
+      color: #fff;
     }
 
     .close-icon {
       font-size: 18px;
-      color: #969799;
+      color: rgba(255, 255, 255, 0.6);
       cursor: pointer;
     }
   }
@@ -670,20 +1121,20 @@ const goToLogin = () => {
       align-items: center;
       justify-content: space-between;
       padding: 16px;
-      border-bottom: 1px solid #ebedf0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
       cursor: pointer;
       transition: background-color 0.2s;
 
       &:active {
-        background-color: #f7f8fa;
+        background-color: rgba(255, 255, 255, 0.1);
       }
 
       &.active {
-        background-color: #323233;
+        background-color: rgba(0, 255, 136, 0.2);
         color: #fff;
 
         .country-code-text {
-          color: #fff;
+          color: #00ff88;
         }
         .country-name {
           color: #fff;
@@ -692,15 +1143,110 @@ const goToLogin = () => {
 
       .country-name {
         font-size: 14px;
-        color: #323233;
+        color: #fff;
       }
 
       .country-code-text {
         font-size: 14px;
-        color: #969799;
+        color: rgba(255, 255, 255, 0.6);
       }
     }
   }
 }
-</style>
 
+// 语言选择对话框
+.language-popup {
+  overflow: visible !important;
+
+  :deep(.van-popup) {
+    overflow: visible !important;
+  }
+
+  :deep(.van-popup__content) {
+    overflow: visible !important;
+    animation: slideInFromRight 0.3s ease-out;
+    will-change: transform;
+  }
+}
+
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+.language-dialog {
+  height: 100%;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: #0a0b0d;
+  position: relative;
+  overflow: visible;
+
+  .dialog-header {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    background-color: rgba(26, 27, 46, 0.9);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+    z-index: 1;
+    flex-shrink: 0;
+
+    .back-icon {
+      font-size: 20px;
+      color: #ffffff;
+      cursor: pointer;
+      margin-right: 12px;
+    }
+
+    .dialog-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: #ffffff;
+      display: inline-block;
+      width: 100%;
+      text-align: center;
+    }
+  }
+
+  .dialog-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0;
+    position: relative;
+    z-index: 1;
+    background-color: #0a0b0d;
+
+    :deep(.van-cell-group) {
+      margin: 0;
+    }
+
+    :deep(.van-cell) {
+      padding: 12px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      background-color: #0a0b0d;
+      color: #ffffff;
+    }
+
+    :deep(.van-cell:last-child) {
+      border-bottom: none;
+    }
+
+    .flag-icon {
+      width: 24px;
+      height: 18px;
+      margin-right: 12px;
+      display: inline-block;
+      object-fit: cover;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+  }
+}
+</style>
