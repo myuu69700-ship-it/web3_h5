@@ -31,211 +31,204 @@
           {{ t("login") }}
         </button>
         <button class="auth-btn register-btn" @click="handleRegister">
-          {{ t("register") }}
+          {{ t("registerNow") }}
         </button>
       </div>
 
-      <!-- 常用功能 -->
-      <div class="menu-section">
-        <div class="section-header" @click="toggleSection('common')">
-          <span class="section-title">{{ t("commonFunctions") }}</span>
-          <van-icon
-            name="arrow-up"
-            class="chevron-icon"
-            :class="{ expanded: expandedSections.common }"
-          />
-        </div>
-        <div
-          v-if="expandedSections.common"
-          class="section-content"
-        >
-          <div class="menu-item" @click="handleTutorial">
-            <div class="menu-icon">
-              <van-icon name="question-o" size="24" />
+      <!-- 可滚动的内容区域 -->
+      <div class="scrollable-content">
+        <!-- 常用功能 -->
+        <div class="menu-section">
+          <div class="section-header" @click="toggleSection('common')">
+            <span class="section-title">{{ t("commonFunctions") }}</span>
+            <img
+              :src="allowTopIcon"
+              class="chevron-icon"
+              :class="{ expanded: expandedSections.common }"
+              alt=""
+            />
+          </div>
+          <div v-if="expandedSections.common" class="section-content">
+            <div class="menu-item" @click="handleTutorial">
+              <div class="menu-icon">
+                <van-icon name="question-o" size="24" />
+              </div>
+              <span class="menu-label">{{ t("newbieTutorial") }}</span>
             </div>
-            <span class="menu-label">{{ t("newbieTutorial") }}</span>
+          </div>
+        </div>
+
+        <!-- 资产管理 -->
+        <div class="menu-section">
+          <div class="section-header" @click="toggleSection('assets')">
+            <span class="section-title">{{ t("assetManagement") }}</span>
+            <img
+              :src="allowTopIcon"
+              class="chevron-icon"
+              :class="{ expanded: expandedSections.assets }"
+              alt=""
+            />
+          </div>
+          <div v-if="expandedSections.assets" class="section-content">
+            <div class="menu-item" @click="handleDeposit">
+              <div class="menu-icon">
+                <van-icon name="balance-o" size="24" />
+              </div>
+              <span class="menu-label">{{ t("deposit") }}</span>
+            </div>
+            <div class="menu-item" @click="handleWithdraw">
+              <div class="menu-icon">
+                <van-icon name="arrow-up" size="24" />
+              </div>
+              <span class="menu-label">{{ t("withdraw") }}</span>
+            </div>
+            <div class="menu-item" @click="handleQuickBuy">
+              <div class="menu-icon">
+                <van-icon name="flash-o" size="24" />
+              </div>
+              <span class="menu-label">{{ t("quickBuy") }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 交易 -->
+        <div class="menu-section">
+          <div class="section-header" @click="toggleSection('trading')">
+            <span class="section-title">{{ t("trading") }}</span>
+            <img
+              :src="allowTopIcon"
+              class="chevron-icon"
+              :class="{ expanded: expandedSections.trading }"
+              alt=""
+            />
+          </div>
+          <div v-if="expandedSections.trading" class="section-content">
+            <div class="menu-item" @click="handleOptions">
+              <div class="menu-icon">
+                <van-icon name="description" size="24" />
+              </div>
+              <span class="menu-label">{{ t("options") }}</span>
+            </div>
+            <div class="menu-item" @click="handleSpot">
+              <div class="menu-icon">
+                <van-icon name="aim" size="24" />
+              </div>
+              <span class="menu-label">{{ t("spot") }}</span>
+            </div>
+            <div class="menu-item" @click="handleContract">
+              <div class="menu-icon">
+                <van-icon name="description" size="24" />
+              </div>
+              <span class="menu-label">{{ t("contract") }}</span>
+            </div>
+            <div class="menu-item" @click="handleNFT">
+              <div class="menu-icon">
+                <span class="nft-icon">NFT</span>
+              </div>
+              <span class="menu-label">{{ t("nft") }}</span>
+            </div>
+            <div class="menu-item" @click="handleAIStrategy">
+              <div class="menu-icon">
+                <van-icon name="setting-o" size="24" />
+              </div>
+              <span class="menu-label">{{ t("aiStrategyTrading") }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 赚币与奖励 -->
+        <div class="menu-section">
+          <div class="section-header" @click="toggleSection('earn')">
+            <span class="section-title">{{ t("earnCoinsAndRewards") }}</span>
+            <img
+              :src="allowTopIcon"
+              class="chevron-icon"
+              :class="{ expanded: expandedSections.earn }"
+              alt=""
+            />
+          </div>
+          <div v-if="expandedSections.earn" class="section-content">
+            <div class="menu-item" @click="handleDeFiLending">
+              <div class="menu-icon">
+                <van-icon name="exchange" size="24" />
+              </div>
+              <span class="menu-label">{{ t("defiLending") }}</span>
+            </div>
+            <div class="menu-item" @click="handlePortfolio">
+              <div class="menu-icon">
+                <van-icon name="cluster-o" size="24" />
+              </div>
+              <span class="menu-label">{{ t("investmentPortfolio") }}</span>
+            </div>
+            <div class="menu-item" @click="handleLockedStaking">
+              <div class="menu-icon">
+                <van-icon name="lock" size="24" />
+              </div>
+              <span class="menu-label">{{ t("lockedStaking") }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 更多功能 -->
+        <div class="menu-section">
+          <div class="section-header" @click="toggleSection('more')">
+            <span class="section-title">{{ t("moreFunctions") }}</span>
+            <img
+              :src="allowTopIcon"
+              class="chevron-icon"
+              :class="{ expanded: expandedSections.more }"
+              alt=""
+            />
+          </div>
+          <div v-if="expandedSections.more" class="section-content">
+            <div class="menu-item" @click="handleAssetCenter">
+              <div class="menu-icon">
+                <van-icon name="notes-o" size="24" />
+              </div>
+              <span class="menu-label">{{ t("assetCenter") }}</span>
+            </div>
+            <div class="menu-item" @click="handleAddressBook">
+              <div class="menu-icon">
+                <van-icon name="notes-o" size="24" />
+              </div>
+              <span class="menu-label">{{ t("addressBook") }}</span>
+            </div>
+            <div class="menu-item" @click="handleCharity">
+              <div class="menu-icon">
+                <van-icon name="like-o" size="24" />
+              </div>
+              <span class="menu-label">{{ t("charity") }}</span>
+            </div>
+            <div class="menu-item" @click="handleSecurityCenter">
+              <div class="menu-icon">
+                <van-icon name="shield-o" size="24" />
+              </div>
+              <span class="menu-label">{{ t("securityCenter") }}</span>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- 资产管理 -->
-      <div class="menu-section">
-        <div class="section-header" @click="toggleSection('assets')">
-          <span class="section-title">{{ t("assetManagement") }}</span>
-          <van-icon
-            name="arrow-up"
-            class="chevron-icon"
-            :class="{ expanded: expandedSections.assets }"
-          />
-        </div>
-        <div
-          v-if="expandedSections.assets"
-          class="section-content"
-        >
-          <div class="menu-item" @click="handleDeposit">
+      <!-- 固定在底部的部分 -->
+      <div class="fixed-bottom">
+        <!-- 清除缓存 -->
+        <div class="menu-section">
+          <div class="menu-item clear-cache" @click="handleClearCache">
             <div class="menu-icon">
-              <van-icon name="balance-o" size="24" />
+              <van-icon name="delete-o" size="20" />
             </div>
-            <span class="menu-label">{{ t("deposit") }}</span>
-          </div>
-          <div class="menu-item" @click="handleWithdraw">
-            <div class="menu-icon">
-              <van-icon name="arrow-up" size="24" />
-            </div>
-            <span class="menu-label">{{ t("withdraw") }}</span>
-          </div>
-          <div class="menu-item" @click="handleQuickBuy">
-            <div class="menu-icon">
-              <van-icon name="flash-o" size="24" />
-            </div>
-            <span class="menu-label">{{ t("quickBuy") }}</span>
+            <span class="menu-label">{{ t("clearCache") }}</span>
           </div>
         </div>
-      </div>
 
-      <!-- 交易 -->
-      <div class="menu-section">
-        <div class="section-header" @click="toggleSection('trading')">
-          <span class="section-title">{{ t("trading") }}</span>
-          <van-icon
-            name="arrow-up"
-            class="chevron-icon"
-            :class="{ expanded: expandedSections.trading }"
-          />
+        <!-- 底部链接 -->
+        <div class="footer-links">
+          <span class="footer-link" @click="handlePrivacy">隐私</span>
+          <span class="footer-divider">|</span>
+          <span class="footer-link" @click="handleTerms">条款</span>
+          <span class="footer-divider">|</span>
+          <span class="footer-link" @click="handleRisk">风险</span>
         </div>
-        <div
-          v-if="expandedSections.trading"
-          class="section-content"
-        >
-          <div class="menu-item" @click="handleOptions">
-            <div class="menu-icon">
-              <van-icon name="description" size="24" />
-            </div>
-            <span class="menu-label">{{ t("options") }}</span>
-          </div>
-          <div class="menu-item" @click="handleSpot">
-            <div class="menu-icon">
-              <van-icon name="aim" size="24" />
-            </div>
-            <span class="menu-label">{{ t("spot") }}</span>
-          </div>
-          <div class="menu-item" @click="handleContract">
-            <div class="menu-icon">
-              <van-icon name="description" size="24" />
-            </div>
-            <span class="menu-label">{{ t("contract") }}</span>
-          </div>
-          <div class="menu-item" @click="handleNFT">
-            <div class="menu-icon">
-              <span class="nft-icon">NFT</span>
-            </div>
-            <span class="menu-label">{{ t("nft") }}</span>
-          </div>
-          <div class="menu-item" @click="handleAIStrategy">
-            <div class="menu-icon">
-              <van-icon name="setting-o" size="24" />
-            </div>
-            <span class="menu-label">{{ t("aiStrategyTrading") }}</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- 赚币与奖励 -->
-      <div class="menu-section">
-        <div class="section-header" @click="toggleSection('earn')">
-          <span class="section-title">{{ t("earnCoinsAndRewards") }}</span>
-          <van-icon
-            name="arrow-up"
-            class="chevron-icon"
-            :class="{ expanded: expandedSections.earn }"
-          />
-        </div>
-        <div
-          v-if="expandedSections.earn"
-          class="section-content"
-        >
-          <div class="menu-item" @click="handleDeFiLending">
-            <div class="menu-icon">
-              <van-icon name="exchange" size="24" />
-            </div>
-            <span class="menu-label">{{ t("defiLending") }}</span>
-          </div>
-          <div class="menu-item" @click="handlePortfolio">
-            <div class="menu-icon">
-              <van-icon name="cluster-o" size="24" />
-            </div>
-            <span class="menu-label">{{ t("investmentPortfolio") }}</span>
-          </div>
-          <div class="menu-item" @click="handleLockedStaking">
-            <div class="menu-icon">
-              <van-icon name="lock" size="24" />
-            </div>
-            <span class="menu-label">{{ t("lockedStaking") }}</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- 更多功能 -->
-      <div class="menu-section">
-        <div class="section-header" @click="toggleSection('more')">
-          <span class="section-title">{{ t("moreFunctions") }}</span>
-          <van-icon
-            name="arrow-up"
-            class="chevron-icon"
-            :class="{ expanded: expandedSections.more }"
-          />
-        </div>
-        <div
-          v-if="expandedSections.more"
-          class="section-content"
-        >
-          <div class="menu-item" @click="handleAssetCenter">
-            <div class="menu-icon">
-              <van-icon name="notes-o" size="24" />
-            </div>
-            <span class="menu-label">{{ t("assetCenter") }}</span>
-          </div>
-          <div class="menu-item" @click="handleAddressBook">
-            <div class="menu-icon">
-              <van-icon name="notes-o" size="24" />
-            </div>
-            <span class="menu-label">{{ t("addressBook") }}</span>
-          </div>
-          <div class="menu-item" @click="handleCharity">
-            <div class="menu-icon">
-              <van-icon name="like-o" size="24" />
-            </div>
-            <span class="menu-label">{{ t("charity") }}</span>
-          </div>
-          <div class="menu-item" @click="handleSecurityCenter">
-            <div class="menu-icon">
-              <van-icon name="shield-o" size="24" />
-            </div>
-            <span class="menu-label">{{ t("securityCenter") }}</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- 分隔线 -->
-      <div class="divider"></div>
-
-      <!-- 清除缓存 -->
-      <div class="menu-section">
-        <div class="menu-item clear-cache" @click="handleClearCache">
-          <div class="menu-icon">
-            <van-icon name="delete-o" size="20" />
-          </div>
-          <span class="menu-label">{{ t("clearCache") }}</span>
-        </div>
-      </div>
-
-      <!-- 底部链接 -->
-      <div class="footer-links">
-        <span class="footer-link" @click="handlePrivacy">隐私</span>
-        <span class="footer-divider">|</span>
-        <span class="footer-link" @click="handleTerms">条款</span>
-        <span class="footer-divider">|</span>
-        <span class="footer-link" @click="handleRisk">风险</span>
       </div>
     </div>
 
@@ -255,7 +248,10 @@
               @click="languageTab = 'language'"
             >
               <span class="tab-text">语言和地区</span>
-              <div class="tab-indicator" v-if="languageTab === 'language'"></div>
+              <div
+                class="tab-indicator"
+                v-if="languageTab === 'language'"
+              ></div>
             </div>
             <div
               class="tab-item"
@@ -263,7 +259,10 @@
               @click="languageTab = 'exchange'"
             >
               <span class="tab-text">汇率</span>
-              <div class="tab-indicator" v-if="languageTab === 'exchange'"></div>
+              <div
+                class="tab-indicator"
+                v-if="languageTab === 'exchange'"
+              ></div>
             </div>
           </div>
           <div class="close-btn" @click="showLanguageDialog = false">
@@ -303,6 +302,7 @@ import { useRouter } from "vue-router";
 import { useI18n, languages } from "@/i18n";
 import kfuIcon from "@/assets/images/kfu.svg";
 import diqiuIcon from "@/assets/images/diqiu.svg";
+import allowTopIcon from "@/assets/image/aeeoeTop.svg";
 
 const props = defineProps({
   modelValue: {
@@ -316,7 +316,7 @@ const emit = defineEmits(["update:modelValue"]);
 const router = useRouter();
 const { t, currentLang, setLanguage } = useI18n();
 const showLanguageDialog = ref(false);
-const languageTab = ref('language');
+const languageTab = ref("language");
 
 // 可折叠部分的状态
 const expandedSections = ref({
@@ -489,23 +489,24 @@ const handleRisk = () => {
 .menu-drawer {
   width: 100%;
   height: 100%;
-  background-color: #1a1a1a;
-  overflow-y: auto;
-  padding-bottom: 20px;
+  background-color: #070210;
   color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
 }
 
 .drawer-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 32px 32px 24px;
+  padding: 38px 32px 73px;
 
   .close-icon {
     font-size: 28px;
     color: #ffffff;
     cursor: pointer;
-    transition: opacity 0.3s;
 
     &:active {
       opacity: 0.7;
@@ -523,7 +524,6 @@ const handleRisk = () => {
       cursor: pointer;
       display: block;
       filter: brightness(0) invert(1);
-      transition: opacity 0.3s;
 
       &:active {
         opacity: 0.7;
@@ -533,7 +533,7 @@ const handleRisk = () => {
 }
 
 .auth-section {
-  padding: 0 32px 24px;
+  padding: 0 32px 60px;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -548,7 +548,6 @@ const handleRisk = () => {
     line-height: 100%;
     cursor: pointer;
     border: none;
-    transition: all 0.3s ease;
 
     &:active {
       opacity: 0.8;
@@ -556,15 +555,31 @@ const handleRisk = () => {
     }
 
     &.login-btn {
-      background: rgba(255, 255, 255, 0.1);
-      color: #ffffff;
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      width: 686px;
+      height: 90px;
+      border-radius: 10px;
+      border: 1px solid #474747;
+      background: #070210;
+      color: #f3f3f3;
+      font-family: "PingFang SC";
+      font-size: 30px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: normal;
+      margin-bottom: 40px;
     }
 
     &.register-btn {
+      width: 686px;
+      height: 90px;
+      border-radius: 10px;
       background: #1df388;
-      color: #070210;
-      border: 1px solid #1df388;
+      color: #121212;
+      font-family: "PingFang SC";
+      font-size: 30px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: normal;
     }
   }
 }
@@ -576,35 +591,34 @@ const handleRisk = () => {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 24px 0;
+    padding: 30px 0;
     cursor: pointer;
-    transition: opacity 0.3s;
 
     &:active {
       opacity: 0.7;
     }
 
     .section-title {
-      font-family: PingFang SC;
+      color: #f3f3f3;
+      font-family: "PingFang SC";
+      font-size: 30px;
+      font-style: normal;
       font-weight: 500;
-      font-size: 28px;
-      color: #ffffff;
+      line-height: normal;
     }
 
     .chevron-icon {
-      font-size: 20px;
-      color: #ffffff;
+      width: 20px;
+      height: 20px;
+      display: block;
       transition: transform 0.3s ease;
-
       &.expanded {
         transform: rotate(180deg);
       }
     }
   }
-
   .section-content {
     padding-bottom: 16px;
-    animation: slideDown 0.3s ease-out;
   }
 
   .menu-item {
@@ -612,15 +626,14 @@ const handleRisk = () => {
     align-items: center;
     padding: 16px 0;
     cursor: pointer;
-    transition: opacity 0.3s;
 
     &:active {
       opacity: 0.7;
     }
 
     .menu-icon {
-      width: 40px;
-      height: 40px;
+      width: 36px;
+      height: 36px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -637,45 +650,73 @@ const handleRisk = () => {
     }
 
     .menu-label {
-      font-family: PingFang SC;
-      font-weight: 400;
+      color: #b9b9b9;
+      font-family: "PingFang SC";
       font-size: 26px;
-      color: #ffffff;
+      font-style: normal;
+      font-weight: 500;
+      line-height: normal;
     }
 
     &.clear-cache {
+      height: 102px;
+      border-top: 1px solid #22262f;
+      border-bottom: 1px solid #22262f;
+      margin-top: 0;
       .menu-icon {
         background: transparent;
-        margin-right: 12px;
+        margin-right: 19px;
+        margin-left: 28px;
       }
 
       .menu-label {
+        color: #f2f2f2;
+        font-family: "PingFang SC";
         font-size: 26px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
       }
     }
   }
 }
 
-.divider {
-  height: 1px;
-  background: rgba(255, 255, 255, 0.2);
-  margin: 24px 32px;
+.scrollable-content {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 240px; // 为底部固定区域预留空间（清除缓存 + footer-links + 43px距离）
+  // 隐藏滚动条但保持滚动功能
+  scrollbar-width: none; // Firefox
+  -ms-overflow-style: none; // IE 和 Edge
+  
+  &::-webkit-scrollbar {
+    display: none; // Chrome, Safari, Opera
+  }
+}
+
+.fixed-bottom {
+  position: absolute;
+  bottom: 0px;
+  left: 0;
+  right: 0;
+  width: 100%;
+  background-color: #070210;
+  z-index: 10;
 }
 
 .footer-links {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   gap: 12px;
-  padding: 24px 32px;
   font-family: PingFang SC;
   font-weight: 400;
   font-size: 24px;
+  padding: 33px 115px 43px;
 
   .footer-link {
     color: #949494;
     cursor: pointer;
-    transition: color 0.3s;
 
     &:active {
       color: #1df388;
@@ -731,7 +772,7 @@ const handleRisk = () => {
   min-height: 100%;
   display: flex;
   flex-direction: column;
-  background: #17181A;
+  background: #17181a;
   position: relative;
   overflow: visible;
 
@@ -740,7 +781,7 @@ const handleRisk = () => {
     align-items: center;
     justify-content: space-between;
     padding: 16px;
-    background: #17181A;
+    background: #17181a;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     position: relative;
     z-index: 1;
@@ -760,7 +801,6 @@ const handleRisk = () => {
         .tab-text {
           font-size: 16px;
           color: #888888;
-          transition: color 0.3s;
         }
 
         &.active .tab-text {
@@ -800,18 +840,17 @@ const handleRisk = () => {
     padding: 0;
     position: relative;
     z-index: 1;
-    background: #17181A;
+    background: #17181a;
 
     .language-list {
       padding: 0;
-      
+
       .language-item {
         display: flex;
         align-items: center;
         padding: 12px 16px;
         border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         cursor: pointer;
-        transition: background-color 0.2s;
         background-color: transparent;
 
         &:hover {
@@ -859,4 +898,3 @@ const handleRisk = () => {
   }
 }
 </style>
-
