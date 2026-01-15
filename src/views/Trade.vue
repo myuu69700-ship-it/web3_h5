@@ -1138,7 +1138,7 @@ onUnmounted(() => {
     display: flex;
     align-items: center;
     gap: 12px;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     font-size: 12px;
     margin-bottom: 16px;
     margin-top: 16px;
@@ -1146,35 +1146,60 @@ onUnmounted(() => {
     z-index: 10;
     width: 100%;
     background-color: #141517;
+    padding: 13px 32px;
 
     .indicator-group {
       display: flex;
       align-items: center;
       gap: 8px;
+      flex: 1 1 auto;
+      min-width: 0;
+      // flex-wrap: wrap;
 
       .indicator-label {
-        color: #a4a4a4;
+        color: #909090;
+        font-family: Inter;
+        font-size: 20px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        padding-right: 36px;
+        white-space: nowrap;
       }
 
       .indicator-item {
-        padding: 4px 8px;
+        // padding: px 8px;
         border-radius: 4px;
-        color: #a4a4a4;
         cursor: pointer;
-        transition: all 0.3s;
+        color: #909090;
+        font-family: Inter;
+        font-size: 20px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        padding-right: 36px;
+        white-space: nowrap;
 
         &.active {
-          background-color: #00d4aa;
-          color: #141517;
-          font-weight: 500;
+          // background-color: #00d4aa;
+          color: #1df388;
+          font-family: Inter;
+          font-size: 20px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: normal;
         }
       }
     }
 
     .more-arrow {
-      font-size: 14px;
-      color: #a4a4a4;
+      font-size: 26px;
+      color: #3f4450;
       margin-left: auto;
+      font-weight: 700;
+      flex: 0 0 auto;
+      white-space: nowrap;
+      padding-top: 6px;
     }
   }
 
@@ -1189,30 +1214,45 @@ onUnmounted(() => {
 
     .order-tabs {
       display: flex;
-      gap: 16px;
+      // gap: 16px;
       margin-bottom: 16px;
       border-bottom: 1px solid #1e1f29;
+      padding: 0 32px;
 
       .order-tab {
         padding: 12px 0;
-        font-size: 14px;
-        color: #a4a4a4;
-        cursor: pointer;
         position: relative;
-        transition: color 0.3s;
+        color: #5c5c5c;
+        font-family: "PingFang SC";
+        font-size: 24px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+        &:nth-child(1) {
+          margin-right: 37px;
+        }
+        &:nth-child(2) {
+          margin-right: 83px;
+        }
 
         &.active {
-          color: #00d4aa;
+          color: #f0f0f0;
+          font-family: "PingFang SC";
+          font-size: 24px;
+          font-style: normal;
           font-weight: 500;
+          line-height: normal;
 
           &::after {
             content: "";
             position: absolute;
             bottom: -1px;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background-color: #00d4aa;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90px;
+            height: 6px;
+            border-radius: 999px;
+            background: #1df388;
           }
         }
       }
