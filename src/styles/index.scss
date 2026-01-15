@@ -15,34 +15,22 @@ html, body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-tap-highlight-color: transparent;
-  overflow: hidden; // 禁止 body 回弹导致的触顶/触底抖动（将滚动交给 #app）
+  overflow-x: hidden;
+  overflow-y: auto;
+  // 防止滚动到顶部/底部时的回弹（常见“抖动”）
+  overscroll-behavior: none;
+  // 避免部分桌面端因滚动条出现/消失引发的布局抖动
+  scrollbar-gutter: stable;
   // 隐藏滚动条但保持滚动功能
   scrollbar-width: none; // Firefox
   -ms-overflow-style: none; // IE 和 Edge
   // 移动端滚动边界背景色
-  overscroll-behavior: none;
-  overscroll-behavior-y: none;
-}
-
-// 让应用根节点成为唯一滚动容器，避免页面触顶/触底回弹抖动
-#app {
-  width: 100%;
-  height: 100%;
-  overflow-y: auto;
-  overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior: none;
-  overscroll-behavior-y: none;
+  // iOS 若仍有回弹，需要把滚动容器从页面切到某个内部容器（页面级回弹无法完全通过 CSS 禁用）
 }
 
 // 隐藏 Webkit 浏览器的滚动条（Chrome, Safari）
 html::-webkit-scrollbar,
 body::-webkit-scrollbar {
-  display: none;
-}
-
-// 同步隐藏 #app 的滚动条（Chrome, Safari）
-#app::-webkit-scrollbar {
   display: none;
 }
 
