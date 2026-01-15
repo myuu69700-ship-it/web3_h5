@@ -15,17 +15,17 @@ html, body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-tap-highlight-color: transparent;
-  overflow-x: hidden;
-  overflow-y: auto;
-  // 防止滚动到顶部/底部时的回弹（常见“抖动”）
-  overscroll-behavior: none;
-  // 避免部分桌面端因滚动条出现/消失引发的布局抖动
-  scrollbar-gutter: stable;
   // 隐藏滚动条但保持滚动功能
   scrollbar-width: none; // Firefox
   -ms-overflow-style: none; // IE 和 Edge
   // 移动端滚动边界背景色
-  // iOS 若仍有回弹，需要把滚动容器从页面切到某个内部容器（页面级回弹无法完全通过 CSS 禁用）
+  // overscroll-behavior: none;
+}
+
+// 统一管理底部 TabBar 高度，避免各处写死导致占位高度不一致（滚动到底部容易抖动）
+:root {
+  --app-tabbar-base-height: 17.6vw;
+  --app-tabbar-height: calc(var(--app-tabbar-base-height) + env(safe-area-inset-bottom));
 }
 
 // 隐藏 Webkit 浏览器的滚动条（Chrome, Safari）
