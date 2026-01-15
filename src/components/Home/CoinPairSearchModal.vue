@@ -2,7 +2,7 @@
   <van-popup
     v-model:show="show"
     position="bottom"
-    :style="{ height: '85%', borderRadius: '16px 16px 0 0' }"
+    :style="popupStyle"
     @close="handleClose"
   >
     <div class="coin-pair-modal">
@@ -72,20 +72,28 @@
                   {{ coin.symbol.substring(0, 1) }}
                 </div>
               </div>
-              <div class="coin-info">
-                <div class="coin-symbol">{{ coin.symbol }}</div>
-                <div class="coin-pair">{{ coin.pair }}</div>
-              </div>
-              <div class="coin-tags">
-                <span class="tag" :class="getTagClass(coin.type)">{{
-                  t(coin.typeLabel)
-                }}</span>
-                <van-icon
-                  v-if="coin.isHot"
-                  name="fire-o"
-                  class="fire-icon"
-                  color="#ff4444"
-                />
+              <div class="coin-main">
+                <div class="coin-info">
+                  <div class="coin-symbol">{{ coin.symbol }}</div>
+                  <div class="coin-pair">{{ coin.pair }}</div>
+                  <van-icon
+                    v-if="coin.isHot"
+                    name="fire-o"
+                    class="fire-icon"
+                  />
+                </div>
+                <div class="coin-quote">
+                  <div class="coin-price">{{ formatPrice(coin.price) }}</div>
+                  <div
+                    class="coin-change"
+                    :class="{
+                      positive: Number(coin.changePct) >= 0,
+                      negative: Number(coin.changePct) < 0,
+                    }"
+                  >
+                    {{ formatChangePct(coin.changePct) }}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -122,6 +130,12 @@ const show = computed({
   get: () => props.modelValue,
   set: (val) => emit("update:modelValue", val),
 });
+
+const popupStyle = computed(() => ({
+  height: "595px",
+  borderRadius: "40px 40px 0 0",
+  background: "#17181A",
+}));
 
 const searchKeyword = ref("");
 
@@ -168,6 +182,8 @@ const coinList = ref([
     type: "spot",
     typeLabel: "spot",
     isHot: true,
+    price: 91276.36,
+    changePct: -0.42,
   },
   {
     symbol: "ETH",
@@ -175,6 +191,8 @@ const coinList = ref([
     type: "spot",
     typeLabel: "spot",
     isHot: true,
+    price: 3131.62,
+    changePct: -0.42,
   },
   {
     symbol: "ATOM",
@@ -182,6 +200,8 @@ const coinList = ref([
     type: "spot",
     typeLabel: "spot",
     isHot: false,
+    price: 91276.36,
+    changePct: 0.15,
   },
   {
     symbol: "BCH",
@@ -189,6 +209,8 @@ const coinList = ref([
     type: "spot",
     typeLabel: "spot",
     isHot: true,
+    price: 610.4,
+    changePct: -1.26,
   },
   {
     symbol: "XRP",
@@ -196,6 +218,8 @@ const coinList = ref([
     type: "spot",
     typeLabel: "spot",
     isHot: true,
+    price: 2.0646,
+    changePct: -1.31,
   },
   {
     symbol: "LTC",
@@ -203,6 +227,8 @@ const coinList = ref([
     type: "spot",
     typeLabel: "spot",
     isHot: true,
+    price: 76.53,
+    changePct: -0.79,
   },
   {
     symbol: "USDC",
@@ -210,6 +236,8 @@ const coinList = ref([
     type: "spot",
     typeLabel: "spot",
     isHot: false,
+    price: 1.0,
+    changePct: 0.02,
   },
   {
     symbol: "DOGE",
@@ -217,6 +245,8 @@ const coinList = ref([
     type: "spot",
     typeLabel: "spot",
     isHot: false,
+    price: 0.1386,
+    changePct: 0.21,
   },
   {
     symbol: "FIL",
@@ -224,6 +254,8 @@ const coinList = ref([
     type: "spot",
     typeLabel: "spot",
     isHot: false,
+    price: 1.484,
+    changePct: -0.06,
   },
   {
     symbol: "DAI",
@@ -231,6 +263,8 @@ const coinList = ref([
     type: "spot",
     typeLabel: "spot",
     isHot: false,
+    price: 1.0013,
+    changePct: 0.02,
   },
   // 合約数据
   {
@@ -239,6 +273,8 @@ const coinList = ref([
     type: "contract",
     typeLabel: "perpetual",
     isHot: true,
+    price: 92073.75,
+    changePct: 1.49,
   },
   {
     symbol: "ETH",
@@ -246,6 +282,8 @@ const coinList = ref([
     type: "contract",
     typeLabel: "perpetual",
     isHot: true,
+    price: 3131.62,
+    changePct: -0.42,
   },
   {
     symbol: "ATOM",
@@ -253,6 +291,8 @@ const coinList = ref([
     type: "contract",
     typeLabel: "perpetual",
     isHot: false,
+    price: 11.23,
+    changePct: 0.15,
   },
   {
     symbol: "BCH",
@@ -260,6 +300,8 @@ const coinList = ref([
     type: "contract",
     typeLabel: "perpetual",
     isHot: true,
+    price: 610.4,
+    changePct: -1.26,
   },
   {
     symbol: "XRP",
@@ -267,6 +309,8 @@ const coinList = ref([
     type: "contract",
     typeLabel: "perpetual",
     isHot: true,
+    price: 2.0646,
+    changePct: -1.31,
   },
   {
     symbol: "LTC",
@@ -274,6 +318,8 @@ const coinList = ref([
     type: "contract",
     typeLabel: "perpetual",
     isHot: true,
+    price: 76.53,
+    changePct: -0.79,
   },
   {
     symbol: "DOGE",
@@ -281,6 +327,8 @@ const coinList = ref([
     type: "contract",
     typeLabel: "perpetual",
     isHot: false,
+    price: 0.1386,
+    changePct: 0.21,
   },
   {
     symbol: "FIL",
@@ -288,6 +336,8 @@ const coinList = ref([
     type: "contract",
     typeLabel: "perpetual",
     isHot: false,
+    price: 1.484,
+    changePct: -0.06,
   },
   {
     symbol: "DAI",
@@ -295,6 +345,8 @@ const coinList = ref([
     type: "contract",
     typeLabel: "perpetual",
     isHot: false,
+    price: 1.0013,
+    changePct: 0.02,
   },
   // 期權数据
   {
@@ -303,6 +355,8 @@ const coinList = ref([
     type: "options",
     typeLabel: "options",
     isHot: true,
+    price: 92073.75,
+    changePct: 1.49,
   },
   {
     symbol: "ETH",
@@ -310,6 +364,8 @@ const coinList = ref([
     type: "options",
     typeLabel: "options",
     isHot: true,
+    price: 3131.62,
+    changePct: -0.42,
   },
   {
     symbol: "ATOM",
@@ -317,6 +373,8 @@ const coinList = ref([
     type: "options",
     typeLabel: "options",
     isHot: false,
+    price: 11.23,
+    changePct: 0.15,
   },
   {
     symbol: "BCH",
@@ -324,6 +382,8 @@ const coinList = ref([
     type: "options",
     typeLabel: "options",
     isHot: true,
+    price: 610.4,
+    changePct: -1.26,
   },
   {
     symbol: "XRP",
@@ -331,6 +391,8 @@ const coinList = ref([
     type: "options",
     typeLabel: "options",
     isHot: true,
+    price: 2.0646,
+    changePct: -1.31,
   },
   {
     symbol: "LTC",
@@ -338,6 +400,8 @@ const coinList = ref([
     type: "options",
     typeLabel: "options",
     isHot: true,
+    price: 76.53,
+    changePct: -0.79,
   },
   {
     symbol: "DOGE",
@@ -345,6 +409,8 @@ const coinList = ref([
     type: "options",
     typeLabel: "options",
     isHot: false,
+    price: 0.1386,
+    changePct: 0.21,
   },
   {
     symbol: "FIL",
@@ -352,6 +418,8 @@ const coinList = ref([
     type: "options",
     typeLabel: "options",
     isHot: false,
+    price: 1.484,
+    changePct: -0.06,
   },
   {
     symbol: "DAI",
@@ -359,6 +427,8 @@ const coinList = ref([
     type: "options",
     typeLabel: "options",
     isHot: false,
+    price: 1.0013,
+    changePct: 0.02,
   },
 ]);
 
@@ -379,13 +449,20 @@ const filteredCoinList = computed(() => {
   return list;
 });
 
-// 获取标签样式类
-const getTagClass = (type) => {
-  return {
-    "tag-spot": type === "spot",
-    "tag-contract": type === "contract",
-    "tag-options": type === "options",
-  };
+const formatPrice = (v) => {
+  const n = Number(v);
+  if (!Number.isFinite(n)) return "--";
+  return n.toLocaleString(undefined, {
+    minimumFractionDigits: n >= 1000 ? 2 : n >= 1 ? 2 : 4,
+    maximumFractionDigits: n >= 1000 ? 2 : n >= 1 ? 2 : 4,
+  });
+};
+
+const formatChangePct = (v) => {
+  const n = Number(v);
+  if (!Number.isFinite(n)) return "--";
+  const sign = n > 0 ? "+" : "";
+  return `${sign}${n.toFixed(2)}%`;
 };
 
 // 切换收藏
@@ -459,29 +536,40 @@ watch(show, (isOpen) => {
 </script>
 
 <style lang="scss" scoped>
+:deep(.van-popup) {
+  background: #17181a !important;
+  border-top-left-radius: 40px !important;
+  border-top-right-radius: 40px !important;
+}
+
+:deep(.van-search__action) {
+  color: #8c8f96;
+}
+
 .coin-pair-modal {
   display: flex;
   flex-direction: column;
   height: 100%;
-  background-color: #fff;
-  border-radius: 16px 16px 0 0;
+  background: #17181a;
+  border-radius: 40px 40px 0 0;
   overflow: hidden;
 }
 
 .drag-handle {
   width: 40px;
   height: 4px;
-  background-color: #d4d4d4;
+  background-color: #2b2d31;
   border-radius: 2px;
-  margin: 8px auto 0;
+  margin: 18px auto 0;
   cursor: pointer;
 }
 
 .search-bar {
-  padding: 8px 16px 12px;
+  padding: 18px 32px 20px;
 
   :deep(.van-search) {
     padding: 0;
+    background: transparent;
   }
 
   :deep(.van-search__content) {
@@ -489,42 +577,47 @@ watch(show, (isOpen) => {
     align-items: center;
     gap: 2.13333vw;
     width: 100%;
-    height: 10.13333vw;
-    padding: 0 4vw;
-    border-radius: 5.06667vw;
-    background-color: #f3f3f3;
+    height: 88px;
+    padding: 0 28px;
+    border-radius: 20px;
+    background-color: #1f2023;
   }
 
   :deep(.van-field__left-icon) {
     margin-right: 8px;
-    color: #040303;
+    color: #6b6f76;
   }
 
   :deep(.van-field__control) {
-    font-size: 14px;
-    color: #000;
+    font-size: 28px;
+    color: #f1f1f1;
+  }
+
+  :deep(.van-field__control::placeholder) {
+    color: #6b6f76;
   }
 }
 
 .main-tabs {
   display: flex;
-  padding: 0 16px;
-  border-bottom: 1px solid #ebedf0;
+  padding: 0 32px;
+  border-bottom: 1px solid #2a2c30;
 
   .tab-item {
     // flex: 1;
-    width: 42.7px;
+    width: auto;
     text-align: center;
-    padding: 14px 0;
-    font-size: 4vw;
+    padding: 20px 0 22px;
+    font-size: 28px;
     font-weight: 600;
-    color: #7e7e7e;
+    color: #8c8f96;
     cursor: pointer;
     position: relative;
     transition: color 0.3s;
+    margin-right: 44px;
 
     &.active {
-      color: #040303;
+      color: #f1f1f1;
       font-weight: 600;
 
       &::after {
@@ -533,8 +626,9 @@ watch(show, (isOpen) => {
         bottom: 0;
         left: 0;
         right: 0;
-        height: 2px;
-        background-color: #040303;
+        height: 6px;
+        background-color: #1df388;
+        border-radius: 999px;
       }
     }
   }
@@ -542,19 +636,20 @@ watch(show, (isOpen) => {
 
 .sub-tabs {
   display: flex;
-  padding: 12px 16px 8px;
-  gap: 20px;
+  padding: 16px 32px 12px;
+  gap: 36px;
+  border-bottom: 1px solid #2a2c30;
 
   .sub-tab-item {
-    font-size: 13px;
-    color: #969799;
+    font-size: 26px;
+    color: #8c8f96;
     cursor: pointer;
     padding: 6px 0;
     position: relative;
     transition: color 0.3s;
 
     &.active {
-      color: #040303;
+      color: #f1f1f1;
       font-weight: 600;
 
       &::after {
@@ -563,8 +658,9 @@ watch(show, (isOpen) => {
         bottom: 0;
         left: 0;
         right: 0;
-        height: 2px;
-        background-color: #040303;
+        height: 6px;
+        background-color: #1df388;
+        border-radius: 999px;
       }
     }
   }
@@ -573,7 +669,7 @@ watch(show, (isOpen) => {
 .content-area {
   flex: 1;
   overflow-y: auto;
-  padding: 0 16px;
+  padding: 0 0 20px;
 }
 
 .empty-state {
@@ -594,8 +690,8 @@ watch(show, (isOpen) => {
 
   .empty-text {
     font-weight: 700;
-    color: #040303;
-    font-size: 3.73333vw;
+    color: #8c8f96;
+    font-size: 28px;
     height: 8vw;
     line-height: 8vw;
     text-align: center;
@@ -604,20 +700,20 @@ watch(show, (isOpen) => {
 }
 
 .coin-list {
-  padding: 8px 0;
+  padding: 8px 0 0;
 }
 
 .coin-item {
   display: flex;
   align-items: center;
-  // padding-left: 4.8vw;
-  padding-right: 5.33333vw;
+  padding: 0 32px;
   width: 100%;
-  height: 14.9333vw;
-  font-size: 3.73333vw;
+  height: 112px;
+  font-size: 28px;
+  border-bottom: 1px solid #24262a;
 
   &:active {
-    background-color: #f5f5f5;
+    background-color: #1f2023;
   }
 
   &:last-child {
@@ -626,96 +722,95 @@ watch(show, (isOpen) => {
 }
 
 .star-icon {
-  width: 3.73333vw;
-  height: 3.73333vw;
+  width: 28px;
+  height: 28px;
   display: flex;
   align-items: center;
   gap: 1.06667vw;
-  margin-right: 4px;
-  color: rgb(142, 142, 142);
+  margin-right: 12px;
+  color: #5b5f66;
 }
 
 .coin-logo {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: 12px;
   flex-shrink: 0;
-  width: 6.66667vw;
-  height: 6.66667vw;
-  margin-right: 2.5vw;
+  width: 56px;
+  height: 56px;
+  margin-right: 18px;
   border-radius: 50%;
-  background-color: #f3f3f3;
+  background-color: #222428;
 
   .logo-placeholder {
-    font-size: 16px;
+    font-size: 28px;
     font-weight: 600;
-    color: #040303;
+    color: #f1f1f1;
   }
+}
+
+.coin-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
+  min-width: 0;
 }
 
 .coin-info {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  min-width: 0;
 
   .coin-symbol {
-    font-size: 15px;
-    font-size: 3.73333vw;
-    color: rgb(4, 3, 3);
-    font-weight: bolder;
-    margin-right: 2px
+    font-size: 28px;
+    color: #f1f1f1;
+    font-weight: 700;
+    margin-right: 8px;
+    white-space: nowrap;
   }
 
   .coin-pair {
-    color: #969799;
     line-height: 1.2;
-    font-size: 3.2vw;
-    color: rgb(126, 126, 126);
-    font-weight: bolder;
+    font-size: 24px;
+    color: #8c8f96;
+    font-weight: 600;
+    white-space: nowrap;
   }
 }
 
-.coin-tags {
+.fire-icon {
+  font-size: 26px;
+  margin-left: 8px;
+  color: #ff4444;
+}
+
+.coin-quote {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
   gap: 6px;
   flex-shrink: 0;
 
-  .tag {
-    padding: 3px 8px;
-    border-radius: 4px;
-    font-size: 11px;
-    font-weight: 500;
-    white-space: nowrap;
-
-    &.tag-spot {
-      background-color: #fff3cd;
-      color: #856404;
-    }
-
-    &.tag-contract {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0.53333vw 1.06667vw;
-      background-color: rgb(245, 229, 195);
-      border-radius: 0.8vw;
-      color: rgb(254, 173, 21);
-      font-size: 2.66667vw;
-      margin-left: 2px;
-      height: 14.65px
-    }
-
-    &.tag-options {
-      background-color: #fff3cd;
-      color: #856404;
-    }
+  .coin-price {
+    font-size: 28px;
+    color: #f1f1f1;
+    font-weight: 600;
   }
 
-  .fire-icon {
-    font-size: 16px;
-    margin-left: 2px;
+  .coin-change {
+    font-size: 22px;
+    font-weight: 600;
+
+    &.positive {
+      color: #1df388;
+    }
+
+    &.negative {
+      color: #ff5b5a;
+    }
   }
 }
 </style>
+
