@@ -308,7 +308,8 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHistory(),
+  // history: createWebHistory(),
+  history: createWebHistory('/h5/'),
   routes,
   scrollBehavior(to, from, savedPosition) {
     // 切换页面时自动滚动到顶部
