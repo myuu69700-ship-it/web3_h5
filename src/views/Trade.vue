@@ -39,30 +39,32 @@
         <van-icon name="star-o" class="star-icon" />
       </div>
 
-      <div class="price-section">
-        <div class="current-price">92,073.75</div>
-        <div class="price-info">
-          <span class="price-usd">≈$92,073.75</span>
-          <span class="price-change positive">+1.49%</span>
+      <div class="price-market-container">
+        <div class="price-section">
+          <div class="current-price">92,073.75</div>
+          <div class="price-info">
+            <span class="price-usd">≈$92,073.75</span>
+            <span class="price-change positive">+1.49%</span>
+          </div>
         </div>
-      </div>
 
-      <div class="market-stats">
-        <div class="stat-item">
-          <div class="stat-label">24H最高价</div>
-          <div class="stat-value">92,681.91</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-label">24H最低价</div>
-          <div class="stat-value">90,133.92</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-label">24H成交量</div>
-          <div class="stat-value">5,650.596422</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-label">24H交易额</div>
-          <div class="stat-value">5.17亿</div>
+        <div class="market-stats">
+          <div class="stat-item">
+            <span class="stat-label">24H最高价</span>
+            <span class="stat-value">92,681.91</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">24H最低价</span>
+            <span class="stat-value">90,133.92</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">24H成交量</span>
+            <span class="stat-value">5,650.596422</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">24H交易额</span>
+            <span class="stat-value">5.17亿</span>
+          </div>
         </div>
       </div>
     </div>
@@ -692,7 +694,7 @@ onUnmounted(() => {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 12px;
+    margin-bottom: 26px;
 
     .coin-pair-info {
       display: flex;
@@ -736,13 +738,24 @@ onUnmounted(() => {
     }
   }
 
-  .price-section {
+  .price-market-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
     margin-bottom: 16px;
+    justify-content: space-between;
+  }
+
+  .price-section {
+    flex: 0 0 auto;
 
     .current-price {
-      font-size: 32px;
-      font-weight: bold;
-      color: #00d4aa;
+      color: #1df388;
+      font-family: Inter;
+      font-size: 40px;
+      font-style: normal;
+      font-weight: 600;
+      line-height: normal;
       margin-bottom: 4px;
     }
 
@@ -750,18 +763,27 @@ onUnmounted(() => {
       display: flex;
       align-items: center;
       gap: 12px;
+      flex-wrap: wrap;
 
       .price-usd {
-        font-size: 14px;
-        color: #a4a4a4;
+        color: #909090;
+        font-family: Inter;
+        font-size: 24px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
       }
 
       .price-change {
-        font-size: 14px;
-        font-weight: 500;
+        color: #1df388;
+        font-family: Inter;
+        font-size: 24px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
 
         &.positive {
-          color: #00d4aa;
+          color: #1df388;
         }
 
         &.negative {
@@ -772,21 +794,34 @@ onUnmounted(() => {
   }
 
   .market-stats {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+    max-width: 300px;
 
     .stat-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
       .stat-label {
-        font-size: 12px;
-        color: #a4a4a4;
-        margin-bottom: 4px;
+        color: #909090;
+        font-family: Inter;
+        font-size: 20px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
       }
 
       .stat-value {
-        font-size: 14px;
-        color: #fff;
-        font-weight: 500;
+        color: #909090;
+        font-family: Inter;
+        font-size: 20px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        text-align: right;
       }
     }
   }
