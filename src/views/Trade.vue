@@ -117,16 +117,17 @@
         <van-icon name="arrow" class="more-arrow" />
       </div>
 
-      <!-- MA指标显示 -->
-      <div class="ma-indicators">
-        <span class="ma-item ma5">MA5 91,955.00</span>
-        <span class="ma-item ma10">MA10 91,955.00</span>
-        <span class="ma-item ma30">MA30 91,955.00</span>
-        <span class="ma-item ma60">MA60 91,955.00</span>
-      </div>
-
       <!-- K线图 -->
-      <div ref="chartContainer" class="chart-wrapper"></div>
+      <div class="chart-wrapper">
+        <!-- MA指标显示（图内浮层） -->
+        <div class="ma-indicators ma-indicators--overlay">
+          <span class="ma-item ma5">MA5 91,955.00</span>
+          <span class="ma-item ma10">MA10 91,955.00</span>
+          <span class="ma-item ma30">MA30 91,955.00</span>
+          <span class="ma-item ma60">MA60 91,955.00</span>
+        </div>
+        <div ref="chartContainer" class="chart-canvas"></div>
+      </div>
 
       <!-- 成交量图 -->
       <div class="volume-section">
@@ -337,8 +338,30 @@ let chart = null;
 let volumeChart = null;
 let candlestickSeries = null;
 let volumeSeries = null;
+let volumeMA5Series = null;
+let volumeMA10Series = null;
+let volumeMA30Series = null;
 let resizeHandler = null;
 let volumeResizeHandler = null;
+let isSyncingCrosshair = false;
+let lastKlineData = [];
+let lastVolumeData = [];
+let klineCloseByTime = new Map();
+let volumeByTime = new Map();
+
+// 成交量刻度格式化（y轴显示 400K、800K 这种形式）
+const formatVolumeTick = (value) => {
+  const v = Number(value);
+  if (!Number.isFinite(v)) return "";
+  // 隐藏 0 刻度，避免出现 0 影响视觉（截图只展示 400K、800K）
+  if (v === 0) return "";
+  if (Math.abs(v) >= 1000) {
+    const k = v / 1000;
+    // 这里不保留小数，确保 400K / 800K 的显示
+    return `${Math.round(k)}K`;
+  }
+  return `${Math.round(v)}`;
+};
 
 const timeframes = [
   { key: "1m", label: "1分" },
@@ -394,6 +417,26 @@ const generateVolumeData = () => {
   return data;
 };
 
+// 计算简单移动平均（SMA）
+const calcSMA = (data, period) => {
+  const out = [];
+  if (!Array.isArray(data) || data.length === 0) return out;
+  let sum = 0;
+  for (let i = 0; i < data.length; i++) {
+    sum += Number(data[i]?.value ?? 0);
+    if (i >= period) {
+      sum -= Number(data[i - period]?.value ?? 0);
+    }
+    if (i >= period - 1) {
+      out.push({
+        time: data[i].time,
+        value: sum / period,
+      });
+    }
+  }
+  return out;
+};
+
 // 初始化图表
 const initChart = () => {
   if (!chartContainer.value) return;
@@ -445,6 +488,8 @@ const initChart = () => {
   // 加载数据
   const data = generateMockData();
   candlestickSeries.setData(data);
+  lastKlineData = data;
+  klineCloseByTime = new Map(data.map((d) => [d.time, d.close]));
 
   // 添加当前价格线
   const latestData = data[data.length - 1];
@@ -499,6 +544,7 @@ const initVolumeChart = () => {
         top: 0.1,
         bottom: 0.1,
       },
+      ticksVisible: true,
     },
     leftPriceScale: {
       visible: false,
@@ -506,18 +552,54 @@ const initVolumeChart = () => {
   });
 
   volumeSeries = volumeChart.addHistogramSeries({
+    // 用自定义 formatter，把 y 轴刻度显示成 400K / 800K
     priceFormat: {
-      type: "volume",
+      type: "custom",
+      formatter: formatVolumeTick,
     },
-    priceScaleId: "",
     scaleMargins: {
       top: 0.1,
       bottom: 0,
+    },
+    // 固定纵轴范围，让刻度稳定出现 400K / 800K
+    autoscaleInfoProvider: () => {
+      return {
+        priceRange: {
+          minValue: 0,
+          maxValue: 800000,
+        },
+      };
     },
   });
 
   const volumeData = generateVolumeData();
   volumeSeries.setData(volumeData);
+  lastVolumeData = volumeData;
+  volumeByTime = new Map(volumeData.map((d) => [d.time, d.value]));
+
+  // 成交量均线（折线叠加到柱状图上）
+  volumeMA5Series = volumeChart.addLineSeries({
+    color: "#ff5b5a",
+    lineWidth: 1,
+    priceLineVisible: false,
+    lastValueVisible: false,
+  });
+  volumeMA10Series = volumeChart.addLineSeries({
+    color: "#9c27b0",
+    lineWidth: 1,
+    priceLineVisible: false,
+    lastValueVisible: false,
+  });
+  volumeMA30Series = volumeChart.addLineSeries({
+    color: "#2196f3",
+    lineWidth: 1,
+    priceLineVisible: false,
+    lastValueVisible: false,
+  });
+
+  volumeMA5Series.setData(calcSMA(volumeData, 5));
+  volumeMA10Series.setData(calcSMA(volumeData, 10));
+  volumeMA30Series.setData(calcSMA(volumeData, 30));
 
   // 同步时间轴
   if (chart && volumeChart) {
@@ -530,6 +612,49 @@ const initVolumeChart = () => {
     chart.timeScale().subscribeVisibleTimeRangeChange((timeRange) => {
       if (timeRange) {
         volumeChart.timeScale().setVisibleRange(timeRange);
+      }
+    });
+  }
+
+  // 同步十字线（让主图与成交量图交互“连在一起”）
+  if (chart && volumeChart && candlestickSeries && volumeSeries) {
+    chart.subscribeCrosshairMove((param) => {
+      if (isSyncingCrosshair) return;
+      isSyncingCrosshair = true;
+      try {
+        if (!param || !param.time || param.point == null) {
+          volumeChart.clearCrosshairPosition();
+          return;
+        }
+        const t = param.time;
+        const v = volumeByTime.get(t);
+        if (v == null) {
+          volumeChart.clearCrosshairPosition();
+          return;
+        }
+        volumeChart.setCrosshairPosition(v, t, volumeSeries);
+      } finally {
+        isSyncingCrosshair = false;
+      }
+    });
+
+    volumeChart.subscribeCrosshairMove((param) => {
+      if (isSyncingCrosshair) return;
+      isSyncingCrosshair = true;
+      try {
+        if (!param || !param.time || param.point == null) {
+          chart.clearCrosshairPosition();
+          return;
+        }
+        const t = param.time;
+        const close = klineCloseByTime.get(t);
+        if (close == null) {
+          chart.clearCrosshairPosition();
+          return;
+        }
+        chart.setCrosshairPosition(close, t, candlestickSeries);
+      } finally {
+        isSyncingCrosshair = false;
       }
     });
   }
@@ -602,6 +727,14 @@ const destroyChart = () => {
   }
   candlestickSeries = null;
   volumeSeries = null;
+  volumeMA5Series = null;
+  volumeMA10Series = null;
+  volumeMA30Series = null;
+  isSyncingCrosshair = false;
+  lastKlineData = [];
+  lastVolumeData = [];
+  klineCloseByTime = new Map();
+  volumeByTime = new Map();
 };
 
 // 监听主标签页变化，初始化或销毁图表
@@ -831,18 +964,24 @@ onUnmounted(() => {
   display: flex;
   background-color: #141517;
   border-bottom: 1px solid #1e1f29;
-  padding: 0 16px;
+  padding: 15px 148px 0 32px;
+  position: relative;
 
   .tab-item {
-    padding: 12px 16px;
-    font-size: 14px;
-    color: #a4a4a4;
+    color: #909090;
+    font-family: "PingFang SC";
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    margin-right: 50px;
+    text-wrap: nowrap;
     cursor: pointer;
     position: relative;
-    transition: color 0.3s;
+    padding-bottom: 24px;
 
     &.active {
-      color: #00d4aa;
+      color: #f1f1f1;
       font-weight: 500;
 
       &::after {
@@ -851,8 +990,9 @@ onUnmounted(() => {
         bottom: 0;
         left: 0;
         right: 0;
-        height: 2px;
-        background-color: #00d4aa;
+        height: 6px;
+        background-color: #1df388;
+        border-radius: 999px;
       }
     }
   }
@@ -860,15 +1000,17 @@ onUnmounted(() => {
 
 .chart-section {
   background-color: #141517;
-  padding: 16px;
+  padding: 16px 0px;
   position: relative;
   overflow: hidden;
 
   .timeframe-selector {
     display: flex;
     align-items: center;
-    gap: 8px;
+    height: 74px;
+    // gap: 8px;
     margin-bottom: 12px;
+    padding: 0 32px;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
 
@@ -877,36 +1019,38 @@ onUnmounted(() => {
     }
 
     .timeframe-item {
-      padding: 6px 12px;
-      border-radius: 4px;
-      font-size: 12px;
-      color: #a4a4a4;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: all 0.3s;
+      color: #979797;
+      font-family: "PT Sans Caption";
+      font-size: 20px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
+      padding-right: 50px;
 
       &.active {
-        background-color: #00d4aa;
-        color: #141517;
+        color: #1df388;
         font-weight: 500;
       }
     }
 
     .more-arrow {
-      font-size: 14px;
-      color: #a4a4a4;
+      font-size: 26px;
+      color: #3f4450;
       margin-left: auto;
+      font-weight: 700;
     }
   }
 
   .ma-indicators {
     display: flex;
     gap: 16px;
-    margin-bottom: 8px;
     flex-wrap: wrap;
 
     .ma-item {
-      font-size: 12px;
+      font-family: Inter;
+      font-size: 18px;
+      font-style: normal;
+      font-weight: 500;
 
       &.ma5 {
         color: #ff5b5a;
@@ -922,6 +1066,7 @@ onUnmounted(() => {
 
       &.ma60 {
         color: #ffc107;
+        padding-right: 141px;
       }
     }
   }
@@ -933,6 +1078,19 @@ onUnmounted(() => {
     position: relative;
     overflow: hidden;
     z-index: 0;
+  }
+
+  .chart-canvas {
+    width: 100%;
+    height: 100%;
+  }
+
+  .ma-indicators--overlay {
+    position: absolute;
+    top: 10px;
+    left: 12px;
+    z-index: 5;
+    pointer-events: none;
   }
 
   .volume-section {
