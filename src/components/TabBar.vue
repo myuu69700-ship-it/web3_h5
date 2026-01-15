@@ -102,7 +102,7 @@ const onChange = (name) => {
 <style lang="scss" scoped>
 :deep(.van-tabbar) {
   width: 100%;
-  height: var(--app-tabbar-height);
+  height: calc(17.6vw + env(safe-area-inset-bottom));
   position: fixed;
   z-index: 99;
   left: 0;
@@ -126,12 +126,6 @@ const onChange = (name) => {
   .van-tabbar-item[name="trade"] {
     overflow: visible;
   }
-}
-
-// van-tabbar 开启 placeholder 时，Vant 会插入占位节点；这里强制占位高度与真实 tabbar 一致
-// 避免不同浏览器/缩放下占位高度不准，滚动到底部出现被遮挡或抖动
-:deep(.van-tabbar__placeholder) {
-  height: var(--app-tabbar-height) !important;
 }
 
 :deep(.van-tabbar-item) {
