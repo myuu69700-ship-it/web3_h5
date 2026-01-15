@@ -34,7 +34,7 @@
         <div class="coin-pair-info" @click="showCoinPairModal = true">
           <div class="btc-logo">B</div>
           <span class="pair-name">BTC/USDT</span>
-          <van-icon name="arrow-down" class="dropdown-icon" />
+          <img :src="allowDownIcon" class="dropdown-icon" alt="" />
         </div>
         <van-icon name="star-o" class="star-icon" />
       </div>
@@ -318,6 +318,7 @@ import CoinPairSearchModal from "@/components/Home/CoinPairSearchModal.vue";
 import tubiaoIcon from "@/assets/image/tubiao.svg";
 import searchIcon from "@/assets/image/search.png";
 import kefuIcon from "@/assets/image/kefu.png";
+import allowDownIcon from "@/assets/image/allow_down.svg";
 
 const showMenu = ref(false);
 const showCoinPairModal = ref(false);
@@ -684,7 +685,7 @@ onUnmounted(() => {
 }
 
 .coin-pair-section {
-  padding: 16px;
+  padding: 65px 32px 0;
   background-color: #141517;
 
   .coin-pair-header {
@@ -696,12 +697,12 @@ onUnmounted(() => {
     .coin-pair-info {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 15px;
       cursor: pointer;
 
       .btc-logo {
-        width: 32px;
-        height: 32px;
+        width: 36px;
+        height: 36px;
         border-radius: 50%;
         background: linear-gradient(135deg, #f7931a 0%, #ffa500 100%);
         display: flex;
@@ -713,19 +714,23 @@ onUnmounted(() => {
       }
 
       .pair-name {
-        font-size: 16px;
+        color: #f1f1f1;
+        font-family: Inter;
+        font-size: 40px;
+        font-style: normal;
         font-weight: 600;
-        color: #fff;
+        line-height: normal;
       }
 
       .dropdown-icon {
-        font-size: 14px;
-        color: #a4a4a4;
+        width: 14px;
+        height: 8px;
+        color: #f3f4f6;
       }
     }
 
     .star-icon {
-      font-size: 20px;
+      font-size: 22px;
       color: #00d4aa;
       cursor: pointer;
     }
