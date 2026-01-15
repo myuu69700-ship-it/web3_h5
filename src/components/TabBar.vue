@@ -102,12 +102,13 @@ const onChange = (name) => {
 <style lang="scss" scoped>
 :deep(.van-tabbar) {
   width: 100%;
-  height: 17.6vw;
+  height: calc(17.6vw + env(safe-area-inset-bottom));
   position: fixed;
   z-index: 99;
   left: 0;
   bottom: 0;
   background-color: #141517;
+  padding-bottom: env(safe-area-inset-bottom);
   border: none !important;
   border-top: none !important;
   border-bottom: none !important;

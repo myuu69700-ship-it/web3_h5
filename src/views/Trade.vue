@@ -195,37 +195,39 @@
 
       <!-- 委托订单区域 - 在图表下方显示 -->
       <div class="orders-section-below-chart">
-        <div class="order-tabs">
-          <div
-            class="order-tab"
-            :class="{ active: activeOrderTab === 'current' }"
-            @click="activeOrderTab = 'current'"
-          >
-            当前委托 ({{ currentOrdersCount }})
+        <!-- 账户余额提示（按截图：文案两行 + 按钮在文案下方居中） -->
+        <div class="balance-prompt">
+          <div class="prompt-text">
+            <div>您的现货账户中 USDT 余额为 0，快去充值开启</div>
+            <div>数字之旅吧</div>
           </div>
-          <div
-            class="order-tab"
-            :class="{ active: activeOrderTab === 'filled' }"
-            @click="activeOrderTab = 'filled'"
+          <van-button
+            type="primary"
+            class="recharge-btn"
+            @click="handleRecharge"
           >
-            成交委托
-          </div>
-          <div
-            class="order-tab"
-            :class="{ active: activeOrderTab === 'canceled' }"
-            @click="activeOrderTab = 'canceled'"
-          >
-            撤销委托
-          </div>
+            充值
+          </van-button>
         </div>
 
-        <div class="order-content">
-          <van-empty
-            v-if="currentOrdersCount === 0"
-            description="暂无委托订单"
-          />
-          <div v-else class="orders-list">
-            <!-- 订单列表 -->
+        <!-- 交易按钮和快捷入口 -->
+        <div class="trade-actions">
+          <van-button type="primary" class="trade-btn" @click="handleTrade">
+            交易
+          </van-button>
+          <div class="quick-actions">
+            <div class="quick-action-item" @click="handleContract">
+              <div class="action-icon">
+                <img class="action-icon-img" :src="heyueIcon" alt="合约" />
+              </div>
+              <span class="action-label">合约</span>
+            </div>
+            <div class="quick-action-item" @click="handleOptions">
+              <div class="action-icon">
+                <img class="action-icon-img" :src="qiquanIcon" alt="期权" />
+              </div>
+              <span class="action-label">期权</span>
+            </div>
           </div>
         </div>
       </div>
@@ -275,33 +277,6 @@
       <van-empty description="暂无市场异动" />
     </div>
 
-    <!-- 账户余额提示 -->
-    <div class="balance-prompt">
-      <div class="prompt-text">
-        您的现货账户中 USDT 余额为0,快去充值开启数字之旅吧
-      </div>
-      <van-button type="primary" class="recharge-btn" @click="handleRecharge">
-        充值
-      </van-button>
-    </div>
-
-    <!-- 交易按钮和快捷入口 -->
-    <div class="trade-actions">
-      <van-button type="primary" class="trade-btn" @click="handleTrade">
-        交易
-      </van-button>
-      <div class="quick-actions">
-        <div class="quick-action-item" @click="handleContract">
-          <div class="action-icon">📊</div>
-          <span class="action-label">合约</span>
-        </div>
-        <div class="quick-action-item" @click="handleOptions">
-          <div class="action-icon">📈</div>
-          <span class="action-label">期权</span>
-        </div>
-      </div>
-    </div>
-
     <!-- 菜单抽屉 -->
     <MenuDrawer v-model="showMenu" />
 
@@ -316,6 +291,8 @@
 <script setup>
 import { ref, onMounted, onUnmounted, nextTick, watch } from "vue";
 import { createChart, ColorType } from "lightweight-charts";
+import heyueIcon from "@/assets/personalCenter/heyue.svg";
+import qiquanIcon from "@/assets/personalCenter/qiquan.svg";
 import MenuDrawer from "@/components/Home/MenuDrawer.vue";
 import CoinPairSearchModal from "@/components/Home/CoinPairSearchModal.vue";
 import tubiaoIcon from "@/assets/image/tubiao.svg";
@@ -772,7 +749,8 @@ onUnmounted(() => {
 .trade-page {
   min-height: 100vh;
   background-color: #141517;
-  padding-bottom: 80px;
+  // 预留空间：底部 TabBar(17.6vw) + trade-actions(约120px) + 安全区（不再额外留 28px 间隙）
+  padding-bottom: calc(17.6vw + 120px + env(safe-area-inset-bottom));
   color: #fff;
 }
 
@@ -1205,62 +1183,12 @@ onUnmounted(() => {
 
   .orders-section-below-chart {
     margin-top: 16px;
-    padding-top: 16px;
-    border-top: 1px solid #1e1f29;
+    padding-top: 0;
+    border-top: none;
     position: relative;
     z-index: 10;
     width: 100%;
     background-color: #141517;
-
-    .order-tabs {
-      display: flex;
-      // gap: 16px;
-      margin-bottom: 16px;
-      border-bottom: 1px solid #1e1f29;
-      padding: 0 32px;
-
-      .order-tab {
-        padding: 12px 0;
-        position: relative;
-        color: #5c5c5c;
-        font-family: "PingFang SC";
-        font-size: 24px;
-        font-style: normal;
-        font-weight: 500;
-        line-height: normal;
-        &:nth-child(1) {
-          margin-right: 37px;
-        }
-        &:nth-child(2) {
-          margin-right: 83px;
-        }
-
-        &.active {
-          color: #f0f0f0;
-          font-family: "PingFang SC";
-          font-size: 24px;
-          font-style: normal;
-          font-weight: 500;
-          line-height: normal;
-
-          &::after {
-            content: "";
-            position: absolute;
-            bottom: -1px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90px;
-            height: 6px;
-            border-radius: 999px;
-            background: #1df388;
-          }
-        }
-      }
-    }
-
-    .order-content {
-      min-height: 150px;
-    }
   }
 }
 
@@ -1312,27 +1240,38 @@ onUnmounted(() => {
 }
 
 .balance-prompt {
-  background-color: #1e1f29;
-  margin: 16px;
-  padding: 16px;
-  border-radius: 8px;
+  background-color: transparent;
+  margin: 0;
+  padding: 90px 32px 16px;
+  border-radius: 0;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+  justify-content: center;
+  gap: 16px;
 
   .prompt-text {
-    font-size: 14px;
-    color: #a4a4a4;
-    flex: 1;
+    color: #929292;
+    text-align: center;
+    font-family: "PingFang SC";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
   }
 
   .recharge-btn {
-    background-color: #00d4aa;
-    border: none;
-    color: #141517;
+    width: 138px;
+    height: 54px;
+    border-radius: 10px;
+    background: #1df388;
+    color: #121212;
+    font-family: "PingFang SC";
+    font-size: 20px;
+    font-style: normal;
     font-weight: 500;
-    padding: 8px 24px;
+    line-height: normal;
+    margin-bottom: 97px;
   }
 }
 
@@ -1340,17 +1279,27 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 16px;
+  padding: 16px 32px;
   background-color: #141517;
+  position: fixed;
+  left: 0;
+  right: 0;
+  // 紧贴底部 TabBar 顶部（TabBar 高度为 17.6vw）
+  bottom: calc(17.6vw + env(safe-area-inset-bottom));
+  z-index: 98;
 
   .trade-btn {
-    flex: 1;
-    background-color: #00d4aa;
-    border: none;
-    color: #141517;
-    font-weight: 600;
-    font-size: 16px;
-    height: 48px;
+    color: #121212;
+    font-family: "PingFang SC";
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    width: 508px;
+    height: 90px;
+    border-radius: 10px;
+    background: #1df388;
+    margin-right: 48px;
   }
 
   .quick-actions {
@@ -1363,14 +1312,34 @@ onUnmounted(() => {
       align-items: center;
       gap: 4px;
       cursor: pointer;
+      &:nth-child(1) {
+        margin-right: 56px;
+      }
 
       .action-icon {
-        font-size: 24px;
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .action-icon-img {
+        width: 28px;
+        height: 33px;
+        display: block;
+        // margin-bottom: 4px;
       }
 
       .action-label {
-        font-size: 12px;
-        color: #a4a4a4;
+        color: #f9f9f9;
+        font-family: "PingFang SC";
+        font-size: 22px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+        text-wrap: nowrap;
+        margin-top: 4px;
       }
     }
   }
