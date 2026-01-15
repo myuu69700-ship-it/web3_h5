@@ -3,12 +3,15 @@
     <!-- 顶部导航栏 -->
     <div class="top-nav-bar">
       <img
-        :src="galleryViewIcon"
+        :src="tubiaoIcon"
         class="menu-icon"
         @click="showMenu = true"
         alt="菜单"
       />
-      <div class="logo-text">WEB3LOGO</div>
+      <div class="logo-text">
+        <div class="logo-text-title">WEB3</div>
+        <div class="logo-text-title2">LOGO</div>
+      </div>
       <div class="top-right-icons">
         <img
           :src="searchIcon"
@@ -35,7 +38,7 @@
         </div>
         <van-icon name="star-o" class="star-icon" />
       </div>
-      
+
       <div class="price-section">
         <div class="current-price">92,073.75</div>
         <div class="price-info">
@@ -214,7 +217,10 @@
         </div>
 
         <div class="order-content">
-          <van-empty v-if="currentOrdersCount === 0" description="暂无委托订单" />
+          <van-empty
+            v-if="currentOrdersCount === 0"
+            description="暂无委托订单"
+          />
           <div v-else class="orders-list">
             <!-- 订单列表 -->
           </div>
@@ -309,7 +315,7 @@ import { ref, onMounted, onUnmounted, nextTick, watch } from "vue";
 import { createChart, ColorType } from "lightweight-charts";
 import MenuDrawer from "@/components/Home/MenuDrawer.vue";
 import CoinPairSearchModal from "@/components/Home/CoinPairSearchModal.vue";
-import galleryViewIcon from "@/assets/images/gallery-view.svg";
+import tubiaoIcon from "@/assets/image/tubiao.svg";
 import searchIcon from "@/assets/image/search.png";
 import kefuIcon from "@/assets/image/kefu.png";
 
@@ -346,14 +352,14 @@ const generateMockData = () => {
   const data = [];
   const now = Math.floor(Date.now() / 1000);
   const basePrice = 92073.75;
-  
+
   for (let i = 100; i >= 0; i--) {
     const time = now - i * 60;
     const open = basePrice + (Math.random() - 0.5) * 200;
     const close = open + (Math.random() - 0.5) * 100;
     const high = Math.max(open, close) + Math.random() * 50;
     const low = Math.min(open, close) - Math.random() * 50;
-    
+
     data.push({
       time: time,
       open: Number(open.toFixed(2)),
@@ -362,7 +368,7 @@ const generateMockData = () => {
       close: Number(close.toFixed(2)),
     });
   }
-  
+
   return data;
 };
 
@@ -370,18 +376,18 @@ const generateMockData = () => {
 const generateVolumeData = () => {
   const data = [];
   const now = Math.floor(Date.now() / 1000);
-  
+
   for (let i = 100; i >= 0; i--) {
     const time = now - i * 60;
     const value = Math.random() * 800000;
-    
+
     data.push({
       time: time,
       value: Math.floor(value),
       color: Math.random() > 0.5 ? "#26a69a" : "#ef5350",
     });
   }
-  
+
   return data;
 };
 
@@ -638,34 +644,40 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 16px;
+  padding: 42px 32px 0;
   background-color: #141517;
   position: sticky;
   top: 0;
   z-index: 100;
 
   .menu-icon {
-    width: 24px;
-    height: 24px;
+    width: 28px;
+    height: 30px;
     cursor: pointer;
   }
 
   .logo-text {
-    font-size: 18px;
-    font-weight: 600;
-    color: #00D4AA;
-    letter-spacing: 1px;
+    color: #1df388;
+    font-family: "PT Sans Caption";
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    display: flex;
+    .logo-text-title2 {
+      color: #f3f4f6;
+    }
   }
 
   .top-right-icons {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 31px;
 
     .search-icon,
     .kefu-icon {
-      width: 24px;
-      height: 24px;
+      width: 30px;
+      height: 30px;
       cursor: pointer;
     }
   }
@@ -691,7 +703,7 @@ onUnmounted(() => {
         width: 32px;
         height: 32px;
         border-radius: 50%;
-        background: linear-gradient(135deg, #F7931A 0%, #FFA500 100%);
+        background: linear-gradient(135deg, #f7931a 0%, #ffa500 100%);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -708,13 +720,13 @@ onUnmounted(() => {
 
       .dropdown-icon {
         font-size: 14px;
-        color: #A4A4A4;
+        color: #a4a4a4;
       }
     }
 
     .star-icon {
       font-size: 20px;
-      color: #00D4AA;
+      color: #00d4aa;
       cursor: pointer;
     }
   }
@@ -725,7 +737,7 @@ onUnmounted(() => {
     .current-price {
       font-size: 32px;
       font-weight: bold;
-      color: #00D4AA;
+      color: #00d4aa;
       margin-bottom: 4px;
     }
 
@@ -736,7 +748,7 @@ onUnmounted(() => {
 
       .price-usd {
         font-size: 14px;
-        color: #A4A4A4;
+        color: #a4a4a4;
       }
 
       .price-change {
@@ -744,11 +756,11 @@ onUnmounted(() => {
         font-weight: 500;
 
         &.positive {
-          color: #00D4AA;
+          color: #00d4aa;
         }
 
         &.negative {
-          color: #FF5B5A;
+          color: #ff5b5a;
         }
       }
     }
@@ -762,7 +774,7 @@ onUnmounted(() => {
     .stat-item {
       .stat-label {
         font-size: 12px;
-        color: #A4A4A4;
+        color: #a4a4a4;
         margin-bottom: 4px;
       }
 
@@ -778,19 +790,19 @@ onUnmounted(() => {
 .main-tabs {
   display: flex;
   background-color: #141517;
-  border-bottom: 1px solid #1E1F29;
+  border-bottom: 1px solid #1e1f29;
   padding: 0 16px;
 
   .tab-item {
     padding: 12px 16px;
     font-size: 14px;
-    color: #A4A4A4;
+    color: #a4a4a4;
     cursor: pointer;
     position: relative;
     transition: color 0.3s;
 
     &.active {
-      color: #00D4AA;
+      color: #00d4aa;
       font-weight: 500;
 
       &::after {
@@ -800,7 +812,7 @@ onUnmounted(() => {
         left: 0;
         right: 0;
         height: 2px;
-        background-color: #00D4AA;
+        background-color: #00d4aa;
       }
     }
   }
@@ -828,13 +840,13 @@ onUnmounted(() => {
       padding: 6px 12px;
       border-radius: 4px;
       font-size: 12px;
-      color: #A4A4A4;
+      color: #a4a4a4;
       cursor: pointer;
       white-space: nowrap;
       transition: all 0.3s;
 
       &.active {
-        background-color: #00D4AA;
+        background-color: #00d4aa;
         color: #141517;
         font-weight: 500;
       }
@@ -842,7 +854,7 @@ onUnmounted(() => {
 
     .more-arrow {
       font-size: 14px;
-      color: #A4A4A4;
+      color: #a4a4a4;
       margin-left: auto;
     }
   }
@@ -857,19 +869,19 @@ onUnmounted(() => {
       font-size: 12px;
 
       &.ma5 {
-        color: #FF5B5A;
+        color: #ff5b5a;
       }
 
       &.ma10 {
-        color: #9C27B0;
+        color: #9c27b0;
       }
 
       &.ma30 {
-        color: #2196F3;
+        color: #2196f3;
       }
 
       &.ma60 {
-        color: #FFC107;
+        color: #ffc107;
       }
     }
   }
@@ -899,19 +911,19 @@ onUnmounted(() => {
         font-size: 12px;
 
         &.vol-ma5 {
-          color: #FF5B5A;
+          color: #ff5b5a;
         }
 
         &.vol-ma10 {
-          color: #9C27B0;
+          color: #9c27b0;
         }
 
         &.vol-ma30 {
-          color: #2196F3;
+          color: #2196f3;
         }
 
         &.vol-current {
-          color: #FFC107;
+          color: #ffc107;
         }
       }
     }
@@ -943,18 +955,18 @@ onUnmounted(() => {
       gap: 8px;
 
       .indicator-label {
-        color: #A4A4A4;
+        color: #a4a4a4;
       }
 
       .indicator-item {
         padding: 4px 8px;
         border-radius: 4px;
-        color: #A4A4A4;
+        color: #a4a4a4;
         cursor: pointer;
         transition: all 0.3s;
 
         &.active {
-          background-color: #00D4AA;
+          background-color: #00d4aa;
           color: #141517;
           font-weight: 500;
         }
@@ -963,7 +975,7 @@ onUnmounted(() => {
 
     .more-arrow {
       font-size: 14px;
-      color: #A4A4A4;
+      color: #a4a4a4;
       margin-left: auto;
     }
   }
@@ -971,7 +983,7 @@ onUnmounted(() => {
   .orders-section-below-chart {
     margin-top: 16px;
     padding-top: 16px;
-    border-top: 1px solid #1E1F29;
+    border-top: 1px solid #1e1f29;
     position: relative;
     z-index: 10;
     width: 100%;
@@ -981,18 +993,18 @@ onUnmounted(() => {
       display: flex;
       gap: 16px;
       margin-bottom: 16px;
-      border-bottom: 1px solid #1E1F29;
+      border-bottom: 1px solid #1e1f29;
 
       .order-tab {
         padding: 12px 0;
         font-size: 14px;
-        color: #A4A4A4;
+        color: #a4a4a4;
         cursor: pointer;
         position: relative;
         transition: color 0.3s;
 
         &.active {
-          color: #00D4AA;
+          color: #00d4aa;
           font-weight: 500;
 
           &::after {
@@ -1002,7 +1014,7 @@ onUnmounted(() => {
             left: 0;
             right: 0;
             height: 2px;
-            background-color: #00D4AA;
+            background-color: #00d4aa;
           }
         }
       }
@@ -1022,18 +1034,18 @@ onUnmounted(() => {
     display: flex;
     gap: 16px;
     margin-bottom: 16px;
-    border-bottom: 1px solid #1E1F29;
+    border-bottom: 1px solid #1e1f29;
 
     .order-tab {
       padding: 12px 0;
       font-size: 14px;
-      color: #A4A4A4;
+      color: #a4a4a4;
       cursor: pointer;
       position: relative;
       transition: color 0.3s;
 
       &.active {
-        color: #00D4AA;
+        color: #00d4aa;
         font-weight: 500;
 
         &::after {
@@ -1043,7 +1055,7 @@ onUnmounted(() => {
           left: 0;
           right: 0;
           height: 2px;
-          background-color: #00D4AA;
+          background-color: #00d4aa;
         }
       }
     }
@@ -1062,7 +1074,7 @@ onUnmounted(() => {
 }
 
 .balance-prompt {
-  background-color: #1E1F29;
+  background-color: #1e1f29;
   margin: 16px;
   padding: 16px;
   border-radius: 8px;
@@ -1073,12 +1085,12 @@ onUnmounted(() => {
 
   .prompt-text {
     font-size: 14px;
-    color: #A4A4A4;
+    color: #a4a4a4;
     flex: 1;
   }
 
   .recharge-btn {
-    background-color: #00D4AA;
+    background-color: #00d4aa;
     border: none;
     color: #141517;
     font-weight: 500;
@@ -1095,7 +1107,7 @@ onUnmounted(() => {
 
   .trade-btn {
     flex: 1;
-    background-color: #00D4AA;
+    background-color: #00d4aa;
     border: none;
     color: #141517;
     font-weight: 600;
@@ -1120,7 +1132,7 @@ onUnmounted(() => {
 
       .action-label {
         font-size: 12px;
-        color: #A4A4A4;
+        color: #a4a4a4;
       }
     }
   }
