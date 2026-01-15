@@ -26,6 +26,8 @@ html, body {
 :root {
   --app-tabbar-base-height: 17.6vw;
   --app-tabbar-height: calc(var(--app-tabbar-base-height) + env(safe-area-inset-bottom));
+  // 动态可视高度（JS 会覆盖成 visualViewport.height 的 px 值）；这里提供兜底
+  --app-height: 100dvh;
 }
 
 // 隐藏 Webkit 浏览器的滚动条（Chrome, Safari）
